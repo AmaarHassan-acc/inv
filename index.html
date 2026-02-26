@@ -1,0 +1,2793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#2D4EA2">
+    <title>ZATCA Invoice Generator | مولد الفواتير الإلكترونية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+
+/* ============================================================
+   ZATCA PREMIUM FINTECH DESIGN SYSTEM
+   - Plus Jakarta Sans typography
+   - Deep blue gradient theme
+   - Elevated card architecture
+   - SCREEN STYLES ONLY (print block preserved at bottom)
+============================================================ */
+
+:root {
+    --blue-deep:    #2D4EA2;
+    --blue-royal:   #3C6BD6;
+    --blue-accent:  #5B8DEF;
+    --blue-light:   #EBF2FF;
+    --blue-pale:    #F0F5FF;
+    --success:      #2DBE7F;
+    --success-bg:   #EAFAF3;
+    --danger:       #E76F6F;
+    --danger-bg:    #FEF0F0;
+    --warning:      #F4B740;
+    --warning-bg:   #FFF8EC;
+    --text-primary: #1E2A3A;
+    --text-secondary:#7B8A9A;
+    --text-muted:   #A0AEC0;
+    --bg-app:       #F5F7FB;
+    --bg-card:      #FFFFFF;
+    --border-soft:  #E8EDF5;
+    --shadow-card:  0 4px 24px rgba(45,78,162,0.07), 0 1px 4px rgba(0,0,0,0.04);
+    --shadow-hover: 0 8px 32px rgba(45,78,162,0.13), 0 2px 8px rgba(0,0,0,0.06);
+    --shadow-strong:0 16px 48px rgba(45,78,162,0.16);
+    --radius-card:  20px;
+    --radius-input: 12px;
+    --radius-btn:   14px;
+    --radius-pill:  100px;
+    --font-main:    'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono:    'DM Mono', 'Fira Code', monospace;
+    --transition:   all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ═══════════════════════════════════════
+   BASE
+═══════════════════════════════════════ */
+body {
+    font-family: var(--font-main);
+    background: var(--bg-app);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding: 0 0 40px 0;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════
+   LICENSE LOCK SCREEN
+═══════════════════════════════════════ */
+#license-lock-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, #1a2d6b 0%, #2D4EA2 45%, #3C6BD6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    font-family: var(--font-main);
+    padding: env(safe-area-inset-top, 16px) 20px env(safe-area-inset-bottom, 16px) 20px;
+}
+
+#license-lock-overlay::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(91,141,239,0.3) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 40% at 80% 100%, rgba(45,78,162,0.4) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+#license-lock-overlay.hidden { display: none; }
+
+.lock-container {
+    background: rgba(255,255,255,0.10);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.18);
+    padding: 44px 40px;
+    border-radius: 28px;
+    max-width: 440px;
+    width: 100%;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.lock-header { text-align: center; margin-bottom: 32px; }
+
+.lock-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 8px;
+}
+
+.lock-logo-icon {
+    width: 52px; height: 52px;
+    background: rgba(255,255,255,0.2);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.lock-logo-title {
+    font-size: 28px; font-weight: 800; color: #FFFFFF; margin: 0;
+    letter-spacing: -0.5px;
+}
+.lock-logo-title span { color: #A8C8FF; }
+
+.lock-logo-subtitle {
+    font-size: 11px; color: rgba(255,255,255,0.65);
+    margin-top: 4px; letter-spacing: 1.2px; text-transform: uppercase;
+    font-weight: 500;
+}
+
+.lock-step-indicator {
+    display: flex; justify-content: center; gap: 16px; margin: 28px 0;
+}
+.lock-step { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.lock-step-circle {
+    width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.25);
+    color: rgba(255,255,255,0.6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700;
+    transition: var(--transition);
+}
+.lock-step.active .lock-step-circle {
+    background: rgba(255,255,255,0.95);
+    border-color: rgba(255,255,255,1);
+    color: var(--blue-deep);
+    box-shadow: 0 4px 20px rgba(255,255,255,0.3);
+}
+.lock-step-label { font-size: 10px; color: rgba(255,255,255,0.55); text-align: center; font-weight: 500; }
+.lock-step.active .lock-step-label { color: rgba(255,255,255,0.9); }
+
+.lock-field { margin-bottom: 18px; }
+.lock-field label {
+    display: block; font-size: 12px; color: rgba(255,255,255,0.7);
+    margin-bottom: 8px; font-weight: 600;
+    text-align: right; direction: rtl;
+    text-transform: uppercase; letter-spacing: 0.5px;
+}
+.lock-field input {
+    width: 100%; padding: 14px 16px;
+    background: rgba(255,255,255,0.12);
+    border: 1.5px solid rgba(255,255,255,0.2);
+    border-radius: 14px; font-size: 15px;
+    color: #FFFFFF; font-family: var(--font-mono);
+    transition: var(--transition); text-align: center;
+    backdrop-filter: blur(4px);
+}
+.lock-field input::placeholder { color: rgba(255,255,255,0.35); }
+.lock-field input:focus {
+    outline: none;
+    border-color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.18);
+    box-shadow: 0 0 0 4px rgba(255,255,255,0.1);
+}
+.lock-field input[readonly] {
+    background: rgba(255,255,255,0.06);
+    color: rgba(255,255,255,0.5); cursor: default;
+}
+
+.device-numbers {
+    font-size: 11px; color: rgba(168,200,255,0.9);
+    margin-top: 6px; text-align: center; font-weight: 600; letter-spacing: 0.5px;
+}
+
+.lock-btn {
+    width: 100%; padding: 15px;
+    border: none; border-radius: 16px;
+    font-size: 15px; font-weight: 700;
+    cursor: pointer; transition: var(--transition);
+    margin-bottom: 12px; display: flex;
+    align-items: center; justify-content: center; gap: 8px;
+    font-family: var(--font-main); letter-spacing: 0.2px;
+}
+.lock-btn:active { transform: scale(0.97); }
+.lock-btn-primary {
+    background: rgba(255,255,255,0.95); color: var(--blue-deep);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+.lock-btn-primary:hover { background: #FFFFFF; box-shadow: 0 6px 24px rgba(0,0,0,0.25); }
+.lock-btn-secondary {
+    background: rgba(45,190,127,0.9); color: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(45,190,127,0.3);
+}
+.lock-btn-secondary:hover { background: rgba(45,190,127,1); }
+.lock-btn:disabled { opacity: 0.45; cursor: not-allowed; transform: none !important; }
+
+.lock-error {
+    background: rgba(231,111,111,0.15);
+    border: 1px solid rgba(231,111,111,0.4);
+    color: #FFB3B3; padding: 12px 16px;
+    border-radius: 12px; font-size: 13px;
+    text-align: center; margin-top: 16px; display: none;
+    font-weight: 500;
+}
+.lock-error.show { display: block; animation: shake 0.4s; }
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+.lock-footer {
+    text-align: center; margin-top: 24px;
+    padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.15);
+    font-size: 11px; color: rgba(255,255,255,0.4);
+    direction: rtl; font-weight: 500; letter-spacing: 0.3px;
+}
+.lock-footer .lock-footer-icon { color: rgba(168,200,255,0.7); margin: 0 4px; }
+
+/* ═══════════════════════════════════════
+   APP WRAPPER
+═══════════════════════════════════════ */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+    padding-top: 20px;
+}
+
+/* ═══════════════════════════════════════
+   APP HEADER HERO BAND
+═══════════════════════════════════════ */
+.app-hero {
+    background: linear-gradient(135deg, #1a2d6b 0%, #2D4EA2 50%, #3C6BD6 100%);
+    padding: 28px 36px 80px 36px;
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 32px 32px;
+    margin-bottom: -60px;
+}
+.app-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 100% at 90% 50%, rgba(91,141,239,0.25) 0%, transparent 70%),
+                radial-gradient(circle at 10% 90%, rgba(255,255,255,0.04) 0%, transparent 50%);
+    pointer-events: none;
+}
+.app-hero-inner {
+    display: flex; align-items: center; justify-content: space-between;
+    position: relative; z-index: 1;
+    max-width: 1100px; margin: 0 auto;
+}
+.app-hero-brand {
+    display: flex; align-items: center; gap: 14px;
+}
+.app-hero-logo {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+.app-hero-name { font-size: 20px; font-weight: 800; color: #FFFFFF; letter-spacing: -0.3px; }
+.app-hero-sub  { font-size: 11px; color: rgba(255,255,255,0.55); text-transform: uppercase; letter-spacing: 1px; margin-top: 1px; font-weight: 500; }
+.app-hero-badge {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.85);
+    padding: 6px 14px; border-radius: var(--radius-pill);
+    font-size: 12px; font-weight: 600; letter-spacing: 0.3px;
+}
+
+/* ═══════════════════════════════════════
+   TABS — pill navigation card
+═══════════════════════════════════════ */
+.tabs {
+    background: var(--bg-card);
+    border-radius: 20px;
+    padding: 6px;
+    margin: 0 20px 24px 20px;
+    display: flex;
+    gap: 4px;
+    box-shadow: var(--shadow-card);
+    overflow-x: auto;
+    position: relative;
+    z-index: 10;
+    border: none;
+    scrollbar-width: none;
+}
+.tabs::-webkit-scrollbar { display: none; }
+
+.tab {
+    flex: 1; min-width: 100px;
+    padding: 11px 16px;
+    background: transparent;
+    color: var(--text-secondary);
+    border: none; cursor: pointer;
+    font-size: 13px; font-weight: 600;
+    border-radius: 14px;
+    transition: var(--transition);
+    white-space: nowrap;
+    font-family: var(--font-main);
+    letter-spacing: 0.1px;
+    position: relative;
+}
+.tab:hover:not(.active) {
+    background: var(--blue-pale);
+    color: var(--blue-royal);
+}
+.tab.active {
+    background: linear-gradient(135deg, var(--blue-deep), var(--blue-royal));
+    color: #FFFFFF;
+    box-shadow: 0 4px 16px rgba(45,78,162,0.35);
+}
+.tab:active { transform: scale(0.97); }
+
+/* ═══════════════════════════════════════
+   SECTIONS
+═══════════════════════════════════════ */
+.section {
+    display: none;
+    padding: 0 20px 40px 20px;
+    animation: sectionFadeIn 0.25s ease;
+}
+.section.active { display: block; }
+
+@keyframes sectionFadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ═══════════════════════════════════════
+   SECTION HEADINGS
+═══════════════════════════════════════ */
+h2 {
+    font-size: 22px; font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+    padding-bottom: 0; border-bottom: none;
+    letter-spacing: -0.3px;
+}
+h2::after { display: none; }
+
+h3 {
+    font-size: 13px; font-weight: 700;
+    color: var(--text-secondary);
+    margin: 24px 0 12px 0;
+    text-transform: uppercase; letter-spacing: 0.8px;
+}
+
+/* ═══════════════════════════════════════
+   FORM GROUPS — white cards
+═══════════════════════════════════════ */
+.form-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 16px;
+    border: 1px solid rgba(232,237,245,0.8);
+}
+.form-card h3 {
+    margin-top: 0; padding-bottom: 14px;
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 18px;
+    font-size: 12px; letter-spacing: 0.8px;
+    color: var(--text-muted);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-bottom: 0;
+}
+
+.form-group { margin-bottom: 16px; }
+.form-group:last-child { margin-bottom: 0; }
+
+.form-group label {
+    display: block;
+    margin-bottom: 7px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1.5px solid var(--border-soft);
+    border-radius: var(--radius-input);
+    font-size: 14px;
+    font-family: var(--font-main);
+    color: var(--text-primary);
+    background: #FAFBFD;
+    transition: var(--transition);
+    -webkit-appearance: none; appearance: none;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--blue-accent);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(91,141,239,0.12);
+}
+.form-group input[readonly] {
+    background: var(--blue-pale);
+    color: var(--blue-royal);
+    font-family: var(--font-mono);
+    font-weight: 500;
+}
+.form-group textarea {
+    min-height: 96px; resize: vertical;
+    line-height: 1.6;
+}
+.form-group select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237B8A9A' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+}
+
+.address-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+/* ═══════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════ */
+.btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    padding: 11px 22px;
+    background: linear-gradient(135deg, var(--blue-deep), var(--blue-royal));
+    color: #FFFFFF; border: none;
+    border-radius: var(--radius-btn);
+    cursor: pointer; font-size: 14px; font-weight: 600;
+    font-family: var(--font-main);
+    transition: var(--transition);
+    margin-right: 8px; margin-bottom: 8px;
+    letter-spacing: 0.1px;
+    box-shadow: 0 3px 12px rgba(45,78,162,0.3);
+    white-space: nowrap;
+}
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(45,78,162,0.4);
+    filter: brightness(1.05);
+}
+.btn:active { transform: scale(0.97) translateY(0); box-shadow: none; }
+
+.btn-success {
+    background: linear-gradient(135deg, #22a870, var(--success));
+    box-shadow: 0 3px 12px rgba(45,190,127,0.3);
+}
+.btn-success:hover { box-shadow: 0 6px 20px rgba(45,190,127,0.4); }
+
+.btn-danger {
+    background: linear-gradient(135deg, #d45555, var(--danger));
+    box-shadow: 0 3px 12px rgba(231,111,111,0.3);
+}
+.btn-danger:hover { box-shadow: 0 6px 20px rgba(231,111,111,0.4); }
+
+.btn-warning {
+    background: linear-gradient(135deg, #e0a025, var(--warning));
+    color: #FFFFFF;
+    box-shadow: 0 3px 12px rgba(244,183,64,0.3);
+}
+.btn-warning:hover { box-shadow: 0 6px 20px rgba(244,183,64,0.4); }
+
+.btn-whatsapp {
+    background: linear-gradient(135deg, #1da851, #25D366);
+    box-shadow: 0 3px 12px rgba(37,211,102,0.3);
+}
+.btn-whatsapp:hover { box-shadow: 0 6px 20px rgba(37,211,102,0.4); }
+
+.btn-small {
+    padding: 8px 16px; font-size: 13px;
+    border-radius: 12px;
+}
+.btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+/* ═══════════════════════════════════════
+   TABLES
+═══════════════════════════════════════ */
+.items-table-container {
+    overflow-x: auto;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    margin: 16px 0;
+    background: var(--bg-card);
+    border: none;
+}
+.items-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; background: var(--bg-card);
+}
+.items-table thead th {
+    background: var(--blue-pale);
+    color: var(--blue-deep);
+    font-weight: 700; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    padding: 14px 12px;
+    text-align: left; border-bottom: none;
+    position: sticky; top: 0; z-index: 2;
+}
+.items-table thead th:first-child { border-radius: var(--radius-card) 0 0 0; }
+.items-table thead th:last-child  { border-radius: 0 var(--radius-card) 0 0; }
+
+.items-table tbody tr {
+    border-bottom: 1px solid #F0F4FF;
+    transition: background-color 0.15s;
+}
+.items-table tbody tr:last-child { border-bottom: none; }
+.items-table tbody tr:hover { background: var(--blue-pale); }
+.items-table td {
+    padding: 11px 12px;
+    color: var(--text-primary);
+    vertical-align: middle;
+}
+.items-table td:last-child { text-align: center; }
+
+.items-table input {
+    width: 100%; padding: 8px 10px;
+    border: 1.5px solid var(--border-soft);
+    border-radius: 10px; font-size: 13px;
+    font-family: var(--font-main);
+    background: #FAFBFD; color: var(--text-primary);
+    transition: var(--transition);
+}
+.items-table input:focus {
+    outline: none; border-color: var(--blue-accent);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 3px rgba(91,141,239,0.1);
+}
+.items-table .remove-btn {
+    background: var(--danger-bg); color: var(--danger);
+    border: 1px solid rgba(231,111,111,0.2);
+    padding: 7px 12px; border-radius: 10px;
+    cursor: pointer; font-size: 12px; font-weight: 600;
+    transition: var(--transition);
+}
+.items-table .remove-btn:hover {
+    background: var(--danger); color: #FFFFFF;
+    box-shadow: 0 2px 8px rgba(231,111,111,0.3);
+}
+
+/* ═══════════════════════════════════════
+   SAVED LISTS
+═══════════════════════════════════════ */
+.saved-list {
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 8px;
+    margin: 14px 0;
+    max-height: 420px;
+    overflow-y: auto;
+    border: none;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-soft) transparent;
+}
+.saved-item {
+    padding: 14px 16px;
+    margin-bottom: 4px;
+    background: var(--bg-card);
+    border-radius: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 14px; color: var(--text-primary);
+    transition: var(--transition);
+    border: 1px solid transparent;
+    cursor: pointer;
+}
+.saved-item:hover {
+    background: var(--blue-pale);
+    border-color: rgba(91,141,239,0.2);
+    transform: translateX(2px);
+    box-shadow: 0 2px 12px rgba(45,78,162,0.08);
+}
+
+/* ═══════════════════════════════════════
+   INVOICE ITEMS (saved invoices list)
+═══════════════════════════════════════ */
+.invoice-item {
+    background: var(--bg-card);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--blue-royal);
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: var(--transition);
+}
+.invoice-item:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+.invoice-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+.invoice-item-number { font-weight: 700; color: var(--text-primary); font-size: 15px; }
+.invoice-item-date { font-size: 13px; color: var(--text-muted); }
+.invoice-item-details { font-size: 13px; color: var(--text-secondary); }
+
+/* ═══════════════════════════════════════
+   TOTALS SECTION
+═══════════════════════════════════════ */
+.totals-section {
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 24px 28px;
+    margin-top: 20px;
+    border: none;
+}
+.total-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-soft);
+    font-size: 14px;
+}
+.total-row:last-child { border-bottom: none; }
+.total-label {
+    color: var(--text-secondary); font-weight: 500;
+    flex: 1; padding-right: 24px;
+}
+.total-value {
+    font-weight: 700; color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-size: 14px; text-align: right; min-width: 120px;
+}
+.grand-total {
+    background: linear-gradient(135deg, var(--blue-pale), #E0EDFF);
+    margin: 8px -28px -24px -28px;
+    padding: 18px 28px;
+    border-radius: 0 0 var(--radius-card) var(--radius-card);
+    border-bottom: none !important;
+}
+.grand-total .total-label {
+    color: var(--blue-deep); font-size: 15px; font-weight: 700;
+}
+.grand-total .total-value {
+    color: var(--blue-deep); font-size: 20px; font-weight: 800;
+    letter-spacing: -0.3px;
+}
+
+/* Inline discount input style */
+#invoiceDiscountPercent {
+    width: 72px !important; margin-left: 10px;
+    padding: 5px 8px !important;
+    border-radius: 8px !important;
+    border: 1.5px solid var(--border-soft) !important;
+    font-size: 13px !important;
+    font-family: var(--font-mono) !important;
+    background: #FAFBFD !important;
+    color: var(--text-primary) !important;
+    display: inline-block !important;
+    vertical-align: middle;
+}
+#invoiceDiscountPercent:focus {
+    outline: none !important;
+    border-color: var(--blue-accent) !important;
+    box-shadow: 0 0 0 3px rgba(91,141,239,0.1) !important;
+}
+
+/* ═══════════════════════════════════════
+   CURRENCY SYMBOL
+═══════════════════════════════════════ */
+.currency-symbol {
+    font-weight: 600; color: var(--blue-accent);
+    font-family: var(--font-mono); font-size: 12px; margin-left: 3px;
+}
+
+/* ═══════════════════════════════════════
+   STATUS BADGES
+═══════════════════════════════════════ */
+.status-badge {
+    display: inline-flex; align-items: center;
+    padding: 5px 14px; border-radius: var(--radius-pill);
+    font-weight: 700; font-size: 12px; letter-spacing: 0.3px;
+    text-transform: uppercase;
+}
+.status-paid { background: var(--success-bg); color: var(--success); }
+.status-unpaid { background: var(--danger-bg); color: var(--danger); }
+.status-partial { background: var(--warning-bg); color: #B07E1A; }
+
+/* ═══════════════════════════════════════
+   PAYMENT TRACKING
+═══════════════════════════════════════ */
+.payment-tracking-section {
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 22px 24px;
+    margin: 20px 0;
+    border: none;
+}
+.payment-tracking-section h4 {
+    font-size: 15px; font-weight: 700;
+    color: var(--text-primary); margin-bottom: 16px;
+}
+.payment-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 12px;
+    margin-bottom: 10px; padding: 12px 14px;
+    background: var(--bg-app);
+    border-radius: 14px;
+    border: 1px solid var(--border-soft);
+    align-items: center;
+}
+
+/* Payment summary box inside tracking */
+#paymentTrackingSection > div[style] {
+    background: linear-gradient(135deg, var(--success-bg), #D5F5E9) !important;
+    border: none !important;
+    border-radius: 14px !important;
+    margin-top: 16px;
+    padding: 16px 20px !important;
+}
+
+/* ═══════════════════════════════════════
+   LOGO PREVIEW
+═══════════════════════════════════════ */
+.logo-preview {
+    display: inline-block;
+    margin: 14px 0;
+    border: 2px dashed var(--border-soft);
+    padding: 16px;
+    border-radius: 16px;
+    background: var(--bg-app);
+    max-width: 260px;
+}
+.logo-preview img { max-width: 100%; max-height: 96px; }
+
+/* ═══════════════════════════════════════
+   EDITABLE SECTION (header/footer/terms)
+═══════════════════════════════════════ */
+.editable-section {
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 20px 24px;
+    margin: 16px 0;
+    border: none;
+}
+.editable-section h3 {
+    font-size: 12px; color: var(--blue-royal);
+    font-weight: 700; text-transform: uppercase;
+    letter-spacing: 0.8px; margin-top: 0; margin-bottom: 12px;
+}
+.editable-section textarea {
+    width: 100%; padding: 12px 14px;
+    border: 1.5px solid var(--border-soft);
+    border-radius: var(--radius-input);
+    min-height: 90px; font-size: 14px;
+    font-family: var(--font-main);
+    background: #FAFBFD; color: var(--text-primary);
+    resize: vertical; transition: var(--transition);
+}
+.editable-section textarea:focus {
+    outline: none; border-color: var(--blue-accent);
+    background: #FFFFFF;
+    box-shadow: 0 0 0 4px rgba(91,141,239,0.1);
+}
+
+/* ═══════════════════════════════════════
+   MODAL
+═══════════════════════════════════════ */
+.modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(30,42,58,0.55);
+    z-index: 1000; overflow: auto;
+    backdrop-filter: blur(4px);
+}
+.modal-content {
+    background: var(--bg-card);
+    max-width: 680px; margin: 60px auto;
+    padding: 32px; border-radius: 24px;
+    max-height: 85vh; overflow-y: auto;
+    box-shadow: var(--shadow-strong);
+    border: 1px solid var(--border-soft);
+}
+.modal-content h2 { margin-bottom: 20px; font-size: 20px; }
+
+/* ═══════════════════════════════════════
+   INVOICE PREVIEW  (unchanged doc layout)
+═══════════════════════════════════════ */
+.invoice-preview {
+    background: #FFFFFF;
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow-card);
+    padding: 24px;
+    max-width: 210mm;
+    margin: 0 auto;
+    font-size: 11px;
+    border: 1px solid var(--border-soft);
+    overflow-x: auto;
+}
+.invoice-header {
+    display: grid; grid-template-columns: 200px 1fr 120px;
+    gap: 20px; align-items: start;
+    margin-bottom: 20px; padding-bottom: 16px;
+    border-bottom: 2px solid var(--blue-royal);
+}
+.invoice-header .logo-and-info { display: flex; flex-direction: column; gap: 10px; }
+.invoice-header .logo-section img { max-width: 180px; max-height: 80px; }
+.invoice-header .company-info { font-size: 10px; line-height: 1.6; color: #4B5563; }
+.invoice-header .company-info strong { color: #111827; }
+.invoice-header .title-section { text-align: center; }
+.invoice-header .qr-section-header { text-align: right; }
+.invoice-header h1 { color: var(--text-primary); margin-bottom: 8px; font-size: 20px; font-weight: 700; }
+.invoice-details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 12px; margin-bottom: 16px; font-size: 10px; }
+.invoice-info { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
+.info-box { border: 1px solid #E5E7EB; padding: 12px; border-radius: 8px; background: #F9FAFB; }
+.info-box h3 { background: var(--blue-royal); color: #FFFFFF; padding: 8px; margin: -12px -12px 12px -12px; border-radius: 6px 6px 0 0; font-size: 13px; font-weight: 600; text-transform: none; letter-spacing: normal; }
+.info-box h4 { font-size: 11px; margin: 12px 0 8px 0; color: #111827; border-bottom: 1px solid #E5E7EB; padding-bottom: 5px; font-weight: 600; }
+.address-table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 9px; }
+.address-table th, .address-table td { padding: 4px; text-align: left; border: 1px solid #E5E7EB; }
+.address-table th { background: #F3F4F6; font-weight: 600; font-size: 8px; }
+.info-row { display: flex; margin-bottom: 6px; font-size: 10px; }
+.info-label { font-weight: 600; min-width: 120px; color: #111827; }
+.totals-section .total-row { padding: 10px 0 !important; }
+.invoice-footer { text-align: center; margin-top: 20px; padding-top: 14px; border-top: 1px solid #E5E7EB; font-size: 10px; color: #6B7280; }
+
+/* ═══════════════════════════════════════
+   PREVIEW SECTION ACTION BAR
+═══════════════════════════════════════ */
+#section-5 > div:first-child {
+    display: flex; flex-wrap: wrap; gap: 10px;
+    justify-content: center; align-items: center;
+    background: var(--bg-card);
+    border-radius: var(--radius-card);
+    padding: 20px 24px; margin-bottom: 20px;
+    box-shadow: var(--shadow-card);
+    text-align: unset;
+}
+
+/* ═══════════════════════════════════════
+   DISCOUNT BADGE
+═══════════════════════════════════════ */
+.discount-badge {
+    background: var(--success-bg); color: var(--success);
+    padding: 3px 10px; border-radius: var(--radius-pill);
+    font-size: 11px; font-weight: 700;
+    display: inline-flex; align-items: center;
+}
+
+/* ═══════════════════════════════════════
+   SECTION CONTENT WRAPPER (card grouping)
+═══════════════════════════════════════ */
+#section-0 > .form-group,
+#section-0 > .form-row,
+#section-1 > .form-group,
+#section-1 > .form-row,
+#section-2 > .form-group,
+#section-2 > .form-row,
+#section-3 > .form-group,
+#section-3 > .form-row {
+    background: var(--bg-card);
+    padding: 20px 22px;
+    border-radius: 18px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 14px;
+    border: 1px solid rgba(232,237,245,0.7);
+}
+
+/* Address grid card wrapper */
+.address-grid {
+    background: var(--bg-card);
+    border-radius: 18px;
+    padding: 20px 22px;
+    box-shadow: var(--shadow-card);
+    margin-bottom: 14px;
+    border: 1px solid rgba(232,237,245,0.7);
+    gap: 16px;
+}
+.address-grid .form-group {
+    background: transparent !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+    margin-bottom: 0 !important;
+    border: none !important;
+}
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width: 768px) {
+    .app-hero { padding: 20px 20px 70px 20px; border-radius: 0 0 24px 24px; }
+    .app-hero-inner { flex-direction: column; gap: 12px; }
+    .app-hero-badge { display: none; }
+    .tabs { margin: 0 12px 20px 12px; padding: 5px; gap: 3px; }
+    .tab { font-size: 12px; padding: 10px 12px; min-width: 80px; }
+    .section { padding: 0 12px 40px 12px; }
+    .form-row, .address-grid { grid-template-columns: 1fr; }
+    .invoice-info { grid-template-columns: 1fr; }
+    .invoice-header { grid-template-columns: 1fr !important; text-align: center; }
+    .invoice-details-grid { grid-template-columns: 1fr; }
+    .payment-item { grid-template-columns: 1fr 1fr; }
+    .grand-total { margin: 8px -24px -24px -24px !important; padding: 18px 24px !important; }
+    .totals-section { padding: 20px; }
+    .modal-content { margin: 20px 12px; border-radius: 20px; padding: 24px; }
+    #section-0 > .form-group, #section-0 > .form-row,
+    #section-1 > .form-group, #section-1 > .form-row,
+    #section-2 > .form-group, #section-2 > .form-row,
+    #section-3 > .form-group, #section-3 > .form-row {
+        padding: 16px 18px;
+        border-radius: 16px;
+    }
+    .address-grid { padding: 16px 18px; border-radius: 16px; }
+    .btn { margin-right: 0; width: 100%; }
+    .form-card { padding: 18px; }
+    .totals-section { margin-left: 0; margin-right: 0; }
+}
+
+/* ═══════════════════════════════════════
+   PRINT — FULLY PRESERVED
+═══════════════════════════════════════ */
+@media print {
+    body { background: #FFFFFF; padding: 0; }
+    .container { border: none; border-radius: 0; max-width: 100%; background: #FFFFFF; }
+    .tabs, .section:not(.invoice-section), .btn, .editable-section { display: none !important; }
+    .invoice-section { display: block !important; padding: 0 !important; }
+    .invoice-preview { padding: 10mm !important; font-size: 9px !important; border: none !important; box-shadow: none !important; }
+    .app-hero { display: none !important; }
+    @page { size: A4; margin: 10mm; }
+}
+
+    </style>
+</head>
+<body>
+
+<!-- ========== LICENSE LOCK SCREEN ========== -->
+<div id="license-lock-overlay">
+    <div class="lock-container">
+        <div class="lock-header">
+            <div class="lock-logo">
+                <div class="lock-logo-icon">📄</div>
+                <div class="lock-logo-text">
+                    <h1 class="lock-logo-title">ZATCA <span>فاتورة</span></h1>
+                    <p class="lock-logo-subtitle">E-INVOICE SYSTEM | نظام الفواتير الإلكترونية</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="lock-step-indicator">
+            <div class="lock-step active">
+                <div class="lock-step-circle">🔐</div>
+                <div class="lock-step-label">التفعيل<br>Activation</div>
+            </div>
+        </div>
+        
+        <div class="lock-field">
+            <label>Device ID | معرّف الجهاز *</label>
+            <input type="text" id="device-id-display" readonly>
+            <div class="device-numbers" id="device-numbers-display"></div>
+        </div>
+        
+        <div class="lock-field">
+            <label>Activation Passcode | رمز التفعيل *</label>
+            <input type="text" id="passcode-input" placeholder="أدخل رمز التفعيل من المسؤول">
+        </div>
+        
+        <button class="lock-btn lock-btn-secondary" id="request-passcode-btn">
+            <span>📱</span>
+            <span>طلب رمز التفعيل عبر واتساب</span>
+        </button>
+        
+        <button class="lock-btn lock-btn-primary" id="unlock-btn">
+            <span>🔓</span>
+            <span>تفعيل النظام | Activate System</span>
+        </button>
+        
+        <div class="lock-error" id="lock-error">
+            رمز التفعيل غير صحيح. يرجى المحاولة مرة أخرى.
+        </div>
+        
+        <div class="lock-footer">
+            <span class="lock-footer-icon">🔒</span>
+            نظام محمي بترخيص إلكتروني
+            <span class="lock-footer-icon">|</span>
+            Protected by License System v2.0
+        </div>
+    </div>
+</div>
+
+<!-- ========== LICENSE LOCK SCRIPT (UNCHANGED) ========== -->
+<script>
+(function() {
+  'use strict';
+  
+  const WHATSAPP_NUMBER = '+966566958474';
+  const SALT = 'ZATCA_Invoice_2024_SecureKey_v1';
+  
+  function extractNumbers(deviceId) {
+    return deviceId.replace(/[^0-9]/g, '');
+  }
+  
+  function getOrCreateDeviceId() {
+    let deviceId = localStorage.getItem('app_device_id');
+    if (!deviceId) {
+      deviceId = crypto.randomUUID();
+      localStorage.setItem('app_device_id', deviceId);
+    }
+    return deviceId;
+  }
+  
+  async function sha256(text) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(text);
+    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    return hashHex;
+  }
+  
+  async function validatePasscode(deviceId, inputPasscode) {
+    const deviceNumbers = extractNumbers(deviceId);
+    const expectedHash = await sha256(deviceNumbers + SALT);
+    const inputHash = await sha256(inputPasscode + SALT);
+    return expectedHash === inputHash;
+  }
+  
+  function unlockApp() {
+    localStorage.setItem('app_unlocked', 'true');
+    document.getElementById('license-lock-overlay').classList.add('hidden');
+  }
+  
+  function isAppUnlocked() {
+    return localStorage.getItem('app_unlocked') === 'true';
+  }
+  
+  const deviceId = getOrCreateDeviceId();
+  const deviceNumbers = extractNumbers(deviceId);
+  
+  if (isAppUnlocked()) {
+    unlockApp();
+  } else {
+    document.getElementById('device-id-display').value = deviceId;
+    document.getElementById('device-numbers-display').textContent = `Numbers: ${deviceNumbers}`;
+    
+    document.getElementById('request-passcode-btn').addEventListener('click', function() {
+      const message = `السلام عليكم، أحتاج إلى رمز تفعيل نظام ZATCA\n\nDevice ID: ${deviceId}\nDevice Numbers: ${deviceNumbers}`;
+      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent(message)}`;
+      window.open(whatsappUrl, '_blank');
+    });
+    
+    document.getElementById('unlock-btn').addEventListener('click', async function() {
+      const passcodeInput = document.getElementById('passcode-input');
+      const errorDiv = document.getElementById('lock-error');
+      const inputPasscode = passcodeInput.value.trim();
+      
+      if (!inputPasscode) {
+        errorDiv.textContent = 'يرجى إدخال رمز التفعيل | Please enter passcode';
+        errorDiv.classList.add('show');
+        return;
+      }
+      
+      this.disabled = true;
+      this.innerHTML = '<span>⏳</span><span>جاري التحقق... Validating...</span>';
+      
+      const isValid = await validatePasscode(deviceId, inputPasscode);
+      
+      if (isValid) {
+        errorDiv.classList.remove('show');
+        this.innerHTML = '<span>✅</span><span>تم التفعيل بنجاح! Activated!</span>';
+        this.style.background = '#16A34A';
+        setTimeout(unlockApp, 800);
+      } else {
+        errorDiv.textContent = 'رمز التفعيل غير صحيح. يرجى المحاولة مرة أخرى.';
+        errorDiv.classList.add('show');
+        passcodeInput.value = '';
+        passcodeInput.focus();
+        this.disabled = false;
+        this.innerHTML = '<span>🔓</span><span>تفعيل النظام | Activate System</span>';
+      }
+    });
+    
+    document.getElementById('passcode-input').addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') {
+        document.getElementById('unlock-btn').click();
+      }
+    });
+  }
+  
+})();
+</script>
+
+<!-- ========== MAIN APPLICATION ========== -->
+<!-- APP HERO HEADER -->
+<div class="app-hero">
+    <div class="app-hero-inner">
+        <div class="app-hero-brand">
+            <div class="app-hero-logo">📄</div>
+            <div>
+                <div class="app-hero-name">ZATCA <span style="color:#A8C8FF;">فاتورة</span></div>
+                <div class="app-hero-sub">E-Invoice System</div>
+            </div>
+        </div>
+        <div class="app-hero-badge">🇸🇦 ZATCA Compliant · Phase 2</div>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <button class="tab active" onclick="showSection(0)">
+            💼 Seller | البائع
+        </button>
+        <button class="tab" onclick="showSection(1)">
+            🛒 Buyer | المشتري
+        </button>
+        <button class="tab" onclick="showSection(2)">
+            📦 Items | البنود
+        </button>
+        <button class="tab" onclick="showSection(3)">
+            📄 Invoice | الفاتورة
+        </button>
+        <button class="tab" onclick="showSection(4)">
+            💾 Saved | المحفوظة
+        </button>
+        <button class="tab" onclick="showSection(5)">
+            👁️ Preview | معاينة
+        </button>
+    </div>
+
+    <!-- Section 1: Seller Information -->
+    <div class="section active" id="section-0">
+        <h2>Seller Information | معلومات البائع</h2>
+        
+        <div class="form-group">
+            <label>Select Saved Seller | اختر بائع محفوظ</label>
+            <select id="savedSellersList" onchange="loadSelectedSeller()">
+                <option value="">-- New Seller --</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Seller Name | اسم البائع *</label>
+            <input type="text" id="sellerName" placeholder="Enter seller name">
+        </div>
+
+        <div class="form-group">
+            <label>Company Logo | شعار الشركة</label>
+            <input type="file" id="sellerLogo" accept="image/*" onchange="previewLogo()">
+            <div class="logo-preview" id="logoPreview" style="display: none;">
+                <img id="logoImage" src="" alt="Logo">
+            </div>
+        </div>
+
+        <h3>Address Details | تفاصيل العنوان</h3>
+        
+        <div class="address-grid">
+            <div class="form-group">
+                <label>Building No | رقم المبنى</label>
+                <input type="text" id="sellerBuildingNo" placeholder="1234">
+            </div>
+            <div class="form-group">
+                <label>Street | الشارع</label>
+                <input type="text" id="sellerStreet" placeholder="King Fahd Road">
+            </div>
+            <div class="form-group">
+                <label>District | الحي</label>
+                <input type="text" id="sellerDistrict" placeholder="Al Olaya">
+            </div>
+            <div class="form-group">
+                <label>City | المدينة</label>
+                <input type="text" id="sellerCity" placeholder="Riyadh">
+            </div>
+            <div class="form-group">
+                <label>Country | الدولة</label>
+                <select id="sellerCountry">
+                    <option value="Saudi Arabia | المملكة العربية السعودية">Saudi Arabia | المملكة العربية السعودية</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Postal Code | الرمز البريدي</label>
+                <input type="text" id="sellerPostalCode" placeholder="12345">
+            </div>
+            <div class="form-group">
+                <label>Additional No | الرقم الإضافي</label>
+                <input type="text" id="sellerAdditionalNo" placeholder="1234">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>VAT Number | الرقم الضريبي *</label>
+                <input type="text" id="sellerVAT" placeholder="3XXXXXXXXXX3">
+            </div>
+            <div class="form-group">
+                <label>CR Number | رقم السجل التجاري</label>
+                <input type="text" id="sellerCR" placeholder="XXXXXXXXXX">
+            </div>
+        </div>
+
+        <button class="btn btn-success" onclick="saveSeller()">
+            💾 Save Seller | حفظ البائع
+        </button>
+        <button class="btn btn-danger" onclick="deleteSeller()">
+            🗑️ Delete Seller | حذف البائع
+        </button>
+    </div>
+
+    <!-- Section 2: Buyer Information -->
+    <div class="section" id="section-1">
+        <h2>Buyer Information | معلومات المشتري</h2>
+        
+        <div class="form-group">
+            <label>Select Saved Buyer | اختر مشتري محفوظ</label>
+            <select id="savedBuyersList" onchange="loadSelectedBuyer()">
+                <option value="">-- New Buyer --</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Buyer Name | اسم المشتري *</label>
+            <input type="text" id="buyerName" placeholder="Enter buyer name">
+        </div>
+
+        <h3>Address Details | تفاصيل العنوان</h3>
+        
+        <div class="address-grid">
+            <div class="form-group">
+                <label>Building No | رقم المبنى</label>
+                <input type="text" id="buyerBuildingNo" placeholder="1234">
+            </div>
+            <div class="form-group">
+                <label>Street | الشارع</label>
+                <input type="text" id="buyerStreet" placeholder="King Fahd Road">
+            </div>
+            <div class="form-group">
+                <label>District | الحي</label>
+                <input type="text" id="buyerDistrict" placeholder="Al Olaya">
+            </div>
+            <div class="form-group">
+                <label>City | المدينة</label>
+                <input type="text" id="buyerCity" placeholder="Riyadh">
+            </div>
+            <div class="form-group">
+                <label>Country | الدولة</label>
+                <select id="buyerCountry">
+                    <option value="Saudi Arabia | المملكة العربية السعودية">Saudi Arabia | المملكة العربية السعودية</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Postal Code | الرمز البريدي</label>
+                <input type="text" id="buyerPostalCode" placeholder="12345">
+            </div>
+            <div class="form-group">
+                <label>Additional No | الرقم الإضافي</label>
+                <input type="text" id="buyerAdditionalNo" placeholder="1234">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>VAT Number | الرقم الضريبي</label>
+                <input type="text" id="buyerVAT" placeholder="3XXXXXXXXXX3">
+            </div>
+            <div class="form-group">
+                <label>CR Number | رقم السجل التجاري</label>
+                <input type="text" id="buyerCR" placeholder="XXXXXXXXXX">
+            </div>
+        </div>
+
+        <button class="btn btn-success" onclick="saveBuyer()">
+            💾 Save Buyer | حفظ المشتري
+        </button>
+        <button class="btn btn-danger" onclick="deleteBuyer()">
+            🗑️ Delete Buyer | حذف المشتري
+        </button>
+    </div>
+
+    <!-- Section 3: Items Library -->
+    <div class="section" id="section-2">
+        <h2>Items Library | مكتبة البنود</h2>
+        
+        <div class="form-group">
+            <label>Item Description | وصف البند</label>
+            <input type="text" id="itemDesc" placeholder="Product or Service Description">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Unit Price | سعر الوحدة</label>
+                <input type="number" id="itemPrice" value="0" min="0" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>VAT % | نسبة الضريبة</label>
+                <input type="number" id="itemVAT" value="15" min="0" max="100">
+            </div>
+        </div>
+
+        <button class="btn btn-success" onclick="saveItem()">
+            💾 Save Item | حفظ البند
+        </button>
+
+        <h3>Saved Items | البنود المحفوظة</h3>
+        <div class="saved-list" id="savedItemsList">
+            <!-- Saved items will appear here -->
+        </div>
+    </div>
+
+    <!-- Section 4: Invoice Details -->
+    <div class="section" id="section-3">
+        <h2>Invoice Details | تفاصيل الفاتورة</h2>
+        
+        <div class="form-row">
+            <div class="form-group">
+                <label>Invoice Date | تاريخ الفاتورة</label>
+                <input type="date" id="invoiceDate">
+            </div>
+            <div class="form-group">
+                <label>Due Date | تاريخ الاستحقاق</label>
+                <input type="date" id="invoiceDueDate">
+            </div>
+            <div class="form-group">
+                <label>Invoice Number (Auto) | رقم الفاتورة</label>
+                <input type="text" id="invoiceNumber" readonly>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Invoice Reference | مرجع الفاتورة</label>
+                <input type="text" id="invoiceReference" placeholder="REF-2024-001">
+            </div>
+            <div class="form-group">
+                <label>Currency | العملة</label>
+                <select id="invoiceCurrency" onchange="updateCurrencyDisplay()">
+                    <option value="SAR">SAR - Saudi Riyal</option>
+                    <option value="USD">USD - US Dollar</option>
+                    <option value="EUR">EUR - Euro</option>
+                    <option value="GBP">GBP - British Pound</option>
+                    <option value="AED">AED - UAE Dirham</option>
+                    <option value="KWD">KWD - Kuwaiti Dinar</option>
+                    <option value="BHD">BHD - Bahraini Dinar</option>
+                    <option value="QAR">QAR - Qatari Riyal</option>
+                    <option value="OMR">OMR - Omani Rial</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Payment Status | حالة الدفع</label>
+                <select id="invoiceStatus" onchange="updateStatusDisplay()">
+                    <option value="Paid">Paid | مدفوع</option>
+                    <option value="Unpaid">Unpaid | غير مدفوع</option>
+                    <option value="Partial">Partial | دفع جزئي</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Bank Details | التفاصيل البنكية</label>
+            <textarea id="bankDetails" placeholder="Bank Name, Account Number, IBAN"></textarea>
+        </div>
+
+        <h3>Invoice Items | بنود الفاتورة</h3>
+        
+        <button class="btn btn-warning btn-small" onclick="showItemSelector()">
+            📋 Add from Library | إضافة من المكتبة
+        </button>
+        
+        <div class="items-table-container">
+            <table class="items-table" id="itemsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Description | الوصف</th>
+                        <th style="width: 8%;">Qty</th>
+                        <th style="width: 12%;">Price</th>
+                        <th style="width: 8%;">Disc %</th>
+                        <th style="width: 12%;">After Disc</th>
+                        <th style="width: 8%;">VAT %</th>
+                        <th style="width: 12%;">VAT Amt</th>
+                        <th style="width: 12%;">Total</th>
+                        <th style="width: 3%;"></th>
+                    </tr>
+                </thead>
+                <tbody id="itemsBody">
+                </tbody>
+            </table>
+        </div>
+
+        <button class="btn btn-success" onclick="addInvoiceItem()">
+            ➕ Add New Item | إضافة بند جديد
+        </button>
+        
+        <div class="totals-section">
+            <div class="total-row">
+                <span class="total-label">Subtotal (Before Discount) | المجموع قبل الخصم:</span>
+                <span class="total-value" id="subtotalBeforeDiscountDisplay">0.00 <span class="currency-symbol">SAR</span></span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Item Discounts | خصومات البنود:</span>
+                <span class="total-value" id="itemDiscountsDisplay">0.00 <span class="currency-symbol">SAR</span></span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Subtotal (After Item Discount) | بعد خصم البنود:</span>
+                <span class="total-value" id="subtotalAfterItemDiscountDisplay">0.00 <span class="currency-symbol">SAR</span></span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">
+                    Invoice Discount (Before VAT) | خصم الفاتورة:
+                    <input type="number" id="invoiceDiscountPercent" value="0" min="0" max="100" step="0.01" 
+                           style="width: 80px; margin-left: 10px; padding: 5px; border-radius: 4px; border: 1px solid #D1D5DB;" 
+                           onchange="calculateTotals()"> %
+                </span>
+                <span class="total-value" id="invoiceDiscountDisplay">0.00 <span class="currency-symbol">SAR</span></span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Subtotal (Before VAT) | المجموع قبل الضريبة:</span>
+                <span class="total-value" id="subtotalDisplay">0.00 <span class="currency-symbol">SAR</span></span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Total VAT | إجمالي الضريبة:</span>
+                <span class="total-value" id="vatTotalDisplay">0.00 <span class="currency-symbol">SAR</span></span>
+            </div>
+            <div class="total-row grand-total">
+                <span class="total-label">Grand Total | الإجمالي النهائي:</span>
+                <span class="total-value" id="grandTotalDisplay">0.00 <span class="currency-symbol">SAR</span></span>
+            </div>
+            <div class="total-row">
+                <span class="total-label">Status | الحالة:</span>
+                <span class="total-value" id="statusDisplay">Unpaid | غير مدفوع</span>
+            </div>
+        </div>
+
+        <!-- Payment Tracking Section -->
+        <div class="payment-tracking-section" id="paymentTrackingSection" style="display: none;">
+            <h4>💰 Payment Tracking | تتبع الدفعات</h4>
+            <div id="paymentsContainer"></div>
+            <button class="btn btn-success btn-small" onclick="addPayment()">
+                ➕ Add Payment | إضافة دفعة
+            </button>
+            <div style="margin-top: 15px; padding: 14px; background: #FFFFFF; border-radius: 6px; border: 1px solid #16A34A;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <strong>Total Paid | المدفوع:</strong>
+                    <span id="totalPaidDisplay" style="color: #16A34A; font-weight: bold;">0.00 <span class="currency-symbol">SAR</span></span>
+                </div>
+                <div style="display: flex; justify-content: space-between;">
+                    <strong>Remaining | المتبقي:</strong>
+                    <span id="remainingDisplay" style="color: #DC2626; font-weight: bold;">0.00 <span class="currency-symbol">SAR</span></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Terms & Conditions -->
+        <div class="editable-section">
+            <h3>📋 Terms & Conditions | الشروط والأحكام</h3>
+            <textarea id="termsConditions" placeholder="Enter your terms and conditions here...
+مثال:
+1. الدفع خلال 30 يوم من تاريخ الفاتورة
+2. جميع الأسعار غير شاملة الضريبة
+3. البضاعة المباعة لا ترد ولا تستبدل
+
+Example:
+1. Payment is due within 30 days of invoice date
+2. All prices are exclusive of VAT
+3. Goods sold are not returnable or exchangeable"></textarea>
+        </div>
+        
+        <br>
+        <button class="btn btn-success" onclick="saveCurrentInvoice()">
+            💾 Save Invoice | حفظ الفاتورة
+        </button>
+        <button class="btn btn-warning" onclick="generateQRCode()">
+            🔲 Generate QR Code | إنشاء رمز QR
+        </button>
+        <button class="btn" onclick="newInvoice()">
+            📄 New Invoice | فاتورة جديدة
+        </button>
+    </div>
+
+    <!-- Section 5: Saved Invoices -->
+    <div class="section" id="section-4">
+        <h2>Saved Invoices | الفواتير المحفوظة</h2>
+        <div class="saved-list" id="savedInvoicesList">
+            <!-- Saved invoices will appear here -->
+        </div>
+    </div>
+
+    <!-- Section 6: Invoice Preview -->
+    <div class="section invoice-section" id="section-5">
+        <div style="text-align: center; margin-bottom: 20px;">
+            <button class="btn" onclick="window.print()">
+                🖨️ Print | طباعة
+            </button>
+            <button class="btn btn-success" onclick="saveAsPDF()">
+                📄 Save as PDF | حفظ PDF
+            </button>
+            <button class="btn btn-whatsapp" onclick="shareToWhatsApp()">
+                📱 Share WhatsApp | مشاركة واتساب
+            </button>
+        </div>
+
+        <div class="editable-section">
+            <h3>Edit Header | تعديل الرأس</h3>
+            <textarea id="headerText" placeholder="Enter custom header text (optional)"></textarea>
+        </div>
+
+        <div class="editable-section">
+            <h3>Edit Footer | تعديل التذييل</h3>
+            <textarea id="footerText">Thank you for your business | شكراً لتعاملكم معنا
+This is a computer-generated invoice | هذه فاتورة إلكترونية</textarea>
+        </div>
+
+        <div class="invoice-preview" id="invoicePreview">
+            <!-- Invoice content will be generated here -->
+        </div>
+    </div>
+</div>
+
+<!-- Item Selector Modal -->
+<div id="itemSelectorModal" class="modal">
+    <div class="modal-content">
+        <h2>Select Item | اختر البند</h2>
+        <div id="itemSelectorList" class="saved-list"></div>
+        <button class="btn btn-danger" onclick="closeItemSelector()">Close | إغلاق</button>
+    </div>
+</div>
+
+<!-- ========== ALL JAVASCRIPT UNCHANGED ========== -->
+<script>
+    // Global variables
+    let currentInvoiceId = null;
+    let payments = [];
+
+    // ==========================================
+    // INITIALIZATION
+    // ==========================================
+    window.onload = function() {
+        loadSellersList();
+        loadBuyersList();
+        loadItemsList();
+        loadSavedInvoices();
+        setTodayDate();
+        generateInvoiceNumber();
+        addInvoiceItem();
+        updateStatusDisplay();
+        updateCurrencyDisplay();
+    };
+
+    // ==========================================
+    // NAVIGATION
+    // ==========================================
+    function showSection(index) {
+        const sections = document.querySelectorAll('.section');
+        const tabs = document.querySelectorAll('.tab');
+        
+        sections.forEach((section, i) => {
+            section.classList.remove('active');
+            tabs[i].classList.remove('active');
+        });
+        
+        sections[index].classList.add('active');
+        tabs[index].classList.add('active');
+
+        if (index === 4) {
+            loadSavedInvoices();
+        } else if (index === 5) {
+            generateInvoicePreview();
+        }
+    }
+
+    // ==========================================
+    // CURRENCY MANAGEMENT
+    // ==========================================
+    function updateCurrencyDisplay() {
+        const currency = document.getElementById('invoiceCurrency').value;
+        const currencySymbols = document.querySelectorAll('.currency-symbol');
+        currencySymbols.forEach(symbol => {
+            symbol.textContent = currency;
+        });
+        calculateTotals();
+    }
+
+    function getCurrency() {
+        return document.getElementById('invoiceCurrency').value;
+    }
+
+    // ==========================================
+    // LOGO PREVIEW
+    // ==========================================
+    function previewLogo() {
+        const file = document.getElementById('sellerLogo').files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('logoImage').src = e.target.result;
+                document.getElementById('logoPreview').style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+    }
+
+    // ==========================================
+    // SELLER MANAGEMENT
+    // ==========================================
+    function saveSeller() {
+        const sellerName = document.getElementById('sellerName').value.trim();
+        if (!sellerName) {
+            alert('⚠️ Please enter seller name!');
+            return;
+        }
+
+        const logoFile = document.getElementById('sellerLogo').files[0];
+        let logoData = null;
+
+        if (logoFile) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                logoData = e.target.result;
+                saveSellerData(logoData);
+            };
+            reader.readAsDataURL(logoFile);
+        } else {
+            const existingLogo = document.getElementById('logoImage').src;
+            if (existingLogo && existingLogo !== window.location.href) {
+                logoData = existingLogo;
+            }
+            saveSellerData(logoData);
+        }
+    }
+
+    function saveSellerData(logoData) {
+        const sellerData = {
+            name: document.getElementById('sellerName').value,
+            buildingNo: document.getElementById('sellerBuildingNo').value,
+            street: document.getElementById('sellerStreet').value,
+            district: document.getElementById('sellerDistrict').value,
+            city: document.getElementById('sellerCity').value,
+            country: document.getElementById('sellerCountry').value,
+            postalCode: document.getElementById('sellerPostalCode').value,
+            additionalNo: document.getElementById('sellerAdditionalNo').value,
+            vat: document.getElementById('sellerVAT').value,
+            cr: document.getElementById('sellerCR').value,
+            logo: logoData
+        };
+
+        let sellers = JSON.parse(localStorage.getItem('sellers') || '[]');
+        const index = sellers.findIndex(s => s.name === sellerData.name);
+        
+        if (index > -1) {
+            sellers[index] = sellerData;
+        } else {
+            sellers.push(sellerData);
+        }
+
+        localStorage.setItem('sellers', JSON.stringify(sellers));
+        loadSellersList();
+        alert('✅ Seller saved! | تم حفظ البائع!');
+    }
+
+    function loadSellersList() {
+        const sellers = JSON.parse(localStorage.getItem('sellers') || '[]');
+        const select = document.getElementById('savedSellersList');
+        select.innerHTML = '<option value="">-- New Seller --</option>';
+        
+        sellers.forEach((seller, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = seller.name;
+            select.appendChild(option);
+        });
+    }
+
+    function loadSelectedSeller() {
+        const index = document.getElementById('savedSellersList').value;
+        if (index === '') {
+            clearSellerForm();
+            return;
+        }
+
+        const sellers = JSON.parse(localStorage.getItem('sellers') || '[]');
+        const seller = sellers[index];
+
+        if (seller) {
+            document.getElementById('sellerName').value = seller.name || '';
+            document.getElementById('sellerBuildingNo').value = seller.buildingNo || '';
+            document.getElementById('sellerStreet').value = seller.street || '';
+            document.getElementById('sellerDistrict').value = seller.district || '';
+            document.getElementById('sellerCity').value = seller.city || '';
+            document.getElementById('sellerCountry').value = seller.country || 'Saudi Arabia | المملكة العربية السعودية';
+            document.getElementById('sellerPostalCode').value = seller.postalCode || '';
+            document.getElementById('sellerAdditionalNo').value = seller.additionalNo || '';
+            document.getElementById('sellerVAT').value = seller.vat || '';
+            document.getElementById('sellerCR').value = seller.cr || '';
+
+            if (seller.logo) {
+                document.getElementById('logoImage').src = seller.logo;
+                document.getElementById('logoPreview').style.display = 'block';
+            }
+        }
+    }
+
+    function clearSellerForm() {
+        document.getElementById('sellerName').value = '';
+        document.getElementById('sellerBuildingNo').value = '';
+        document.getElementById('sellerStreet').value = '';
+        document.getElementById('sellerDistrict').value = '';
+        document.getElementById('sellerCity').value = '';
+        document.getElementById('sellerPostalCode').value = '';
+        document.getElementById('sellerAdditionalNo').value = '';
+        document.getElementById('sellerVAT').value = '';
+        document.getElementById('sellerCR').value = '';
+        document.getElementById('logoPreview').style.display = 'none';
+        document.getElementById('sellerLogo').value = '';
+    }
+
+    function deleteSeller() {
+        const index = document.getElementById('savedSellersList').value;
+        if (index === '') {
+            alert('⚠️ Please select a seller to delete!');
+            return;
+        }
+
+        if (confirm('Are you sure you want to delete this seller? | هل أنت متأكد من حذف هذا البائع؟')) {
+            let sellers = JSON.parse(localStorage.getItem('sellers') || '[]');
+            sellers.splice(index, 1);
+            localStorage.setItem('sellers', JSON.stringify(sellers));
+            loadSellersList();
+            clearSellerForm();
+            alert('✅ Seller deleted! | تم حذف البائع!');
+        }
+    }
+
+    // ==========================================
+    // BUYER MANAGEMENT
+    // ==========================================
+    function saveBuyer() {
+        const buyerName = document.getElementById('buyerName').value.trim();
+        if (!buyerName) {
+            alert('⚠️ Please enter buyer name!');
+            return;
+        }
+
+        const buyerData = {
+            name: document.getElementById('buyerName').value,
+            buildingNo: document.getElementById('buyerBuildingNo').value,
+            street: document.getElementById('buyerStreet').value,
+            district: document.getElementById('buyerDistrict').value,
+            city: document.getElementById('buyerCity').value,
+            country: document.getElementById('buyerCountry').value,
+            postalCode: document.getElementById('buyerPostalCode').value,
+            additionalNo: document.getElementById('buyerAdditionalNo').value,
+            vat: document.getElementById('buyerVAT').value,
+            cr: document.getElementById('buyerCR').value
+        };
+
+        let buyers = JSON.parse(localStorage.getItem('buyers') || '[]');
+        const index = buyers.findIndex(b => b.name === buyerData.name);
+        
+        if (index > -1) {
+            buyers[index] = buyerData;
+        } else {
+            buyers.push(buyerData);
+        }
+
+        localStorage.setItem('buyers', JSON.stringify(buyers));
+        loadBuyersList();
+        alert('✅ Buyer saved! | تم حفظ المشتري!');
+    }
+
+    function loadBuyersList() {
+        const buyers = JSON.parse(localStorage.getItem('buyers') || '[]');
+        const select = document.getElementById('savedBuyersList');
+        select.innerHTML = '<option value="">-- New Buyer --</option>';
+        
+        buyers.forEach((buyer, index) => {
+            const option = document.createElement('option');
+            option.value = index;
+            option.textContent = buyer.name;
+            select.appendChild(option);
+        });
+    }
+
+    function loadSelectedBuyer() {
+        const index = document.getElementById('savedBuyersList').value;
+        if (index === '') {
+            clearBuyerForm();
+            return;
+        }
+
+        const buyers = JSON.parse(localStorage.getItem('buyers') || '[]');
+        const buyer = buyers[index];
+
+        if (buyer) {
+            document.getElementById('buyerName').value = buyer.name || '';
+            document.getElementById('buyerBuildingNo').value = buyer.buildingNo || '';
+            document.getElementById('buyerStreet').value = buyer.street || '';
+            document.getElementById('buyerDistrict').value = buyer.district || '';
+            document.getElementById('buyerCity').value = buyer.city || '';
+            document.getElementById('buyerCountry').value = buyer.country || 'Saudi Arabia | المملكة العربية السعودية';
+            document.getElementById('buyerPostalCode').value = buyer.postalCode || '';
+            document.getElementById('buyerAdditionalNo').value = buyer.additionalNo || '';
+            document.getElementById('buyerVAT').value = buyer.vat || '';
+            document.getElementById('buyerCR').value = buyer.cr || '';
+        }
+    }
+
+    function clearBuyerForm() {
+        document.getElementById('buyerName').value = '';
+        document.getElementById('buyerBuildingNo').value = '';
+        document.getElementById('buyerStreet').value = '';
+        document.getElementById('buyerDistrict').value = '';
+        document.getElementById('buyerCity').value = '';
+        document.getElementById('buyerPostalCode').value = '';
+        document.getElementById('buyerAdditionalNo').value = '';
+        document.getElementById('buyerVAT').value = '';
+        document.getElementById('buyerCR').value = '';
+    }
+
+    function deleteBuyer() {
+        const index = document.getElementById('savedBuyersList').value;
+        if (index === '') {
+            alert('⚠️ Please select a buyer to delete!');
+            return;
+        }
+
+        if (confirm('Are you sure you want to delete this buyer? | هل أنت متأكد من حذف هذا المشتري؟')) {
+            let buyers = JSON.parse(localStorage.getItem('buyers') || '[]');
+            buyers.splice(index, 1);
+            localStorage.setItem('buyers', JSON.stringify(buyers));
+            loadBuyersList();
+            clearBuyerForm();
+            alert('✅ Buyer deleted! | تم حذف المشتري!');
+        }
+    }
+
+    // ==========================================
+    // ITEMS LIBRARY
+    // ==========================================
+    function saveItem() {
+        const desc = document.getElementById('itemDesc').value.trim();
+        if (!desc) {
+            alert('⚠️ Please enter item description!');
+            return;
+        }
+
+        const itemData = {
+            description: desc,
+            price: document.getElementById('itemPrice').value,
+            vatPercent: document.getElementById('itemVAT').value
+        };
+
+        let items = JSON.parse(localStorage.getItem('itemsLibrary') || '[]');
+        items.push(itemData);
+        localStorage.setItem('itemsLibrary', JSON.stringify(items));
+        
+        document.getElementById('itemDesc').value = '';
+        document.getElementById('itemPrice').value = '0';
+        document.getElementById('itemVAT').value = '15';
+        
+        loadItemsList();
+        alert('✅ Item saved! | تم حفظ البند!');
+    }
+
+    function loadItemsList() {
+        const items = JSON.parse(localStorage.getItem('itemsLibrary') || '[]');
+        const list = document.getElementById('savedItemsList');
+        list.innerHTML = '';
+
+        items.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'saved-item';
+            div.innerHTML = `
+                <span>${item.description} - ${item.price} (VAT: ${item.vatPercent}%)</span>
+                <button class="btn-small btn-danger" onclick="deleteItem(${index})">Delete</button>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function deleteItem(index) {
+        if (confirm('Delete this item? | حذف هذا البند؟')) {
+            let items = JSON.parse(localStorage.getItem('itemsLibrary') || '[]');
+            items.splice(index, 1);
+            localStorage.setItem('itemsLibrary', JSON.stringify(items));
+            loadItemsList();
+        }
+    }
+
+    function showItemSelector() {
+        const items = JSON.parse(localStorage.getItem('itemsLibrary') || '[]');
+        const list = document.getElementById('itemSelectorList');
+        list.innerHTML = '';
+
+        if (items.length === 0) {
+            list.innerHTML = '<p>No saved items. Go to Items tab to add items.</p>';
+        } else {
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'saved-item';
+                div.innerHTML = `<span>${item.description} - ${item.price} (VAT: ${item.vatPercent}%)</span>`;
+                div.onclick = () => {
+                    addItemToInvoice(item);
+                    closeItemSelector();
+                };
+                list.appendChild(div);
+            });
+        }
+
+        document.getElementById('itemSelectorModal').style.display = 'block';
+    }
+
+    function closeItemSelector() {
+        document.getElementById('itemSelectorModal').style.display = 'none';
+    }
+
+    function addItemToInvoice(item) {
+        const tbody = document.getElementById('itemsBody');
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td><input type="text" class="item-desc" value="${item.description}"></td>
+            <td><input type="number" class="item-qty" value="1" min="1" onchange="calculateRow(this)"></td>
+            <td><input type="number" class="item-price" value="${item.price}" min="0" step="0.01" onchange="calculateRow(this)"></td>
+            <td><input type="number" class="item-discount" value="0" min="0" max="100" step="0.01" onchange="calculateRow(this)"></td>
+            <td><input type="number" class="item-after-discount" value="0" readonly></td>
+            <td><input type="number" class="item-vat-percent" value="${item.vatPercent}" min="0" max="100" onchange="calculateRow(this)"></td>
+            <td><input type="number" class="item-vat-amount" value="0" readonly></td>
+            <td><input type="number" class="item-total" value="0" readonly></td>
+            <td><button class="remove-btn" onclick="removeItem(this)">✕</button></td>
+        `;
+        calculateRow(row.querySelector('.item-qty'));
+    }
+
+    // ==========================================
+    // INVOICE ITEMS
+    // ==========================================
+    function addInvoiceItem() {
+        const tbody = document.getElementById('itemsBody');
+        const row = tbody.insertRow();
+        row.innerHTML = `
+            <td><input type="text" class="item-desc" placeholder="Item description"></td>
+            <td><input type="number" class="item-qty" value="1" min="1" onchange="calculateRow(this)"></td>
+            <td><input type="number" class="item-price" value="0" min="0" step="0.01" onchange="calculateRow(this)"></td>
+            <td><input type="number" class="item-discount" value="0" min="0" max="100" step="0.01" onchange="calculateRow(this)"></td>
+            <td><input type="number" class="item-after-discount" value="0" readonly></td>
+            <td><input type="number" class="item-vat-percent" value="15" min="0" max="100" onchange="calculateRow(this)"></td>
+            <td><input type="number" class="item-vat-amount" value="0" readonly></td>
+            <td><input type="number" class="item-total" value="0" readonly></td>
+            <td><button class="remove-btn" onclick="removeItem(this)">✕</button></td>
+        `;
+    }
+
+    function removeItem(btn) {
+        const row = btn.closest('tr');
+        row.remove();
+        calculateTotals();
+    }
+
+    function calculateRow(input) {
+        const row = input.closest('tr');
+        const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+        const price = parseFloat(row.querySelector('.item-price').value) || 0;
+        const discountPercent = parseFloat(row.querySelector('.item-discount').value) || 0;
+        const vatPercent = parseFloat(row.querySelector('.item-vat-percent').value) || 0;
+        
+        const subtotal = qty * price;
+        const discountAmount = subtotal * (discountPercent / 100);
+        const afterDiscount = subtotal - discountAmount;
+        const vatAmount = afterDiscount * (vatPercent / 100);
+        const total = afterDiscount + vatAmount;
+        
+        row.querySelector('.item-after-discount').value = afterDiscount.toFixed(2);
+        row.querySelector('.item-vat-amount').value = vatAmount.toFixed(2);
+        row.querySelector('.item-total').value = total.toFixed(2);
+        
+        calculateTotals();
+    }
+
+    function calculateTotals() {
+        const currency = getCurrency();
+        const rows = document.querySelectorAll('#itemsBody tr');
+        let subtotalBeforeDiscount = 0;
+        let itemDiscounts = 0;
+        let subtotalAfterItemDiscount = 0;
+        let vatTotal = 0;
+        
+        rows.forEach(row => {
+            const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+            const price = parseFloat(row.querySelector('.item-price').value) || 0;
+            const discountPercent = parseFloat(row.querySelector('.item-discount').value) || 0;
+            const afterDiscount = parseFloat(row.querySelector('.item-after-discount').value) || 0;
+            const vatAmount = parseFloat(row.querySelector('.item-vat-amount').value) || 0;
+            
+            const itemSubtotal = qty * price;
+            const itemDiscountAmount = itemSubtotal * (discountPercent / 100);
+            
+            subtotalBeforeDiscount += itemSubtotal;
+            itemDiscounts += itemDiscountAmount;
+            subtotalAfterItemDiscount += afterDiscount;
+            vatTotal += vatAmount;
+        });
+        
+        // Invoice-level discount (before VAT)
+        const invoiceDiscountPercent = parseFloat(document.getElementById('invoiceDiscountPercent').value) || 0;
+        const invoiceDiscountAmount = subtotalAfterItemDiscount * (invoiceDiscountPercent / 100);
+        const subtotalBeforeVAT = subtotalAfterItemDiscount - invoiceDiscountAmount;
+        
+        // Recalculate VAT on the new subtotal
+        vatTotal = 0;
+        rows.forEach(row => {
+            const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+            const price = parseFloat(row.querySelector('.item-price').value) || 0;
+            const discountPercent = parseFloat(row.querySelector('.item-discount').value) || 0;
+            const vatPercent = parseFloat(row.querySelector('.item-vat-percent').value) || 0;
+            
+            const itemSubtotal = qty * price;
+            const itemDiscountAmount = itemSubtotal * (discountPercent / 100);
+            const afterItemDiscount = itemSubtotal - itemDiscountAmount;
+            
+            // Apply proportional invoice discount
+            const proportionalInvoiceDiscount = (afterItemDiscount / subtotalAfterItemDiscount) * invoiceDiscountAmount;
+            const finalItemSubtotal = afterItemDiscount - proportionalInvoiceDiscount;
+            
+            const vatAmount = finalItemSubtotal * (vatPercent / 100);
+            vatTotal += vatAmount;
+        });
+        
+        const grandTotal = subtotalBeforeVAT + vatTotal;
+        
+        document.getElementById('subtotalBeforeDiscountDisplay').innerHTML = `${subtotalBeforeDiscount.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
+        document.getElementById('itemDiscountsDisplay').innerHTML = `${itemDiscounts.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
+        document.getElementById('subtotalAfterItemDiscountDisplay').innerHTML = `${subtotalAfterItemDiscount.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
+        document.getElementById('invoiceDiscountDisplay').innerHTML = `${invoiceDiscountAmount.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
+        document.getElementById('subtotalDisplay').innerHTML = `${subtotalBeforeVAT.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
+        document.getElementById('vatTotalDisplay').innerHTML = `${vatTotal.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
+        document.getElementById('grandTotalDisplay').innerHTML = `${grandTotal.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
+        
+        updatePaymentTracking();
+    }
+
+    function updateStatusDisplay() {
+        const status = document.getElementById('invoiceStatus').value;
+        let statusText = '';
+        
+        if (status === 'Paid') {
+            statusText = '<span class="status-badge status-paid">Paid | مدفوع</span>';
+            document.getElementById('paymentTrackingSection').style.display = 'none';
+        } else if (status === 'Unpaid') {
+            statusText = '<span class="status-badge status-unpaid">Unpaid | غير مدفوع</span>';
+            document.getElementById('paymentTrackingSection').style.display = 'none';
+        } else if (status === 'Partial') {
+            statusText = '<span class="status-badge status-partial">Partial Payment | دفع جزئي</span>';
+            document.getElementById('paymentTrackingSection').style.display = 'block';
+        }
+        
+        document.getElementById('statusDisplay').innerHTML = statusText;
+        updatePaymentTracking();
+    }
+
+    // ==========================================
+    // PAYMENT TRACKING
+    // ==========================================
+    function addPayment() {
+        const payment = {
+            date: new Date().toISOString().split('T')[0],
+            amount: 0,
+            method: 'Cash',
+            notes: ''
+        };
+        payments.push(payment);
+        renderPayments();
+    }
+
+    function removePayment(index) {
+        payments.splice(index, 1);
+        renderPayments();
+    }
+
+    function renderPayments() {
+        const container = document.getElementById('paymentsContainer');
+        container.innerHTML = '';
+        
+        payments.forEach((payment, index) => {
+            const div = document.createElement('div');
+            div.className = 'payment-item';
+            div.innerHTML = `
+                <input type="date" value="${payment.date}" onchange="updatePayment(${index}, 'date', this.value)">
+                <input type="number" value="${payment.amount}" min="0" step="0.01" placeholder="Amount" 
+                       onchange="updatePayment(${index}, 'amount', this.value)">
+                <select onchange="updatePayment(${index}, 'method', this.value)">
+                    <option value="Cash" ${payment.method === 'Cash' ? 'selected' : ''}>Cash</option>
+                    <option value="Bank Transfer" ${payment.method === 'Bank Transfer' ? 'selected' : ''}>Bank Transfer</option>
+                    <option value="Credit Card" ${payment.method === 'Credit Card' ? 'selected' : ''}>Credit Card</option>
+                    <option value="Check" ${payment.method === 'Check' ? 'selected' : ''}>Check</option>
+                </select>
+                <button class="remove-btn" onclick="removePayment(${index})">✕</button>
+            `;
+            container.appendChild(div);
+        });
+        
+        updatePaymentTracking();
+    }
+
+    function updatePayment(index, field, value) {
+        payments[index][field] = value;
+        updatePaymentTracking();
+    }
+
+    function updatePaymentTracking() {
+        const currency = getCurrency();
+        const grandTotalText = document.getElementById('grandTotalDisplay').textContent;
+        const grandTotal = parseFloat(grandTotalText.replace(/[^0-9.-]+/g, '')) || 0;
+        
+        const totalPaid = payments.reduce((sum, payment) => sum + (parseFloat(payment.amount) || 0), 0);
+        const remaining = grandTotal - totalPaid;
+        
+        document.getElementById('totalPaidDisplay').innerHTML = `${totalPaid.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
+        document.getElementById('remainingDisplay').innerHTML = `${remaining.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
+    }
+
+    // ==========================================
+    // INVOICE MANAGEMENT
+    // ==========================================
+    function saveCurrentInvoice() {
+        const items = [];
+        const rows = document.querySelectorAll('#itemsBody tr');
+        
+        rows.forEach(row => {
+            const desc = row.querySelector('.item-desc').value;
+            if (desc.trim()) {
+                items.push({
+                    description: desc,
+                    qty: row.querySelector('.item-qty').value,
+                    price: row.querySelector('.item-price').value,
+                    discount: row.querySelector('.item-discount').value,
+                    afterDiscount: row.querySelector('.item-after-discount').value,
+                    vatPercent: row.querySelector('.item-vat-percent').value,
+                    vatAmount: row.querySelector('.item-vat-amount').value,
+                    total: row.querySelector('.item-total').value
+                });
+            }
+        });
+
+        if (items.length === 0) {
+            alert('⚠️ Please add at least one item!');
+            return;
+        }
+
+        const invoice = {
+            id: currentInvoiceId || Date.now().toString(),
+            date: document.getElementById('invoiceDate').value,
+            dueDate: document.getElementById('invoiceDueDate').value,
+            number: document.getElementById('invoiceNumber').value,
+            reference: document.getElementById('invoiceReference').value,
+            currency: document.getElementById('invoiceCurrency').value,
+            status: document.getElementById('invoiceStatus').value,
+            bankDetails: document.getElementById('bankDetails').value,
+            sellerIndex: document.getElementById('savedSellersList').value,
+            buyerIndex: document.getElementById('savedBuyersList').value,
+            items: items,
+            invoiceDiscountPercent: document.getElementById('invoiceDiscountPercent').value,
+            payments: payments,
+            termsConditions: document.getElementById('termsConditions').value,
+            qrCode: localStorage.getItem('qrCodeData') || '',
+            headerText: document.getElementById('headerText').value,
+            footerText: document.getElementById('footerText').value,
+            savedAt: new Date().toISOString()
+        };
+
+        let invoices = JSON.parse(localStorage.getItem('invoices') || '[]');
+        const index = invoices.findIndex(inv => inv.id === invoice.id);
+        
+        if (index > -1) {
+            invoices[index] = invoice;
+            alert('✅ Invoice updated! | تم تحديث الفاتورة!');
+        } else {
+            invoices.push(invoice);
+            currentInvoiceId = invoice.id;
+            alert('✅ Invoice saved! | تم حفظ الفاتورة!');
+        }
+
+        localStorage.setItem('invoices', JSON.stringify(invoices));
+        loadSavedInvoices();
+    }
+
+    function loadSavedInvoices() {
+        const invoices = JSON.parse(localStorage.getItem('invoices') || '[]');
+        const list = document.getElementById('savedInvoicesList');
+        list.innerHTML = '';
+
+        if (invoices.length === 0) {
+            list.innerHTML = '<p style="text-align: center; padding: 20px; color: #6B7280;">No saved invoices yet.</p>';
+            return;
+        }
+
+        invoices.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+
+        invoices.forEach((invoice, index) => {
+            const div = document.createElement('div');
+            div.className = 'invoice-item';
+            const statusClass = invoice.status === 'Paid' ? 'status-paid' : invoice.status === 'Partial' ? 'status-partial' : 'status-unpaid';
+            
+            div.innerHTML = `
+                <div class="invoice-item-header">
+                    <span class="invoice-item-number">${invoice.number}</span>
+                    <span class="invoice-item-date">${invoice.date}</span>
+                </div>
+                <div class="invoice-item-details">
+                    <span class="status-badge ${statusClass}">${invoice.status}</span>
+                    <span style="margin-left: 10px;">Items: ${invoice.items.length}</span>
+                    ${invoice.reference ? `<span style="margin-left: 10px;">Ref: ${invoice.reference}</span>` : ''}
+                    ${invoice.currency ? `<span style="margin-left: 10px;">Currency: ${invoice.currency}</span>` : ''}
+                </div>
+                <div style="margin-top: 8px;">
+                    <button class="btn-small btn-success" onclick="loadInvoice('${invoice.id}')">Load | تحميل</button>
+                    <button class="btn-small btn-danger" onclick="deleteInvoice('${invoice.id}')">Delete | حذف</button>
+                </div>
+            `;
+            list.appendChild(div);
+        });
+    }
+
+    function loadInvoice(id) {
+        const invoices = JSON.parse(localStorage.getItem('invoices') || '[]');
+        const invoice = invoices.find(inv => inv.id === id);
+
+        if (!invoice) {
+            alert('⚠️ Invoice not found!');
+            return;
+        }
+
+        currentInvoiceId = invoice.id;
+
+        document.getElementById('invoiceDate').value = invoice.date;
+        document.getElementById('invoiceDueDate').value = invoice.dueDate || '';
+        document.getElementById('invoiceNumber').value = invoice.number;
+        document.getElementById('invoiceReference').value = invoice.reference || '';
+        document.getElementById('invoiceCurrency').value = invoice.currency || 'SAR';
+        document.getElementById('invoiceStatus').value = invoice.status;
+        document.getElementById('bankDetails').value = invoice.bankDetails || '';
+        document.getElementById('invoiceDiscountPercent').value = invoice.invoiceDiscountPercent || 0;
+        document.getElementById('termsConditions').value = invoice.termsConditions || '';
+
+        if (invoice.sellerIndex !== '' && invoice.sellerIndex !== undefined) {
+            document.getElementById('savedSellersList').value = invoice.sellerIndex;
+            loadSelectedSeller();
+        }
+
+        if (invoice.buyerIndex !== '' && invoice.buyerIndex !== undefined) {
+            document.getElementById('savedBuyersList').value = invoice.buyerIndex;
+            loadSelectedBuyer();
+        }
+
+        const tbody = document.getElementById('itemsBody');
+        tbody.innerHTML = '';
+
+        invoice.items.forEach(item => {
+            const row = tbody.insertRow();
+            row.innerHTML = `
+                <td><input type="text" class="item-desc" value="${item.description}"></td>
+                <td><input type="number" class="item-qty" value="${item.qty}" min="1" onchange="calculateRow(this)"></td>
+                <td><input type="number" class="item-price" value="${item.price}" min="0" step="0.01" onchange="calculateRow(this)"></td>
+                <td><input type="number" class="item-discount" value="${item.discount || 0}" min="0" max="100" step="0.01" onchange="calculateRow(this)"></td>
+                <td><input type="number" class="item-after-discount" value="${item.afterDiscount || 0}" readonly></td>
+                <td><input type="number" class="item-vat-percent" value="${item.vatPercent}" min="0" max="100" onchange="calculateRow(this)"></td>
+                <td><input type="number" class="item-vat-amount" value="${item.vatAmount}" readonly></td>
+                <td><input type="number" class="item-total" value="${item.total}" readonly></td>
+                <td><button class="remove-btn" onclick="removeItem(this)">✕</button></td>
+            `;
+        });
+
+        payments = invoice.payments || [];
+        renderPayments();
+
+        if (invoice.qrCode) {
+            localStorage.setItem('qrCodeData', invoice.qrCode);
+        }
+
+        if (invoice.headerText) {
+            document.getElementById('headerText').value = invoice.headerText;
+        }
+
+        if (invoice.footerText) {
+            document.getElementById('footerText').value = invoice.footerText;
+        }
+
+        updateCurrencyDisplay();
+        calculateTotals();
+        updateStatusDisplay();
+        showSection(3);
+        alert('✅ Invoice loaded! | تم تحميل الفاتورة!');
+    }
+
+    function deleteInvoice(id) {
+        if (confirm('Are you sure you want to delete this invoice? | هل أنت متأكد من حذف هذه الفاتورة؟')) {
+            let invoices = JSON.parse(localStorage.getItem('invoices') || '[]');
+            invoices = invoices.filter(inv => inv.id !== id);
+            localStorage.setItem('invoices', JSON.stringify(invoices));
+            loadSavedInvoices();
+            alert('✅ Invoice deleted! | تم حذف الفاتورة!');
+        }
+    }
+
+    function newInvoice() {
+        if (confirm('Create new invoice? Current data will be cleared. | إنشاء فاتورة جديدة؟ سيتم مسح البيانات الحالية.')) {
+            currentInvoiceId = null;
+            document.getElementById('invoiceReference').value = '';
+            document.getElementById('invoiceDueDate').value = '';
+            document.getElementById('invoiceCurrency').value = 'SAR';
+            document.getElementById('invoiceStatus').value = 'Unpaid';
+            document.getElementById('bankDetails').value = '';
+            document.getElementById('invoiceDiscountPercent').value = '0';
+            document.getElementById('termsConditions').value = '';
+            document.getElementById('itemsBody').innerHTML = '';
+            payments = [];
+            renderPayments();
+            setTodayDate();
+            generateInvoiceNumber();
+            addInvoiceItem();
+            calculateTotals();
+            updateStatusDisplay();
+            updateCurrencyDisplay();
+            localStorage.removeItem('qrCodeData');
+            alert('✅ New invoice ready! | فاتورة جديدة جاهزة!');
+        }
+    }
+
+    // ==========================================
+    // INVOICE NUMBER & DATE
+    // ==========================================
+    function generateInvoiceNumber() {
+        let counter = parseInt(localStorage.getItem('invoiceCounter') || '1000');
+        counter++;
+        localStorage.setItem('invoiceCounter', counter.toString());
+        document.getElementById('invoiceNumber').value = 'INV-' + counter;
+    }
+
+    function setTodayDate() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('invoiceDate').value = today;
+    }
+
+    // ==========================================
+    // ZATCA QR CODE GENERATION
+    // ==========================================
+    function generateQRCode() {
+        const sellerName = document.getElementById('sellerName').value;
+        const sellerVAT = document.getElementById('sellerVAT').value;
+        const invoiceDate = document.getElementById('invoiceDate').value;
+        const grandTotalText = document.getElementById('grandTotalDisplay').textContent;
+        const grandTotal = grandTotalText.replace(/[^0-9.-]+/g, '');
+        const vatTotalText = document.getElementById('vatTotalDisplay').textContent;
+        const vatTotal = vatTotalText.replace(/[^0-9.-]+/g, '');
+
+        if (!sellerName || !sellerVAT) {
+            alert('⚠️ Please fill seller name and VAT number first!');
+            return;
+        }
+
+        const timestamp = new Date(invoiceDate).toISOString();
+
+        const tlvData = generateTLV([
+            { tag: 1, value: sellerName },
+            { tag: 2, value: sellerVAT },
+            { tag: 3, value: timestamp },
+            { tag: 4, value: grandTotal },
+            { tag: 5, value: vatTotal }
+        ]);
+
+        const base64QR = btoa(tlvData);
+        localStorage.setItem('qrCodeData', base64QR);
+        
+        alert('✅ QR Code generated! | تم إنشاء رمز QR بنجاح!');
+    }
+
+    function generateTLV(fields) {
+        let tlv = '';
+        fields.forEach(field => {
+            const tag = String.fromCharCode(field.tag);
+            const value = field.value.toString();
+            const length = String.fromCharCode(value.length);
+            tlv += tag + length + value;
+        });
+        return tlv;
+    }
+
+    // ==========================================
+    // BUILD ADDRESS TABLE
+    // ==========================================
+    function buildAddressTable(data) {
+        if (!data.buildingNo && !data.street && !data.district && !data.city && !data.country && !data.postalCode && !data.additionalNo) {
+            return '';
+        }
+
+        let headers = '';
+        let values = '';
+
+        if (data.buildingNo) {
+            headers += '<th>Building No<br>رقم المبنى</th>';
+            values += `<td>${data.buildingNo}</td>`;
+        }
+        if (data.street) {
+            headers += '<th>Street<br>الشارع</th>';
+            values += `<td>${data.street}</td>`;
+        }
+        if (data.district) {
+            headers += '<th>District<br>الحي</th>';
+            values += `<td>${data.district}</td>`;
+        }
+        if (data.city) {
+            headers += '<th>City<br>المدينة</th>';
+            values += `<td>${data.city}</td>`;
+        }
+        if (data.country) {
+            headers += '<th>Country<br>الدولة</th>';
+            values += `<td>${data.country}</td>`;
+        }
+        if (data.postalCode) {
+            headers += '<th>Postal<br>الرمز البريدي</th>';
+            values += `<td>${data.postalCode}</td>`;
+        }
+        if (data.additionalNo) {
+            headers += '<th>Add. No<br>رقم إضافي</th>';
+            values += `<td>${data.additionalNo}</td>`;
+        }
+
+        return `
+            <h4>Address | العنوان</h4>
+            <table class="address-table">
+                <thead><tr>${headers}</tr></thead>
+                <tbody><tr>${values}</tr></tbody>
+            </table>
+        `;
+    }
+
+    // ==========================================
+    // INVOICE PREVIEW GENERATION
+    // ==========================================
+    function generateInvoicePreview() {
+        const currency = getCurrency();
+        const sellers = JSON.parse(localStorage.getItem('sellers') || '[]');
+        const sellerIndex = document.getElementById('savedSellersList').value;
+        const sellerData = sellerIndex !== '' ? sellers[sellerIndex] : {
+            name: document.getElementById('sellerName').value,
+            buildingNo: document.getElementById('sellerBuildingNo').value,
+            street: document.getElementById('sellerStreet').value,
+            district: document.getElementById('sellerDistrict').value,
+            city: document.getElementById('sellerCity').value,
+            country: document.getElementById('sellerCountry').value,
+            postalCode: document.getElementById('sellerPostalCode').value,
+            additionalNo: document.getElementById('sellerAdditionalNo').value,
+            vat: document.getElementById('sellerVAT').value,
+            cr: document.getElementById('sellerCR').value,
+            logo: document.getElementById('logoImage').src !== window.location.href ? document.getElementById('logoImage').src : null
+        };
+
+        const buyers = JSON.parse(localStorage.getItem('buyers') || '[]');
+        const buyerIndex = document.getElementById('savedBuyersList').value;
+        const buyerData = buyerIndex !== '' ? buyers[buyerIndex] : {
+            name: document.getElementById('buyerName').value,
+            buildingNo: document.getElementById('buyerBuildingNo').value,
+            street: document.getElementById('buyerStreet').value,
+            district: document.getElementById('buyerDistrict').value,
+            city: document.getElementById('buyerCity').value,
+            country: document.getElementById('buyerCountry').value,
+            postalCode: document.getElementById('buyerPostalCode').value,
+            additionalNo: document.getElementById('buyerAdditionalNo').value,
+            vat: document.getElementById('buyerVAT').value,
+            cr: document.getElementById('buyerCR').value
+        };
+
+        const qrData = localStorage.getItem('qrCodeData') || '';
+        const headerText = document.getElementById('headerText').value;
+        const footerText = document.getElementById('footerText').value;
+        const termsConditions = document.getElementById('termsConditions').value;
+
+        const invoiceDate = document.getElementById('invoiceDate').value;
+        const invoiceDueDate = document.getElementById('invoiceDueDate').value;
+        const invoiceNumber = document.getElementById('invoiceNumber').value;
+        const invoiceReference = document.getElementById('invoiceReference').value;
+        const invoiceStatus = document.getElementById('invoiceStatus').value;
+        const bankDetails = document.getElementById('bankDetails').value;
+
+        const subtotalBeforeDiscount = document.getElementById('subtotalBeforeDiscountDisplay').textContent;
+        const itemDiscounts = document.getElementById('itemDiscountsDisplay').textContent;
+        const subtotalAfterItemDiscount = document.getElementById('subtotalAfterItemDiscountDisplay').textContent;
+        const invoiceDiscount = document.getElementById('invoiceDiscountDisplay').textContent;
+        const subtotal = document.getElementById('subtotalDisplay').textContent;
+        const vatTotal = document.getElementById('vatTotalDisplay').textContent;
+        const grandTotal = document.getElementById('grandTotalDisplay').textContent;
+
+        // Generate items table
+        let itemsHTML = '';
+        const rows = document.querySelectorAll('#itemsBody tr');
+        let itemCount = 0;
+        rows.forEach((row) => {
+            const desc = row.querySelector('.item-desc').value;
+            if (desc.trim()) {
+                itemCount++;
+                const qty = row.querySelector('.item-qty').value;
+                const price = row.querySelector('.item-price').value;
+                const discount = row.querySelector('.item-discount').value;
+                const afterDiscount = row.querySelector('.item-after-discount').value;
+                const vatPercent = row.querySelector('.item-vat-percent').value;
+                const vatAmount = row.querySelector('.item-vat-amount').value;
+                const total = row.querySelector('.item-total').value;
+
+                const hasDiscount = parseFloat(discount) > 0;
+
+                itemsHTML += `
+                    <tr>
+                        <td>${itemCount}</td>
+                        <td>${desc}</td>
+                        <td>${qty}</td>
+                        <td>${parseFloat(price).toFixed(2)}</td>
+                        <td>${discount}%${hasDiscount ? '<br><span class="discount-badge">-' + (parseFloat(price) * parseFloat(qty) * parseFloat(discount) / 100).toFixed(2) + ' ' + currency + '</span>' : ''}</td>
+                        <td>${parseFloat(afterDiscount).toFixed(2)}</td>
+                        <td>${vatPercent}%</td>
+                        <td>${parseFloat(vatAmount).toFixed(2)}</td>
+                        <td style="font-weight: bold;">${parseFloat(total).toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+        });
+
+        const statusClass = invoiceStatus === 'Paid' ? 'status-paid' : invoiceStatus === 'Partial' ? 'status-partial' : 'status-unpaid';
+        const statusText = invoiceStatus === 'Paid' ? 'PAID | مدفوع' : invoiceStatus === 'Partial' ? 'PARTIAL PAYMENT | دفع جزئي' : 'UNPAID | غير مدفوع';
+
+        // QR Code
+        const qrCodeHTML = qrData ? `
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(qrData)}" 
+                 alt="QR" style="width: 120px; height: 120px;" 
+                 onerror="this.outerHTML='<div style=\'width:120px;height:120px;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:10px;\'>QR Code</div>';">
+        ` : '<div style="width:120px;height:120px;border:1px solid #E5E7EB;display:flex;align-items:center;justify-content:center;font-size:10px;">Generate QR</div>';
+
+        const sellerAddressTable = buildAddressTable(sellerData);
+        const buyerAddressTable = buildAddressTable(buyerData);
+
+        // Payment tracking display
+        let paymentsHTML = '';
+        if (invoiceStatus === 'Partial' && payments.length > 0) {
+            paymentsHTML = `
+                <div style="margin: 18px 0; padding: 14px; background: #F9FAFB; border-radius: 6px; border: 1px solid #E5E7EB;">
+                    <h4 style="font-size: 12px; margin-bottom: 12px; color: #111827; font-weight: 600;">Payment History | سجل الدفعات</h4>
+                    <table style="width: 100%; border-collapse: collapse; font-size: 10px;">
+                        <thead>
+                            <tr>
+                                <th style="padding: 6px; text-align: left; border: 1px solid #E5E7EB; background: #F3F4F6;">Date</th>
+                                <th style="padding: 6px; text-align: left; border: 1px solid #E5E7EB; background: #F3F4F6;">Amount</th>
+                                <th style="padding: 6px; text-align: left; border: 1px solid #E5E7EB; background: #F3F4F6;">Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            payments.forEach(payment => {
+                paymentsHTML += `
+                    <tr>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB;">${payment.date}</td>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB; font-weight: bold;">${parseFloat(payment.amount).toFixed(2)} ${currency}</td>
+                        <td style="padding: 6px; border: 1px solid #E5E7EB;">${payment.method}</td>
+                    </tr>
+                `;
+            });
+            
+            const totalPaid = payments.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
+            const grandTotalNum = parseFloat(grandTotal.replace(/[^0-9.-]+/g, ''));
+            const remaining = grandTotalNum - totalPaid;
+            
+            paymentsHTML += `
+                        </tbody>
+                    </table>
+                    <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #E5E7EB;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <strong>Total Paid | المدفوع:</strong>
+                            <span style="color: #16A34A; font-weight: bold;">${totalPaid.toFixed(2)} ${currency}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <strong>Remaining | المتبقي:</strong>
+                            <span style="color: #DC2626; font-weight: bold;">${remaining.toFixed(2)} ${currency}</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        const previewHTML = `
+            ${headerText ? `<div style="text-align: center; padding: 12px; background: #EFF6FF; margin-bottom: 18px; font-size: 12px; border-radius: 6px; border: 1px solid #BFDBFE;">${headerText}</div>` : ''}
+
+            <div class="invoice-header">
+                <div class="logo-and-info">
+                    ${sellerData.logo ? `<div class="logo-section"><img src="${sellerData.logo}" alt="Logo"></div>` : ''}
+                    <div class="company-info">
+                        ${sellerData.name ? `<div><strong>${sellerData.name}</strong></div>` : ''}
+                        ${sellerData.vat ? `<div>VAT | الرقم الضريبي: ${sellerData.vat}</div>` : ''}
+                        ${sellerData.cr ? `<div>CR | السجل التجاري: ${sellerData.cr}</div>` : ''}
+                    </div>
+                </div>
+                <div class="title-section">
+                    <h1>TAX INVOICE<br>فاتورة ضريبية</h1>
+                    <div class="status-badge ${statusClass}">${statusText}</div>
+                </div>
+                <div class="qr-section-header">
+                    ${qrCodeHTML}
+                </div>
+            </div>
+
+            <div class="invoice-details-grid">
+                <div class="info-row">
+                    <span class="info-label">Invoice Number | رقم الفاتورة:</span>
+                    <span>${invoiceNumber}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Invoice Date | تاريخ الفاتورة:</span>
+                    <span>${invoiceDate}</span>
+                </div>
+                ${invoiceDueDate ? `
+                <div class="info-row">
+                    <span class="info-label">Due Date | تاريخ الاستحقاق:</span>
+                    <span style="color: #DC2626; font-weight: bold;">${invoiceDueDate}</span>
+                </div>
+                ` : ''}
+                ${invoiceReference ? `
+                <div class="info-row">
+                    <span class="info-label">Reference | المرجع:</span>
+                    <span>${invoiceReference}</span>
+                </div>
+                ` : ''}
+                <div class="info-row">
+                    <span class="info-label">Currency | العملة:</span>
+                    <span style="font-weight: bold; color: #2563EB;">${currency}</span>
+                </div>
+            </div>
+
+            <div class="invoice-info">
+                <div class="info-box">
+                    <h3>Seller | البائع</h3>
+                    ${sellerData.name ? `<div class="info-row"><span class="info-label">Name | الاسم:</span><span>${sellerData.name}</span></div>` : ''}
+                    ${sellerAddressTable}
+                    ${sellerData.vat ? `<div class="info-row"><span class="info-label">VAT | الرقم الضريبي:</span><span>${sellerData.vat}</span></div>` : ''}
+                    ${sellerData.cr ? `<div class="info-row"><span class="info-label">CR | السجل التجاري:</span><span>${sellerData.cr}</span></div>` : ''}
+                </div>
+
+                <div class="info-box">
+                    <h3>Buyer | المشتري</h3>
+                    ${buyerData.name ? `<div class="info-row"><span class="info-label">Name | الاسم:</span><span>${buyerData.name}</span></div>` : ''}
+                    ${buyerAddressTable}
+                    ${buyerData.vat ? `<div class="info-row"><span class="info-label">VAT | الرقم الضريبي:</span><span>${buyerData.vat}</span></div>` : ''}
+                    ${buyerData.cr ? `<div class="info-row"><span class="info-label">CR | السجل التجاري:</span><span>${buyerData.cr}</span></div>` : ''}
+                </div>
+            </div>
+
+            <h3 style="margin: 15px 0 10px 0; font-size: 14px;">Invoice Items | بنود الفاتورة</h3>
+            <table class="items-table">
+                <thead>
+                    <tr>
+                        <th style="width: 5%;">#</th>
+                        <th style="width: 25%;">Description | الوصف</th>
+                        <th style="width: 8%;">Qty</th>
+                        <th style="width: 10%;">Price</th>
+                        <th style="width: 10%;">Disc %</th>
+                        <th style="width: 12%;">After Disc</th>
+                        <th style="width: 8%;">VAT %</th>
+                        <th style="width: 10%;">VAT Amt</th>
+                        <th style="width: 12%;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${itemsHTML}
+                </tbody>
+            </table>
+
+            <div class="totals-section">
+                <div class="total-row">
+                    <span class="total-label">Subtotal (Before Discount) | قبل الخصم:</span>
+                    <span class="total-value">${subtotalBeforeDiscount}</span>
+                </div>
+                ${parseFloat(itemDiscounts.replace(/[^0-9.-]+/g, '')) > 0 ? `
+                <div class="total-row">
+                    <span class="total-label">Item Discounts | خصومات البنود:</span>
+                    <span class="total-value" style="color: #16A34A;">- ${itemDiscounts}</span>
+                </div>
+                ` : ''}
+                <div class="total-row">
+                    <span class="total-label">Subtotal (After Item Discount) | بعد خصم البنود:</span>
+                    <span class="total-value">${subtotalAfterItemDiscount}</span>
+                </div>
+                ${parseFloat(invoiceDiscount.replace(/[^0-9.-]+/g, '')) > 0 ? `
+                <div class="total-row">
+                    <span class="total-label">Invoice Discount (${document.getElementById('invoiceDiscountPercent').value}%) | خصم الفاتورة:</span>
+                    <span class="total-value" style="color: #16A34A;">- ${invoiceDiscount}</span>
+                </div>
+                ` : ''}
+                <div class="total-row">
+                    <span class="total-label">Subtotal (Before VAT) | قبل الضريبة:</span>
+                    <span class="total-value">${subtotal}</span>
+                </div>
+                <div class="total-row">
+                    <span class="total-label">Total VAT | إجمالي الضريبة:</span>
+                    <span class="total-value">${vatTotal}</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span class="total-label">Grand Total | الإجمالي النهائي:</span>
+                    <span class="total-value">${grandTotal}</span>
+                </div>
+                <div class="total-row">
+                    <span class="total-label">Payment Status | حالة الدفع:</span>
+                    <span class="total-value ${statusClass}">${statusText}</span>
+                </div>
+            </div>
+
+            ${paymentsHTML}
+
+            ${bankDetails ? `
+            <div style="margin: 18px 0; padding: 14px; border: 1px solid #E5E7EB; border-radius: 6px; background: #F9FAFB;">
+                <h4 style="font-size: 12px; margin-bottom: 10px; color: #111827; font-weight: 600;">Bank Details | التفاصيل البنكية</h4>
+                <p style="white-space: pre-line; font-size: 10px; margin: 0; color: #4B5563;">${bankDetails}</p>
+            </div>
+            ` : ''}
+
+            ${termsConditions ? `
+            <div style="margin: 18px 0; padding: 14px; border: 1px solid #2563EB; border-radius: 6px; background: #EFF6FF;">
+                <h4 style="font-size: 12px; margin-bottom: 10px; color: #2563EB; font-weight: 600;">📋 Terms & Conditions | الشروط والأحكام</h4>
+                <p style="white-space: pre-line; font-size: 10px; margin: 0; line-height: 1.6; color: #1E40AF;">${termsConditions}</p>
+            </div>
+            ` : ''}
+
+            <div class="invoice-footer">
+                ${footerText.split('\n').map(line => `<p>${line}</p>`).join('')}
+            </div>
+        `;
+
+        document.getElementById('invoicePreview').innerHTML = previewHTML;
+    }
+
+    // ==========================================
+    // PDF & WHATSAPP
+    // ==========================================
+    function saveAsPDF() {
+        window.print();
+    }
+
+    function shareToWhatsApp() {
+        const invoiceNumber = document.getElementById('invoiceNumber').value;
+        const grandTotal = document.getElementById('grandTotalDisplay').textContent;
+        const invoiceDate = document.getElementById('invoiceDate').value;
+        const invoiceDueDate = document.getElementById('invoiceDueDate').value;
+        const invoiceStatus = document.getElementById('invoiceStatus').value;
+        const currency = getCurrency();
+        
+        let message = `📄 *Invoice ${invoiceNumber}*\n\n` +
+                      `Date: ${invoiceDate}\n`;
+        
+        if (invoiceDueDate) {
+            message += `Due Date: ${invoiceDueDate}\n`;
+        }
+        
+        message += `Total: ${grandTotal}\n` +
+                   `Status: ${invoiceStatus}\n` +
+                   `Currency: ${currency}\n\n` +
+                   `Please find the invoice.\nيرجى الاطلاع على الفاتورة.`;
+        
+        const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
+        window.open(whatsappURL, '_blank');
+    }
+</script>
+</body>
+</html>
