@@ -1,558 +1,2606 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>ZATCA Admin — Code Generator</title>
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --shell:      #0D1B2A;
-            --shell-mid:  #132236;
-            --shell-rim:  #1C3050;
-            --coral:      #FF5C3A;
-            --coral-dim:  #FF7A5C;
-            --green:      #2EC4A9;
-            --green-bg:   rgba(46,196,169,0.12);
-            --green-bdr:  rgba(46,196,169,0.3);
-            --red:        #E05C5C;
-            --red-bg:     rgba(224,92,92,0.12);
-            --red-bdr:    rgba(224,92,92,0.3);
-            --amber:      #F4A93A;
-            --font-d:     'Sora', system-ui, sans-serif;
-            --font-m:     'IBM Plex Mono', monospace;
-            --ease:       cubic-bezier(0.4,0,0.2,1);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#0D1B2A">
+<title>ReadyInvoice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
 
-        *, *::before, *::after {
-            margin: 0; padding: 0; box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
-        }
+/* ═══════════════════════════════════════════════════════
+   READYINVOICE — Design System
+   Sora display · IBM Plex Sans body · IBM Plex Mono data
+═══════════════════════════════════════════════════════ */
+:root {
+    --shell:         #0D1B2A;
+    --shell-mid:     #132236;
+    --shell-rim:     #1C3050;
+    --shell-hover:   #1a2d45;
+    --coral:         #FF5C3A;
+    --coral-dim:     #FF7A5C;
+    --coral-pale:    #FFF1EE;
+    --coral-glow:    rgba(255,92,58,0.18);
+    --green:         #2EC4A9;
+    --green-bg:      #E6FAF7;
+    --red:           #E05C5C;
+    --red-bg:        #FDEAEA;
+    --amber:         #F4A93A;
+    --amber-bg:      #FEF4E1;
+    --ink:           #0F1E2E;
+    --ink-2:         #4A5A70;
+    --ink-3:         #8A9BB0;
+    --ink-4:         #C0CEDF;
+    --surface:       #FFFFFF;
+    --surface-2:     #F6F9FC;
+    --surface-3:     #EDF2F8;
+    --border:        #E4EAF3;
+    --font-display:  'Sora', system-ui, sans-serif;
+    --font-body:     'IBM Plex Sans', system-ui, sans-serif;
+    --font-mono:     'IBM Plex Mono', monospace;
+    --r-xs: 6px; --r-sm: 10px; --r-md: 14px; --r-lg: 18px; --r-xl: 24px; --r-pill: 100px;
+    --shadow-card:   0 2px 16px rgba(13,27,42,0.08), 0 1px 3px rgba(13,27,42,0.04);
+    --shadow-float:  0 8px 32px rgba(13,27,42,0.16), 0 2px 8px rgba(13,27,42,0.08);
+    --ease:          cubic-bezier(0.4,0,0.2,1);
+    --dur:           0.22s;
+    --sidebar-w:     260px;
+    --sat: env(safe-area-inset-top,0px);
+    --sab: env(safe-area-inset-bottom,0px);
+}
 
-        html, body {
-            min-height: 100%;
-            font-family: var(--font-d);
-            background: var(--shell);
-            color: #fff;
-            overscroll-behavior: none;
-        }
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; -webkit-font-smoothing:antialiased; }
 
-        /* ── Mesh background ── */
-        body::before {
-            content: '';
-            position: fixed; inset: 0; pointer-events: none; z-index: 0;
-            background:
-                radial-gradient(ellipse 70% 55% at 15% 10%, rgba(255,92,58,0.14) 0%, transparent 60%),
-                radial-gradient(ellipse 55% 45% at 85% 85%, rgba(46,196,169,0.10) 0%, transparent 60%),
-                radial-gradient(ellipse 90% 70% at 50% 50%, rgba(28,48,80,0.55) 0%, transparent 75%);
-        }
+html, body { height:100%; font-family:var(--font-body); font-size:15px; color:var(--ink); background:var(--surface-2); overflow:hidden; }
 
-        .page {
-            position: relative; z-index: 1;
-            min-height: 100vh;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: flex-start;
-            padding: 40px 20px 60px;
-        }
+/* ═══════════════════════════════════════════════════════
+   LICENSE LOCK SCREEN
+═══════════════════════════════════════════════════════ */
+#license-lock-overlay {
+    position:fixed; inset:0; background:var(--shell);
+    display:flex; align-items:center; justify-content:center;
+    z-index:999999; font-family:var(--font-display);
+    padding:calc(var(--sat)+20px) 24px calc(var(--sab)+20px); overflow-y:auto;
+}
+#license-lock-overlay::before {
+    content:''; position:fixed; inset:0; pointer-events:none;
+    background:
+        radial-gradient(ellipse 60% 50% at 20% 20%,rgba(255,92,58,0.12) 0%,transparent 60%),
+        radial-gradient(ellipse 50% 40% at 80% 80%,rgba(46,196,169,0.08) 0%,transparent 60%),
+        radial-gradient(ellipse 80% 60% at 50% 50%,rgba(28,48,80,0.6) 0%,transparent 70%);
+}
+#license-lock-overlay.hidden { display:none; }
+.lock-container { width:100%; max-width:400px; position:relative; z-index:1; animation:lockAppear 0.5s var(--ease) both; }
+@keyframes lockAppear { from{opacity:0;transform:translateY(24px) scale(0.97)} to{opacity:1;transform:none} }
+.lock-header { text-align:center; margin-bottom:32px; }
+.lock-logo { display:flex; align-items:center; justify-content:center; gap:14px; margin-bottom:16px; }
+.lock-logo-icon { width:56px; height:56px; background:linear-gradient(135deg,var(--coral),#FF8060); border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:26px; box-shadow:0 8px 24px rgba(255,92,58,0.35); }
+.lock-logo-title { font-family:var(--font-display); font-size:30px; font-weight:800; color:#FFF; letter-spacing:-1px; margin:0; }
+.lock-logo-title span { color:var(--coral-dim); }
+.lock-logo-subtitle { font-size:11px; color:rgba(255,255,255,0.4); margin-top:4px; letter-spacing:1.5px; text-transform:uppercase; font-weight:500; }
+.lock-step-indicator { display:flex; justify-content:center; gap:14px; margin:28px 0; }
+.lock-step { display:flex; flex-direction:column; align-items:center; gap:6px; }
+.lock-step-circle { width:50px; height:50px; border-radius:50%; background:rgba(255,255,255,0.07); border:2px solid rgba(255,255,255,0.12); color:rgba(255,255,255,0.35); display:flex; align-items:center; justify-content:center; font-size:22px; font-weight:700; transition:all 0.3s var(--ease); }
+.lock-step.active .lock-step-circle { background:var(--coral); border-color:var(--coral); color:#fff; box-shadow:0 4px 20px rgba(255,92,58,0.4); }
+.lock-step-label { font-size:10px; color:rgba(255,255,255,0.3); text-align:center; font-weight:500; line-height:1.3; }
+.lock-step.active .lock-step-label { color:rgba(255,255,255,0.7); }
+.lock-card { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:var(--r-xl); padding:28px 24px; backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); box-shadow:0 16px 48px rgba(0,0,0,0.3),inset 0 1px 0 rgba(255,255,255,0.1); }
+.lock-field { margin-bottom:18px; }
+.lock-field label { display:block; font-size:11px; color:rgba(255,255,255,0.45); margin-bottom:8px; font-weight:600; text-align:right; direction:rtl; text-transform:uppercase; letter-spacing:0.8px; font-family:var(--font-body); }
+.lock-field input { width:100%; padding:15px 16px; background:rgba(255,255,255,0.07); border:1.5px solid rgba(255,255,255,0.12); border-radius:var(--r-md); font-size:15px; color:#FFF; font-family:var(--font-mono); transition:all var(--dur) var(--ease); text-align:center; -webkit-appearance:none; min-height:52px; }
+.lock-field input::placeholder { color:rgba(255,255,255,0.2); font-family:var(--font-body); }
+.lock-field input:focus { outline:none; border-color:var(--coral); background:rgba(255,255,255,0.1); box-shadow:0 0 0 4px rgba(255,92,58,0.15); }
+.lock-field input[readonly] { color:rgba(255,255,255,0.35); cursor:default; font-size:12px; }
+.device-numbers { font-size:11px; color:rgba(255,92,58,0.8); margin-top:6px; text-align:center; font-weight:600; font-family:var(--font-mono); }
+.lock-btn { width:100%; padding:16px; border:none; border-radius:var(--r-md); font-size:15px; font-weight:700; cursor:pointer; transition:all var(--dur) var(--ease); margin-bottom:12px; display:flex; align-items:center; justify-content:center; gap:8px; font-family:var(--font-display); min-height:54px; }
+.lock-btn:active { transform:scale(0.97); }
+.lock-btn-primary { background:linear-gradient(135deg,var(--coral),#FF7A5C); color:#FFF; box-shadow:0 6px 24px rgba(255,92,58,0.4); }
+.lock-btn-secondary { background:rgba(46,196,169,0.15); border:1px solid rgba(46,196,169,0.3); color:var(--green); }
+.lock-btn:disabled { opacity:0.4; cursor:not-allowed; transform:none !important; box-shadow:none !important; }
+.lock-error { background:rgba(224,92,92,0.15); border:1px solid rgba(224,92,92,0.3); color:#FFA5A5; padding:12px 16px; border-radius:var(--r-sm); font-size:13px; text-align:center; margin-top:16px; display:none; font-weight:500; }
+.lock-error.show { display:block; animation:lockShake 0.4s; }
+@keyframes lockShake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+.lock-footer { text-align:center; margin-top:24px; font-size:11px; color:rgba(255,255,255,0.2); font-weight:500; }
 
-        /* ── Header ── */
-        .header {
-            text-align: center; margin-bottom: 36px;
-        }
-        .logo-wrap {
-            display: inline-flex; align-items: center; gap: 14px;
-            margin-bottom: 14px;
-        }
-        .logo-icon {
-            width: 58px; height: 58px;
-            background: linear-gradient(135deg, var(--coral), #FF8060);
-            border-radius: 18px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 28px;
-            box-shadow: 0 8px 28px rgba(255,92,58,0.4);
-        }
-        .logo-title {
-            font-size: 32px; font-weight: 800;
-            letter-spacing: -1px; line-height: 1;
-        }
-        .logo-title span { color: var(--coral-dim); }
-        .logo-sub {
-            font-size: 11px; color: rgba(255,255,255,0.35);
-            letter-spacing: 2px; text-transform: uppercase;
-            font-weight: 600; margin-top: 4px;
-        }
-        .header-badge {
-            display: inline-flex; align-items: center; gap: 7px;
-            background: rgba(255,92,58,0.12);
-            border: 1px solid rgba(255,92,58,0.25);
-            border-radius: 100px;
-            padding: 6px 16px; font-size: 12px; font-weight: 700;
-            color: var(--coral-dim); letter-spacing: 0.5px;
-        }
+/* ═══════════════════════════════════════════════════════
+   APP LAYOUT  —  Sidebar + Main
+═══════════════════════════════════════════════════════ */
+.app-layout {
+    display:flex; height:100vh; overflow:hidden;
+    position:relative;
+}
 
-        /* ── Main card ── */
-        .card {
-            width: 100%; max-width: 480px;
-            background: rgba(255,255,255,0.055);
-            border: 1px solid rgba(255,255,255,0.10);
-            border-radius: 28px;
-            padding: 32px 28px;
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
-            margin-bottom: 20px;
-        }
+/* ── Sidebar ─────────────────────────────────── */
+.sidebar {
+    width:var(--sidebar-w); min-width:var(--sidebar-w);
+    height:100vh; position:fixed; left:0; top:0; bottom:0;
+    background:var(--shell); border-right:1px solid rgba(255,255,255,0.06);
+    display:flex; flex-direction:column; z-index:300;
+    transition:transform 0.3s var(--ease);
+    box-shadow:4px 0 24px rgba(0,0,0,0.2);
+}
 
-        .card-title {
-            font-size: 13px; font-weight: 700;
-            color: rgba(255,255,255,0.4);
-            text-transform: uppercase; letter-spacing: 1.2px;
-            margin-bottom: 22px;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .card-title-dot {
-            width: 7px; height: 7px; border-radius: 50%;
-            background: var(--coral); flex-shrink: 0;
-        }
+.sidebar-brand {
+    padding:22px 20px 18px;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    flex-shrink:0;
+}
+.sidebar-brand-inner {
+    display:flex; align-items:center; gap:12px;
+}
+.sidebar-logo-icon {
+    width:38px; height:38px;
+    background:linear-gradient(135deg,var(--coral),#FF8060);
+    border-radius:12px; display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0;
+    box-shadow:0 4px 12px rgba(255,92,58,0.4);
+}
+.sidebar-app-name {
+    font-family:var(--font-display); font-size:18px; font-weight:800;
+    color:#FFF; letter-spacing:-0.5px; line-height:1;
+}
+.sidebar-app-name span { color:var(--coral-dim); }
+.sidebar-app-tag {
+    font-size:9px; color:rgba(255,255,255,0.3); text-transform:uppercase;
+    letter-spacing:1.2px; font-weight:600; margin-top:3px;
+}
 
-        /* ── Field ── */
-        .field { margin-bottom: 20px; }
-        .field:last-of-type { margin-bottom: 0; }
+.sidebar-nav {
+    flex:1; overflow-y:auto; padding:14px 12px;
+    scrollbar-width:none;
+}
+.sidebar-nav::-webkit-scrollbar { display:none; }
 
-        .field label {
-            display: block; font-size: 11px; font-weight: 700;
-            color: rgba(255,255,255,0.42);
-            text-transform: uppercase; letter-spacing: 0.9px;
-            margin-bottom: 9px;
-        }
+.nav-section-label {
+    font-size:9px; font-weight:700; color:rgba(255,255,255,0.2);
+    text-transform:uppercase; letter-spacing:1.5px;
+    padding:10px 10px 6px; font-family:var(--font-body);
+}
 
-        .field input {
-            width: 100%; padding: 16px 18px;
-            background: rgba(255,255,255,0.07);
-            border: 1.5px solid rgba(255,255,255,0.12);
-            border-radius: 14px; font-size: 16px;
-            color: #FFFFFF; font-family: var(--font-m);
-            transition: all 0.2s var(--ease);
-            -webkit-appearance: none;
-            min-height: 56px; text-align: center;
-            letter-spacing: 4px; font-weight: 700;
-            text-transform: uppercase;
-        }
-        .field input::placeholder {
-            color: rgba(255,255,255,0.18);
-            font-family: var(--font-d); letter-spacing: 0;
-            font-size: 14px; font-weight: 400;
-        }
-        .field input:focus {
-            outline: none;
-            border-color: var(--coral);
-            background: rgba(255,255,255,0.1);
-            box-shadow: 0 0 0 4px rgba(255,92,58,0.18);
-        }
-        .field-hint {
-            margin-top: 7px; font-size: 11px;
-            color: rgba(255,255,255,0.3); text-align: center;
-            font-family: var(--font-d); font-weight: 500;
-        }
+.nav-item {
+    display:flex; align-items:center; gap:12px;
+    padding:11px 14px; border-radius:var(--r-md);
+    cursor:pointer; transition:all var(--dur) var(--ease);
+    margin-bottom:3px; border:none; width:100%;
+    background:transparent; text-align:left;
+    font-family:var(--font-body); text-decoration:none;
+}
+.nav-item:hover { background:rgba(255,255,255,0.06); }
+.nav-item.active {
+    background:rgba(255,92,58,0.15);
+    box-shadow:inset 3px 0 0 var(--coral);
+}
+.nav-item-icon {
+    font-size:18px; width:24px; text-align:center; flex-shrink:0;
+}
+.nav-item-label {
+    font-size:13.5px; font-weight:600; color:rgba(255,255,255,0.5);
+    transition:color var(--dur) var(--ease); line-height:1;
+}
+.nav-item:hover .nav-item-label { color:rgba(255,255,255,0.8); }
+.nav-item.active .nav-item-label { color:#FFF; }
+.nav-item-badge {
+    margin-left:auto; background:var(--coral); color:#fff;
+    font-size:10px; font-weight:700; border-radius:var(--r-pill);
+    padding:2px 7px; min-width:20px; text-align:center; font-family:var(--font-display);
+}
 
-        /* ── Generate Button ── */
-        .btn-generate {
-            width: 100%; padding: 17px;
-            background: linear-gradient(135deg, var(--coral), #FF7A5C);
-            border: none; border-radius: 14px;
-            font-size: 15px; font-weight: 700;
-            color: #FFFFFF; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 9px;
-            font-family: var(--font-d); letter-spacing: 0.3px;
-            min-height: 56px; margin-top: 24px;
-            box-shadow: 0 6px 24px rgba(255,92,58,0.42);
-            transition: all 0.2s var(--ease);
-        }
-        .btn-generate:hover { box-shadow: 0 8px 30px rgba(255,92,58,0.55); transform: translateY(-1px); }
-        .btn-generate:active { transform: scale(0.97); box-shadow: none; }
-        .btn-generate:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+.sidebar-footer {
+    padding:14px 12px 20px;
+    border-top:1px solid rgba(255,255,255,0.06); flex-shrink:0;
+}
+.sidebar-version {
+    font-size:10px; color:rgba(255,255,255,0.18);
+    text-align:center; font-family:var(--font-mono);
+    letter-spacing:0.5px;
+}
 
-        /* ── Result Card ── */
-        .result-card {
-            width: 100%; max-width: 480px;
-            background: var(--green-bg);
-            border: 1px solid var(--green-bdr);
-            border-radius: 28px; padding: 28px 28px 24px;
-            text-align: center;
-            animation: popIn 0.38s var(--ease) both;
-            display: none;
-        }
-        .result-card.visible { display: block; }
+/* ── Mobile overlay ─────────────────────────── */
+#sidebar-overlay {
+    display:none; position:fixed; inset:0;
+    background:rgba(0,0,0,0.55); z-index:299;
+    backdrop-filter:blur(3px);
+    -webkit-backdrop-filter:blur(3px);
+}
+#sidebar-overlay.show { display:block; }
 
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.93) translateY(16px); }
-            to   { opacity: 1; transform: scale(1) translateY(0); }
-        }
+/* ── Main area ──────────────────────────────── */
+.main-area {
+    margin-left:var(--sidebar-w);
+    flex:1; display:flex; flex-direction:column;
+    height:100vh; overflow:hidden; min-width:0;
+}
 
-        .result-label {
-            font-size: 11px; font-weight: 700;
-            color: rgba(46,196,169,0.65);
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin-bottom: 12px;
-        }
+/* ── Top bar ────────────────────────────────── */
+.top-bar {
+    height:60px; background:var(--surface);
+    border-bottom:1px solid var(--border);
+    display:flex; align-items:center;
+    padding:0 24px; gap:14px; flex-shrink:0;
+    position:relative; z-index:100;
+    box-shadow:0 1px 8px rgba(13,27,42,0.06);
+}
+.hamburger-btn {
+    display:none; background:none; border:none;
+    cursor:pointer; padding:8px; border-radius:var(--r-sm);
+    color:var(--ink-2); font-size:20px; line-height:1;
+    transition:background var(--dur); flex-shrink:0;
+}
+.hamburger-btn:hover { background:var(--surface-3); }
+.top-bar-title {
+    font-family:var(--font-display); font-size:17px; font-weight:700;
+    color:var(--ink); letter-spacing:-0.3px; flex:1;
+}
+.top-bar-actions { display:flex; align-items:center; gap:8px; }
+.top-bar-btn {
+    display:inline-flex; align-items:center; gap:6px;
+    padding:8px 14px; border-radius:var(--r-sm); font-size:13px;
+    font-weight:600; cursor:pointer; border:none; transition:all var(--dur) var(--ease);
+    font-family:var(--font-body);
+}
+.top-bar-btn-primary { background:linear-gradient(135deg,var(--coral),#FF7A5C); color:#fff; box-shadow:0 2px 10px rgba(255,92,58,0.3); }
+.top-bar-btn-ghost { background:var(--surface-3); color:var(--ink-2); border:1.5px solid var(--border); }
 
-        .result-code {
-            font-family: var(--font-m);
-            font-size: 44px; font-weight: 700;
-            color: var(--green);
-            letter-spacing: 10px;
-            line-height: 1;
-            text-shadow: 0 0 30px rgba(46,196,169,0.4);
-            margin-bottom: 10px;
-            word-break: break-all;
-        }
+/* ── Page content ───────────────────────────── */
+.page-content {
+    flex:1; overflow-y:auto; overflow-x:hidden;
+    padding:24px;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+}
 
-        .result-device {
-            font-size: 11px; color: rgba(255,255,255,0.3);
-            font-family: var(--font-m); letter-spacing: 2px;
-            margin-bottom: 22px;
-        }
+.page { display:none; }
+.page.active { display:block; animation:pageIn 0.25s var(--ease) both; }
+@keyframes pageIn { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:none} }
 
-        .btn-row {
-            display: flex; gap: 10px;
-        }
+/* ── Responsive breakpoints ─────────────────── */
+@media (max-width:768px) {
+    .sidebar { transform:translateX(-100%); }
+    .sidebar.open { transform:translateX(0); box-shadow:8px 0 40px rgba(0,0,0,0.4); }
+    .main-area { margin-left:0; }
+    .hamburger-btn { display:flex; }
+    .page-content { padding:16px; }
+    .top-bar { padding:0 16px; }
+}
 
-        .btn-copy, .btn-whatsapp {
-            flex: 1; padding: 14px 10px;
-            border: none; border-radius: 12px;
-            font-size: 13px; font-weight: 700;
-            cursor: pointer; display: flex;
-            align-items: center; justify-content: center; gap: 7px;
-            font-family: var(--font-d);
-            transition: all 0.2s var(--ease);
-            min-height: 48px;
-        }
-        .btn-copy {
-            background: rgba(46,196,169,0.18);
-            border: 1px solid var(--green-bdr);
-            color: var(--green);
-        }
-        .btn-copy:active { background: rgba(46,196,169,0.3); }
+/* ═══════════════════════════════════════════════════════
+   STATS CARDS (Dashboard)
+═══════════════════════════════════════════════════════ */
+.stats-grid {
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:14px; margin-bottom:22px;
+}
+.stat-card {
+    background:var(--surface); border-radius:var(--r-lg);
+    padding:18px 16px; box-shadow:var(--shadow-card);
+    border:1px solid var(--border);
+    display:flex; flex-direction:column; gap:8px;
+}
+.stat-card-icon {
+    width:36px; height:36px; border-radius:10px;
+    display:flex; align-items:center; justify-content:center; font-size:18px;
+}
+.stat-card-icon.coral { background:var(--coral-pale); }
+.stat-card-icon.green { background:var(--green-bg); }
+.stat-card-icon.amber { background:var(--amber-bg); }
+.stat-card-icon.blue { background:#EFF6FF; }
+.stat-card-value {
+    font-family:var(--font-display); font-size:24px; font-weight:800;
+    color:var(--ink); letter-spacing:-0.5px; line-height:1;
+}
+.stat-card-label { font-size:11px; color:var(--ink-3); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
 
-        .btn-whatsapp {
-            background: rgba(37,211,102,0.15);
-            border: 1px solid rgba(37,211,102,0.3);
-            color: #25D366;
-        }
-        .btn-whatsapp:active { background: rgba(37,211,102,0.25); }
+/* ═══════════════════════════════════════════════════════
+   PAGE HEADERS
+═══════════════════════════════════════════════════════ */
+.page-header {
+    display:flex; align-items:flex-start; justify-content:space-between;
+    margin-bottom:20px; gap:14px; flex-wrap:wrap;
+}
+.page-header-left h1 {
+    font-family:var(--font-display); font-size:22px; font-weight:800;
+    color:var(--ink); letter-spacing:-0.5px; margin-bottom:4px;
+}
+.page-header-left p { font-size:13px; color:var(--ink-3); font-weight:500; }
+.page-header-actions { display:flex; gap:8px; flex-wrap:wrap; }
 
-        /* ── History ── */
-        .history-card {
-            width: 100%; max-width: 480px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 24px;
-            overflow: hidden;
-            display: none;
-        }
-        .history-card.visible { display: block; }
+/* ═══════════════════════════════════════════════════════
+   CARDS
+═══════════════════════════════════════════════════════ */
+.card {
+    background:var(--surface); border-radius:var(--r-lg);
+    padding:20px; margin-bottom:16px;
+    box-shadow:var(--shadow-card); border:1px solid var(--border);
+}
+.card-header {
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:16px;
+}
+.card-title-row {
+    display:flex; align-items:center; gap:10px;
+}
+.card-icon {
+    width:32px; height:32px; border-radius:9px;
+    background:linear-gradient(135deg,var(--coral),#FF7A5C);
+    display:flex; align-items:center; justify-content:center; font-size:15px;
+    box-shadow:0 3px 8px rgba(255,92,58,0.3); flex-shrink:0;
+}
+.card-title {
+    font-family:var(--font-display); font-size:14px; font-weight:700;
+    color:var(--ink); margin:0;
+}
+.card-subtitle { font-size:11px; color:var(--ink-3); font-weight:500; margin-top:1px; }
 
-        .history-header {
-            padding: 16px 22px;
-            font-size: 11px; font-weight: 700;
-            color: rgba(255,255,255,0.35);
-            text-transform: uppercase; letter-spacing: 1px;
-            border-bottom: 1px solid rgba(255,255,255,0.07);
-            display: flex; align-items: center; justify-content: space-between;
-        }
+/* ═══════════════════════════════════════════════════════
+   FORM ELEMENTS
+═══════════════════════════════════════════════════════ */
+.form-group { margin-bottom:14px; }
+.form-group:last-child { margin-bottom:0; }
+.form-group label {
+    display:block; margin-bottom:6px; font-weight:600;
+    color:var(--ink-2); font-size:12px; letter-spacing:0.2px;
+    font-family:var(--font-body);
+}
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width:100%; padding:11px 14px;
+    border:1.5px solid var(--border); border-radius:var(--r-sm);
+    font-size:14px; font-family:var(--font-body);
+    color:var(--ink); background:var(--surface-2);
+    transition:all var(--dur) var(--ease);
+    -webkit-appearance:none; appearance:none;
+    min-height:44px;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline:none; border-color:var(--coral); background:var(--surface);
+    box-shadow:0 0 0 4px rgba(255,92,58,0.1);
+}
+.form-group input[readonly] {
+    background:var(--surface-3); color:var(--coral);
+    font-family:var(--font-mono); font-size:13px; font-weight:500; cursor:default;
+}
+.form-group textarea { min-height:88px; resize:vertical; line-height:1.6; }
+.form-group select {
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238A9BB0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat; background-position:right 12px center; padding-right:36px;
+}
 
-        .history-clear {
-            font-size: 11px; font-weight: 600;
-            color: var(--red); cursor: pointer;
-            background: none; border: none;
-            font-family: var(--font-d); letter-spacing: 0;
-            text-transform: none;
-        }
+.form-row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.form-row-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; }
+.form-row .form-group,
+.form-row-3 .form-group { margin-bottom:0; }
+.address-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.address-grid .form-group { margin-bottom:0; }
 
-        .history-list { max-height: 260px; overflow-y: auto; }
+@media(max-width:600px) {
+    .form-row,.form-row-3,.address-grid { grid-template-columns:1fr; }
+}
 
-        .history-item {
-            padding: 14px 22px;
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            cursor: pointer; transition: background 0.15s;
-        }
-        .history-item:last-child { border-bottom: none; }
-        .history-item:hover { background: rgba(255,255,255,0.04); }
-        .history-item:active { background: rgba(255,255,255,0.08); }
+/* Logo preview */
+.logo-preview { display:inline-block; margin:10px 0; border:2px dashed var(--border); padding:12px; border-radius:var(--r-md); background:var(--surface-2); max-width:200px; }
+.logo-preview img { max-width:100%; max-height:70px; display:block; }
 
-        .history-item-left {}
-        .history-device {
-            font-family: var(--font-m); font-size: 14px;
-            font-weight: 700; color: rgba(255,255,255,0.75);
-            letter-spacing: 2px; margin-bottom: 3px;
-        }
-        .history-time {
-            font-size: 10px; color: rgba(255,255,255,0.25);
-            font-weight: 500;
-        }
-        .history-code {
-            font-family: var(--font-m); font-size: 18px;
-            font-weight: 700; color: var(--green);
-            letter-spacing: 3px;
-        }
+/* ═══════════════════════════════════════════════════════
+   BUTTONS
+═══════════════════════════════════════════════════════ */
+.btn {
+    display:inline-flex; align-items:center; justify-content:center; gap:7px;
+    padding:11px 18px; min-height:44px;
+    border:1.5px solid rgba(255,255,255,0.1);
+    border-radius:var(--r-md); cursor:pointer;
+    font-size:13.5px; font-weight:600; font-family:var(--font-display);
+    transition:all var(--dur) var(--ease); letter-spacing:0.1px;
+    background:linear-gradient(135deg,var(--shell),var(--shell-mid));
+    color:rgba(255,255,255,0.85); box-shadow:0 2px 8px rgba(13,27,42,0.2);
+}
+.btn:active { transform:scale(0.97); }
+.btn:disabled { opacity:0.4; cursor:not-allowed; transform:none !important; }
+.btn-primary { background:linear-gradient(135deg,var(--coral),#FF7A5C); color:#fff; border-color:transparent; box-shadow:0 4px 16px rgba(255,92,58,0.35); }
+.btn-success { background:linear-gradient(135deg,#1AAF97,var(--green)); color:#fff; border-color:transparent; box-shadow:0 4px 12px rgba(46,196,169,0.3); }
+.btn-danger { background:linear-gradient(135deg,#C94A4A,var(--red)); color:#fff; border-color:transparent; box-shadow:0 4px 12px rgba(224,92,92,0.25); }
+.btn-warning { background:linear-gradient(135deg,#D4881A,var(--amber)); color:#fff; border-color:transparent; box-shadow:0 4px 12px rgba(244,169,58,0.3); }
+.btn-whatsapp { background:linear-gradient(135deg,#128C45,#25D366); color:#fff; border-color:transparent; box-shadow:0 4px 12px rgba(37,211,102,0.25); }
+.btn-ghost { background:var(--surface); color:var(--ink-2); border:1.5px solid var(--border); box-shadow:none; }
+.btn-sm { min-height:36px; padding:8px 14px; font-size:12px; border-radius:var(--r-sm); }
+.btn-full { width:100%; }
+.btn-row { display:flex; gap:10px; flex-wrap:wrap; }
+.btn-row .btn { flex:1; min-width:110px; }
 
-        /* ── Footer ── */
-        .footer {
-            margin-top: 32px; text-align: center;
-            font-size: 11px; color: rgba(255,255,255,0.18);
-            font-weight: 500; letter-spacing: 0.3px;
-        }
-        .footer span { color: rgba(255,92,58,0.45); margin: 0 4px; }
+/* ═══════════════════════════════════════════════════════
+   DATA TABLES (Customers / Items / Saved Invoices)
+═══════════════════════════════════════════════════════ */
+.data-table-wrap {
+    background:var(--surface); border-radius:var(--r-lg);
+    box-shadow:var(--shadow-card); border:1px solid var(--border);
+    overflow:hidden;
+}
+.data-table-wrap .table-scroll { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.data-table {
+    width:100%; border-collapse:collapse; font-size:13px;
+    min-width:540px;
+}
+.data-table thead th {
+    background:var(--shell); color:rgba(255,255,255,0.55);
+    font-weight:700; font-size:10.5px; text-transform:uppercase;
+    letter-spacing:0.7px; padding:12px 14px; text-align:left;
+    white-space:nowrap; font-family:var(--font-body);
+}
+.data-table tbody tr { border-bottom:1px solid var(--surface-3); transition:background var(--dur); }
+.data-table tbody tr:last-child { border-bottom:none; }
+.data-table tbody tr:hover { background:var(--surface-2); }
+.data-table td { padding:12px 14px; color:var(--ink); vertical-align:middle; }
+.data-table .td-mono { font-family:var(--font-mono); font-size:12px; color:var(--ink-2); }
+.data-table .td-actions { display:flex; gap:6px; flex-wrap:wrap; }
+.data-table .empty-row td { text-align:center; color:var(--ink-3); padding:32px; font-size:13px; }
 
-        /* Error state */
-        .field input.error { border-color: var(--red) !important; box-shadow: 0 0 0 4px rgba(224,92,92,0.18) !important; }
-        .error-msg {
-            margin-top: 7px; font-size: 11px;
-            color: #FFA5A5; text-align: center;
-            font-weight: 600; display: none;
-        }
-        .error-msg.show { display: block; animation: shake 0.4s; }
-        @keyframes shake {
-            0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)}
-        }
+/* Row action buttons */
+.tbl-btn {
+    padding:5px 10px; border-radius:6px; font-size:11.5px; font-weight:600;
+    cursor:pointer; border:none; transition:all var(--dur) var(--ease);
+    font-family:var(--font-body); white-space:nowrap;
+}
+.tbl-btn-edit { background:var(--coral-pale); color:var(--coral); }
+.tbl-btn-edit:hover { background:var(--coral); color:#fff; }
+.tbl-btn-del { background:var(--red-bg); color:var(--red); }
+.tbl-btn-del:hover { background:var(--red); color:#fff; }
+.tbl-btn-view { background:#EFF6FF; color:#2563EB; }
+.tbl-btn-view:hover { background:#2563EB; color:#fff; }
+.tbl-btn-pdf { background:var(--green-bg); color:var(--green); }
+.tbl-btn-pdf:hover { background:var(--green); color:#fff; }
+.tbl-btn-load { background:var(--coral-pale); color:var(--coral); }
+.tbl-btn-load:hover { background:var(--coral); color:#fff; }
 
-        /* Scrollbar */
-        .history-list::-webkit-scrollbar { width: 4px; }
-        .history-list::-webkit-scrollbar-track { background: transparent; }
-        .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
-    </style>
+/* ═══════════════════════════════════════════════════════
+   STATUS BADGES
+═══════════════════════════════════════════════════════ */
+.badge {
+    display:inline-flex; align-items:center; padding:3px 10px;
+    border-radius:var(--r-pill); font-weight:700; font-size:11px;
+    letter-spacing:0.3px; text-transform:uppercase; font-family:var(--font-body);
+}
+.badge-paid { background:var(--green-bg); color:var(--green); }
+.badge-unpaid { background:var(--red-bg); color:var(--red); }
+.badge-partial { background:var(--amber-bg); color:#A06B10; }
+/* legacy alias */
+.status-paid { background:var(--green-bg); color:var(--green); display:inline-flex; align-items:center; padding:3px 10px; border-radius:var(--r-pill); font-weight:700; font-size:11px; }
+.status-unpaid { background:var(--red-bg); color:var(--red); display:inline-flex; align-items:center; padding:3px 10px; border-radius:var(--r-pill); font-weight:700; font-size:11px; }
+.status-partial { background:var(--amber-bg); color:#A06B10; display:inline-flex; align-items:center; padding:3px 10px; border-radius:var(--r-pill); font-weight:700; font-size:11px; }
+.status-badge { display:inline-flex; align-items:center; padding:4px 12px; border-radius:var(--r-pill); font-weight:700; font-size:11px; }
+
+/* ═══════════════════════════════════════════════════════
+   INVOICE ITEMS TABLE (inline editing)
+═══════════════════════════════════════════════════════ */
+.items-table-wrap { border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--shadow-card); background:var(--surface); border:1px solid var(--border); }
+.items-table-wrap > div { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+.items-table { width:100%; border-collapse:collapse; font-size:12px; min-width:640px; }
+.items-table thead th { background:var(--shell); color:rgba(255,255,255,0.55); font-weight:700; font-size:10px; text-transform:uppercase; letter-spacing:0.7px; padding:11px 9px; text-align:left; font-family:var(--font-body); }
+.items-table thead th:first-child { padding-left:13px; }
+.items-table tbody tr { border-bottom:1px solid var(--surface-3); }
+.items-table tbody tr:last-child { border-bottom:none; }
+.items-table tbody tr:nth-child(even) { background:var(--surface-2); }
+.items-table td { padding:8px 9px; vertical-align:middle; }
+.items-table td:first-child { padding-left:13px; }
+.items-table input {
+    width:100%; padding:7px 9px; border:1.5px solid var(--border);
+    border-radius:var(--r-xs); font-size:12.5px; font-family:var(--font-body);
+    background:var(--surface-2); color:var(--ink);
+    transition:all var(--dur) var(--ease); min-height:36px;
+}
+.items-table input:focus { outline:none; border-color:var(--coral); background:var(--surface); box-shadow:0 0 0 3px rgba(255,92,58,0.1); }
+.items-table .remove-btn { background:var(--red-bg); color:var(--red); border:1px solid rgba(224,92,92,0.2); padding:6px 10px; border-radius:var(--r-xs); cursor:pointer; font-size:12px; font-weight:600; transition:all var(--dur); min-height:32px; font-family:var(--font-body); }
+.items-table .remove-btn:active { background:var(--red); color:#fff; }
+
+/* ═══════════════════════════════════════════════════════
+   TOTALS CARD
+═══════════════════════════════════════════════════════ */
+.totals-section { background:var(--surface); border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--shadow-card); margin-top:14px; border:1px solid var(--border); }
+.total-row { display:flex; justify-content:space-between; align-items:center; padding:11px 16px; border-bottom:1px solid var(--surface-3); font-size:13px; }
+.total-row:last-child { border-bottom:none; }
+.total-label { color:var(--ink-2); font-weight:500; flex:1; padding-right:14px; font-size:13px; }
+.total-value { font-weight:700; color:var(--ink); font-family:var(--font-mono); font-size:14px; text-align:right; min-width:100px; flex-shrink:0; }
+.grand-total { background:var(--shell) !important; border-bottom:none !important; }
+.grand-total .total-label { color:rgba(255,255,255,0.6) !important; font-size:14px; font-weight:600; }
+.grand-total .total-value { color:var(--coral) !important; font-size:22px !important; font-weight:800 !important; letter-spacing:-0.5px; }
+.currency-symbol { font-weight:700; color:var(--ink-3); font-family:var(--font-mono); font-size:11px; margin-left:3px; }
+#invoiceDiscountPercent { width:56px !important; min-height:unset !important; padding:4px 7px !important; border-radius:var(--r-xs) !important; border:1.5px solid var(--border) !important; font-size:12px !important; font-family:var(--font-mono) !important; background:var(--surface-2) !important; color:var(--ink) !important; display:inline-block !important; vertical-align:middle; margin-left:5px; }
+#invoiceDiscountPercent:focus { outline:none !important; border-color:var(--coral) !important; box-shadow:0 0 0 3px rgba(255,92,58,0.1) !important; }
+
+/* ═══════════════════════════════════════════════════════
+   PAYMENT TRACKING
+═══════════════════════════════════════════════════════ */
+.payment-tracking-section { background:var(--surface); border-radius:var(--r-lg); padding:18px; margin:14px 0; box-shadow:var(--shadow-card); border:1px solid var(--border); }
+.payment-tracking-section h4 { font-size:14px; font-weight:700; color:var(--ink); margin-bottom:14px; font-family:var(--font-display); }
+.payment-item { display:grid; grid-template-columns:1fr 1fr 1fr auto; gap:10px; margin-bottom:10px; padding:12px; background:var(--surface-2); border-radius:var(--r-md); border:1px solid var(--border); align-items:end; }
+.payment-item .form-group { margin-bottom:0; }
+.payment-item .form-group input, .payment-item .form-group select { min-height:40px; font-size:13px; }
+@media(max-width:600px) { .payment-item { grid-template-columns:1fr 1fr; } }
+
+/* ═══════════════════════════════════════════════════════
+   EDITABLE SECTIONS (header/footer/terms)
+═══════════════════════════════════════════════════════ */
+.editable-section { background:var(--surface); border-radius:var(--r-lg); padding:16px; margin:12px 0; box-shadow:var(--shadow-card); border:1px solid var(--border); }
+.editable-section h4 { font-size:11px; color:var(--coral); font-weight:700; text-transform:uppercase; letter-spacing:0.8px; margin:0 0 10px 0; }
+.editable-section textarea { width:100%; padding:10px 12px; border:1.5px solid var(--border); border-radius:var(--r-sm); min-height:80px; font-size:13px; font-family:var(--font-body); background:var(--surface-2); color:var(--ink); resize:vertical; transition:all var(--dur) var(--ease); }
+.editable-section textarea:focus { outline:none; border-color:var(--coral); background:var(--surface); box-shadow:0 0 0 4px rgba(255,92,58,0.1); }
+
+/* ═══════════════════════════════════════════════════════
+   MODAL / BOTTOM SHEET
+═══════════════════════════════════════════════════════ */
+.modal { display:none; position:fixed; inset:0; background:rgba(10,18,28,0.65); z-index:500; overflow:auto; backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); padding:20px 16px 40px; align-items:flex-end; }
+.modal.open { display:flex !important; flex-direction:column; justify-content:flex-end; }
+.modal-content { background:var(--surface); width:100%; max-width:560px; margin:0 auto; padding:24px 22px; border-radius:20px; max-height:80vh; overflow-y:auto; box-shadow:0 -8px 40px rgba(0,0,0,0.3); animation:sheetUp 0.3s var(--ease) both; }
+@keyframes sheetUp { from{transform:translateY(60px);opacity:0} to{transform:none;opacity:1} }
+.modal-content h3 { font-family:var(--font-display); font-size:16px; font-weight:700; color:var(--ink); margin-bottom:16px; }
+
+/* ═══════════════════════════════════════════════════════
+   ABOUT PAGE
+═══════════════════════════════════════════════════════ */
+.about-hero { background:linear-gradient(135deg,var(--shell),var(--shell-rim)); border-radius:var(--r-xl); padding:36px 28px; text-align:center; margin-bottom:20px; position:relative; overflow:hidden; }
+.about-hero::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse 60% 50% at 50% 0%,rgba(255,92,58,0.15) 0%,transparent 65%); }
+.about-hero-icon { width:70px; height:70px; background:linear-gradient(135deg,var(--coral),#FF8060); border-radius:22px; display:flex; align-items:center; justify-content:center; font-size:32px; margin:0 auto 16px; box-shadow:0 8px 28px rgba(255,92,58,0.4); position:relative; }
+.about-hero h1 { font-family:var(--font-display); font-size:28px; font-weight:800; color:#fff; letter-spacing:-0.8px; margin-bottom:6px; position:relative; }
+.about-hero h1 span { color:var(--coral-dim); }
+.about-hero p { font-size:13px; color:rgba(255,255,255,0.45); font-weight:500; position:relative; }
+.about-detail-card { background:var(--surface); border-radius:var(--r-lg); padding:20px; box-shadow:var(--shadow-card); border:1px solid var(--border); margin-bottom:14px; }
+.about-detail-row { display:flex; align-items:center; gap:14px; padding:12px 0; border-bottom:1px solid var(--surface-3); }
+.about-detail-row:last-child { border-bottom:none; padding-bottom:0; }
+.about-detail-icon { width:38px; height:38px; border-radius:10px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.about-detail-label { font-size:11px; color:var(--ink-3); font-weight:600; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:2px; }
+.about-detail-value { font-size:14px; color:var(--ink); font-weight:600; }
+.about-tech-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+.tech-chip { background:var(--surface-3); color:var(--ink-2); border:1px solid var(--border); padding:4px 12px; border-radius:var(--r-pill); font-size:12px; font-weight:600; }
+
+/* ═══════════════════════════════════════════════════════
+   INVOICE PREVIEW OVERLAY
+═══════════════════════════════════════════════════════ */
+#preview-overlay {
+    display:none; position:fixed; inset:0;
+    background:#fff; z-index:400; flex-direction:column;
+    overflow:hidden;
+}
+#preview-overlay.open { display:flex; }
+
+.preview-topbar {
+    background:var(--shell); padding:0 20px;
+    height:58px; display:flex; align-items:center;
+    gap:10px; flex-shrink:0; box-shadow:0 2px 12px rgba(0,0,0,0.3);
+}
+.preview-topbar .btn { min-height:38px; padding:8px 14px; font-size:13px; }
+.preview-topbar-title { font-family:var(--font-display); font-size:15px; font-weight:700; color:#fff; flex:1; }
+
+.preview-scroll {
+    flex:1; overflow-y:auto; padding:20px;
+    background:#f0f3f8; -webkit-overflow-scrolling:touch;
+}
+
+/* ── Invoice document styles ── */
+.invoice-preview-doc {
+    background:#FFFFFF; border-radius:var(--r-lg);
+    box-shadow:var(--shadow-float); padding:22px;
+    font-size:11px; border:1px solid var(--border);
+    max-width:800px; margin:0 auto;
+}
+.invoice-header { display:grid; grid-template-columns:1fr 1fr 120px; gap:14px; margin-bottom:14px; padding-bottom:12px; border-bottom:2.5px solid #2D4EA2; align-items:start; }
+.invoice-header .logo-and-info { display:flex; flex-direction:column; gap:6px; }
+.invoice-header .logo-section img { max-width:130px; max-height:55px; }
+.invoice-header .company-info { font-size:10px; line-height:1.6; color:#4B5563; }
+.invoice-header .company-info strong { color:#111827; }
+.invoice-header .title-section { text-align:center; }
+.invoice-header .qr-section-header { text-align:right; }
+.invoice-header h1 { color:#111827; margin-bottom:5px; font-size:16px; font-weight:700; font-family:var(--font-display); }
+.invoice-details-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:5px 10px; margin-bottom:10px; font-size:10px; background:#F9FAFB; border:1px solid #E5E7EB; border-radius:6px; padding:8px 10px; }
+.invoice-info { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.info-box { border:1px solid #E5E7EB; padding:9px; border-radius:7px; background:#F9FAFB; }
+.info-box h3 { background:#2D4EA2; color:#fff; padding:5px 9px; margin:-9px -9px 9px; border-radius:6px 6px 0 0; font-size:11px; font-weight:700; text-transform:none; letter-spacing:normal; }
+.info-box h4 { font-size:9.5px; margin:8px 0 5px; color:#111827; border-bottom:1px solid #E5E7EB; padding-bottom:3px; font-weight:600; }
+.address-table { width:100%; border-collapse:collapse; margin-top:5px; font-size:8.5px; }
+.address-table th,.address-table td { padding:2.5px 4px; text-align:left; border:1px solid #E5E7EB; }
+.address-table th { background:#F3F4F6; font-weight:600; font-size:8px; }
+.info-row { display:flex; margin-bottom:4px; font-size:10px; }
+.info-label { font-weight:600; min-width:55px; color:#111827; flex-shrink:0; }
+.invoice-footer { text-align:center; margin-top:14px; padding-top:10px; border-top:1px solid #E5E7EB; font-size:10px; color:#6B7280; }
+/* Invoice preview totals */
+.invoice-preview-doc .totals-section { margin-top:12px; background:#F9FAFB; padding:12px; border-radius:7px; border:1px solid #E5E7EB; box-shadow:none; display:grid; grid-template-columns:1fr 1fr; gap:0 16px; }
+.invoice-preview-doc .total-row { padding:4px 0; border-bottom:none; font-size:10.5px; }
+.invoice-preview-doc .grand-total { grid-column:1/-1 !important; background:#EFF6FF !important; border-radius:5px; padding:6px 8px !important; margin-top:4px; }
+.invoice-preview-doc .total-label { color:#4B5563; min-width:140px; font-size:10.5px; }
+.invoice-preview-doc .total-value { font-size:11px; min-width:80px; }
+.invoice-preview-doc .grand-total .total-label { color:#1E40AF !important; font-size:11px !important; }
+.invoice-preview-doc .grand-total .total-value { color:#1E40AF !important; font-size:13px !important; }
+
+/* ═══════════════════════════════════════════════════════
+   PRINT — ONE PAGE A4
+═══════════════════════════════════════════════════════ */
+@media print {
+    *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+    @page { size:A4 portrait; margin:6mm; }
+
+    html,body { background:#fff !important; overflow:visible !important; height:auto !important; font-size:7.5px !important; }
+
+    .sidebar,.main-area,.sidebar-overlay,
+    #license-lock-overlay { display:none !important; }
+
+    #preview-overlay {
+        display:block !important; position:static !important;
+        overflow:visible !important; height:auto !important;
+    }
+    .preview-topbar,.preview-topbar+.editable-section,
+    .editable-section { display:none !important; }
+    .preview-scroll {
+        overflow:visible !important; padding:0 !important;
+        background:#fff !important; height:auto !important;
+    }
+    .invoice-preview-doc {
+        padding:0 !important; border:none !important; box-shadow:none !important;
+        border-radius:0 !important; max-width:100% !important; font-size:7.5px !important;
+        overflow:visible !important;
+    }
+    .invoice-header { grid-template-columns:1.4fr 1.1fr 0.6fr !important; gap:5px !important; margin-bottom:5px !important; padding-bottom:5px !important; }
+    .invoice-header .logo-section img { max-width:65px !important; max-height:32px !important; }
+    .invoice-header .company-info { font-size:7px !important; }
+    .invoice-header h1 { font-size:11px !important; margin-bottom:3px !important; }
+    .invoice-header .qr-section-header canvas,
+    .invoice-header .qr-section-header img { width:60px !important; height:60px !important; }
+    .invoice-details-grid { grid-template-columns:repeat(3,1fr) !important; font-size:7px !important; padding:4px 6px !important; margin-bottom:5px !important; }
+    .invoice-info { gap:5px !important; margin-bottom:5px !important; }
+    .info-box { padding:4px !important; }
+    .info-box h3 { padding:3px 4px !important; font-size:7.5px !important; margin:-4px -4px 4px !important; }
+    .info-row { font-size:7px !important; margin-bottom:2px !important; }
+    .info-label { min-width:45px !important; font-size:7px !important; }
+    .address-table th,.address-table td { padding:1.5px 2px !important; font-size:6.5px !important; }
+    .items-table { font-size:7px !important; }
+    .items-table th { padding:2.5px 3px !important; font-size:6.5px !important; }
+    .items-table td { padding:2.5px 3px !important; }
+    .invoice-preview-doc .totals-section { padding:4px !important; font-size:7px !important; margin-top:4px !important; }
+    .invoice-preview-doc .total-row { padding:1.5px 0 !important; font-size:7px !important; }
+    .invoice-preview-doc .grand-total { padding:3px 5px !important; margin-top:2px !important; }
+    .invoice-preview-doc .total-label { min-width:90px !important; font-size:7px !important; }
+    .invoice-preview-doc .total-value { font-size:7.5px !important; }
+    .invoice-preview-doc .grand-total .total-label { font-size:8px !important; }
+    .invoice-preview-doc .grand-total .total-value { font-size:10px !important; }
+    .status-badge,.badge { padding:1px 5px !important; font-size:6px !important; }
+    .invoice-footer { margin-top:4px !important; padding-top:3px !important; font-size:6.5px !important; }
+    .invoice-footer p { margin:0 !important; }
+    div[data-section="bank"],div[data-section="terms"],div[data-section="payments"] { margin:3px 0 !important; padding:4px !important; font-size:7px !important; }
+}
+
+</style>
 </head>
 <body>
-<div class="page">
 
-    <!-- Header -->
-    <div class="header">
-        <div class="logo-wrap">
-            <div class="logo-icon">🔑</div>
-            <div>
-                <div class="logo-title">ZATCA <span>Admin</span></div>
-                <div class="logo-sub">Code Generator</div>
+<!-- ═══════════════════════════════════════════════════════
+     LICENSE LOCK SCREEN
+═══════════════════════════════════════════════════════ -->
+<div id="license-lock-overlay">
+    <div class="lock-container">
+        <div class="lock-header">
+            <div class="lock-logo">
+                <div class="lock-logo-icon">📄</div>
+                <div class="lock-logo-text">
+                    <h1 class="lock-logo-title">Ready<span>Invoice</span></h1>
+                    <p class="lock-logo-subtitle">Professional Invoice System</p>
+                </div>
             </div>
         </div>
-        <div class="header-badge">🔐 مولّد رموز التفعيل</div>
-    </div>
-
-    <!-- Input Card -->
-    <div class="card">
-        <div class="card-title"><span class="card-title-dot"></span>Generate Activation Code | توليد رمز تفعيل</div>
-
-        <div class="field">
-            <label>Customer Device Code | رمز جهاز العميل</label>
-            <input type="text" id="deviceInput"
-                   placeholder="e.g.  A3F7B2C1"
-                   maxlength="8"
-                   autocomplete="off"
-                   autocorrect="off"
-                   spellcheck="false">
-            <div class="field-hint">The 8-character code shown on the customer's device</div>
-            <div class="error-msg" id="errorMsg">⚠️ Please enter the device code (at least 4 characters)</div>
+        <div class="lock-step-indicator">
+            <div class="lock-step active">
+                <div class="lock-step-circle">🔐</div>
+                <div class="lock-step-label">Activation<br>التفعيل</div>
+            </div>
         </div>
-
-        <button class="btn-generate" id="generateBtn">
-            <span>⚡</span>
-            <span>Generate Code | توليد الرمز</span>
-        </button>
-    </div>
-
-    <!-- Result Card -->
-    <div class="result-card" id="resultCard">
-        <div class="result-label">✅ Activation Code | رمز التفعيل</div>
-        <div class="result-code" id="resultCode">—</div>
-        <div class="result-device" id="resultDevice"></div>
-        <div class="btn-row">
-            <button class="btn-copy" id="copyBtn">📋 Copy</button>
-            <button class="btn-whatsapp" id="waBtn">💬 WhatsApp</button>
+        <div class="lock-card">
+            <div class="lock-field">
+                <label>Device Code | رمز الجهاز</label>
+                <input type="text" id="device-id-display" readonly>
+                <div class="device-numbers" id="device-numbers-display">Share this code with admin to get your passcode</div>
+            </div>
+            <div class="lock-field">
+                <label>Activation Passcode | رمز التفعيل</label>
+                <input type="text" id="passcode-input" placeholder="Enter your activation code">
+            </div>
+            <button class="lock-btn lock-btn-secondary" id="request-passcode-btn">
+                <span>📱</span><span>Request via WhatsApp | طلب عبر واتساب</span>
+            </button>
+            <button class="lock-btn lock-btn-primary" id="unlock-btn">
+                <span>🔓</span><span>Activate | تفعيل النظام</span>
+            </button>
+            <div class="lock-error" id="lock-error">رمز التفعيل غير صحيح. يرجى المحاولة مرة أخرى.</div>
         </div>
-    </div>
-
-    <!-- History Card -->
-    <div class="history-card" id="historyCard">
-        <div class="history-header">
-            <span>Recent Codes | السجل</span>
-            <button class="history-clear" id="clearHistoryBtn">Clear All</button>
-        </div>
-        <div class="history-list" id="historyList"></div>
-    </div>
-
-    <div class="footer">
-        <span>🔒</span> ZATCA Admin Tool &nbsp;·&nbsp; v3.0 &nbsp;·&nbsp; Licensed System <span>🔒</span>
+        <div class="lock-footer">🔒 ReadyInvoice v3.0 — Licensed System</div>
     </div>
 </div>
 
+<!-- LICENSE LOCK SCRIPT -->
 <script>
-(function() {
+(function(){
     'use strict';
-
-    const SALT = 'ZATCA_Invoice_2024_SecureKey_v1';
-    const WHATSAPP_NUMBER = '+966566958474';
-    const HISTORY_KEY = 'zatca_admin_history';
-
-    /* ── Crypto ── */
-    async function sha256(text) {
-        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
-        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
-    }
-
-    async function generateActivationCode(deviceCode) {
-        const hash = await sha256(deviceCode.toUpperCase().trim() + SALT);
-        return hash.replace(/[^0-9]/g, '').substring(0, 8);
-    }
-
-    /* ── History ── */
-    function loadHistory() {
-        try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
-        catch { return []; }
-    }
-
-    function saveHistory(history) {
-        localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
-    }
-
-    function addToHistory(deviceCode, activationCode) {
-        const history = loadHistory();
-        // Remove duplicate
-        const filtered = history.filter(h => h.device !== deviceCode.toUpperCase());
-        filtered.unshift({
-            device: deviceCode.toUpperCase(),
-            code: activationCode,
-            time: new Date().toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
+    const WHATSAPP_NUMBER='+966566958474';
+    const SALT='ZATCA_Invoice_2024_SecureKey_v1';
+    async function sha256(t){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(t));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('');}
+    async function getDeviceCode(uuid){const h=await sha256(uuid+'ZATCA_DEVICE_FP');return h.substring(0,8).toUpperCase();}
+    async function generateActivationCode(dc){const h=await sha256(dc.toUpperCase().trim()+SALT);return h.replace(/[^0-9]/g,'').substring(0,8);}
+    async function validatePasscode(dc,input){const expected=await generateActivationCode(dc);return expected===input.trim();}
+    function getOrCreateDeviceId(){let id=localStorage.getItem('app_device_id');if(!id){id=crypto.randomUUID();localStorage.setItem('app_device_id',id);}return id;}
+    function unlockApp(){localStorage.setItem('app_unlocked','true');document.getElementById('license-lock-overlay').classList.add('hidden');}
+    const uuid=getOrCreateDeviceId();
+    if(localStorage.getItem('app_unlocked')==='true'){unlockApp();}
+    else{
+        getDeviceCode(uuid).then(dc=>{
+            const di=document.getElementById('device-id-display');
+            if(di){di.value=dc;di.style.fontSize='22px';di.style.fontWeight='800';di.style.letterSpacing='5px';di.style.color='#FFFFFF';}
+            const dn=document.getElementById('device-numbers-display');
+            if(dn){dn.textContent='Send this 8-character code to admin';dn.style.color='rgba(255,255,255,0.35)';dn.style.letterSpacing='0';}
+            const rb=document.getElementById('request-passcode-btn');
+            if(rb){rb.addEventListener('click',()=>{const m=`السلام عليكم، أحتاج رمز تفعيل ReadyInvoice\nDevice Code: ${dc}`;window.open(`https://wa.me/${WHATSAPP_NUMBER.replace('+','')}?text=${encodeURIComponent(m)}`,'_blank');});}
+            const ub=document.getElementById('unlock-btn');
+            if(ub){ub.addEventListener('click',async function(){
+                const pi=document.getElementById('passcode-input');
+                const ed=document.getElementById('lock-error');
+                const inp=pi.value.trim();
+                if(!inp){ed.textContent='يرجى إدخال رمز التفعيل';ed.classList.add('show');return;}
+                this.disabled=true;this.innerHTML='<span>⏳</span><span>Verifying...</span>';
+                const v=await validatePasscode(dc,inp);
+                if(v){ed.classList.remove('show');this.innerHTML='<span>✅</span><span>Activated!</span>';this.style.background='linear-gradient(135deg,#1AAF97,#2EC4A9)';setTimeout(unlockApp,700);}
+                else{ed.textContent='رمز التفعيل غير صحيح. يرجى المحاولة مرة أخرى.';ed.classList.add('show');pi.value='';pi.focus();this.disabled=false;this.innerHTML='<span>🔓</span><span>Activate | تفعيل النظام</span>';}
+            });}
+            const pe=document.getElementById('passcode-input');
+            if(pe){pe.addEventListener('keypress',e=>{if(e.key==='Enter')document.getElementById('unlock-btn').click();});}
         });
-        saveHistory(filtered);
-        renderHistory();
     }
+})();
+</script>
 
-    function renderHistory() {
-        const history = loadHistory();
-        const historyCard = document.getElementById('historyCard');
-        const historyList = document.getElementById('historyList');
 
-        if (history.length === 0) {
-            historyCard.classList.remove('visible');
-            return;
-        }
+<!-- ═══════════════════════════════════════════════════════
+     APP LAYOUT
+═══════════════════════════════════════════════════════ -->
+<div class="app-layout">
 
-        historyCard.classList.add('visible');
-        historyList.innerHTML = history.map((h, i) => `
-            <div class="history-item" data-code="${h.code}" data-device="${h.device}">
-                <div class="history-item-left">
-                    <div class="history-device">${h.device}</div>
-                    <div class="history-time">${h.time}</div>
+    <!-- ── SIDEBAR ───────────────────────────────── -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="sidebar-brand-inner">
+                <div class="sidebar-logo-icon">📄</div>
+                <div>
+                    <div class="sidebar-app-name">Ready<span>Invoice</span></div>
+                    <div class="sidebar-app-tag">Professional Invoicing</div>
                 </div>
-                <div class="history-code">${h.code}</div>
+            </div>
+        </div>
+
+        <div class="sidebar-nav">
+            <div class="nav-section-label">Main</div>
+            <button class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+                <span class="nav-item-icon">🏠</span>
+                <span class="nav-item-label">Dashboard</span>
+            </button>
+            <button class="nav-item" data-page="settings" onclick="showPage('settings')">
+                <span class="nav-item-icon">⚙️</span>
+                <span class="nav-item-label">Settings</span>
+            </button>
+
+            <div class="nav-section-label" style="margin-top:10px;">Records</div>
+            <button class="nav-item" data-page="customers" onclick="showPage('customers')">
+                <span class="nav-item-icon">👥</span>
+                <span class="nav-item-label">Customers</span>
+            </button>
+            <button class="nav-item" data-page="items" onclick="showPage('items')">
+                <span class="nav-item-icon">📦</span>
+                <span class="nav-item-label">Items</span>
+            </button>
+            <button class="nav-item" data-page="saved" onclick="showPage('saved')">
+                <span class="nav-item-icon">💾</span>
+                <span class="nav-item-label">Saved Invoices</span>
+                <span class="nav-item-badge" id="invoiceBadge">0</span>
+            </button>
+
+            <div class="nav-section-label" style="margin-top:10px;">App</div>
+            <button class="nav-item" data-page="about" onclick="showPage('about')">
+                <span class="nav-item-icon">ℹ️</span>
+                <span class="nav-item-label">About</span>
+            </button>
+        </div>
+
+        <div class="sidebar-footer">
+            <div class="sidebar-version">ReadyInvoice v3.0 · © 2024</div>
+        </div>
+    </nav>
+
+    <!-- Mobile overlay -->
+    <div id="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <!-- ── MAIN AREA ──────────────────────────────── -->
+    <div class="main-area">
+
+        <!-- Top bar -->
+        <div class="top-bar">
+            <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Menu">☰</button>
+            <div class="top-bar-title" id="topBarTitle">Dashboard</div>
+            <div class="top-bar-actions">
+                <button class="top-bar-btn top-bar-btn-primary" onclick="showPage('dashboard');newInvoice()">➕ New Invoice</button>
+            </div>
+        </div>
+
+        <!-- Scrollable page content -->
+        <div class="page-content" id="pageContent">
+
+            <!-- ══════════════════════════════════════════
+                 PAGE: DASHBOARD (Invoice Creation)
+            ══════════════════════════════════════════ -->
+            <div id="page-dashboard" class="page active">
+
+                <!-- Stats -->
+                <div class="stats-grid" id="statsGrid">
+                    <div class="stat-card">
+                        <div class="stat-card-icon coral">📄</div>
+                        <div class="stat-card-value" id="statTotal">0</div>
+                        <div class="stat-card-label">Total Invoices</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-icon green">✅</div>
+                        <div class="stat-card-value" id="statPaid">0</div>
+                        <div class="stat-card-label">Paid</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-icon amber">⏳</div>
+                        <div class="stat-card-value" id="statUnpaid">0</div>
+                        <div class="stat-card-label">Unpaid</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-icon blue">👥</div>
+                        <div class="stat-card-value" id="statCustomers">0</div>
+                        <div class="stat-card-label">Customers</div>
+                    </div>
+                </div>
+
+                <!-- Invoice meta -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-row">
+                            <div class="card-icon">📋</div>
+                            <div>
+                                <div class="card-title">Invoice Details</div>
+                                <div class="card-subtitle">Fill invoice information</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Invoice # (Auto)</label>
+                            <input type="text" id="invoiceNumber" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Reference</label>
+                            <input type="text" id="invoiceReference" placeholder="REF-2024-001">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top:12px;">
+                        <div class="form-group">
+                            <label>Invoice Date</label>
+                            <input type="date" id="invoiceDate">
+                        </div>
+                        <div class="form-group">
+                            <label>Due Date</label>
+                            <input type="date" id="invoiceDueDate">
+                        </div>
+                    </div>
+                    <div class="form-row" style="margin-top:12px;">
+                        <div class="form-group">
+                            <label>Currency</label>
+                            <select id="invoiceCurrency" onchange="updateCurrencyDisplay()">
+                                <option value="SAR">SAR - Saudi Riyal</option>
+                                <option value="USD">USD - US Dollar</option>
+                                <option value="EUR">EUR - Euro</option>
+                                <option value="GBP">GBP - British Pound</option>
+                                <option value="AED">AED - UAE Dirham</option>
+                                <option value="KWD">KWD - Kuwaiti Dinar</option>
+                                <option value="BHD">BHD - Bahraini Dinar</option>
+                                <option value="QAR">QAR - Qatari Riyal</option>
+                                <option value="OMR">OMR - Omani Rial</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Payment Status</label>
+                            <select id="invoiceStatus" onchange="updateStatusDisplay()">
+                                <option value="Unpaid">Unpaid | غير مدفوع</option>
+                                <option value="Paid">Paid | مدفوع</option>
+                                <option value="Partial">Partial | دفع جزئي</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buyer / Customer -->
+                <!-- Customer selector — manage customers in the Customers page -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-row">
+                            <div class="card-icon">👤</div>
+                            <div>
+                                <div class="card-title">Customer / Buyer</div>
+                                <div class="card-subtitle">Choose from your saved customers</div>
+                            </div>
+                        </div>
+                        <button class="btn btn-ghost btn-sm" onclick="showPage('customers')" style="white-space:nowrap;">➕ Manage</button>
+                    </div>
+                    <div class="form-group" style="margin:0;">
+                        <select id="savedBuyersList" onchange="loadSelectedBuyer()">
+                            <option value="">— Select a customer —</option>
+                        </select>
+                    </div>
+                    <!-- Selected customer preview chip -->
+                    <div id="selectedCustomerChip" style="display:none;margin-top:10px;padding:10px 14px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-md);display:none;align-items:center;gap:10px;">
+                        <span style="font-size:20px;">👤</span>
+                        <div>
+                            <div id="chipCustomerName" style="font-weight:700;font-size:14px;color:var(--ink);"></div>
+                            <div id="chipCustomerMeta" style="font-size:11px;color:var(--ink-3);margin-top:2px;"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hidden buyer fields populated by dropdown — data used in preview/save -->
+                <input type="hidden" id="buyerName" value="">
+                <input type="hidden" id="buyerBuildingNo" value="">
+                <input type="hidden" id="buyerStreet" value="">
+                <input type="hidden" id="buyerDistrict" value="">
+                <input type="hidden" id="buyerCity" value="">
+                <input type="hidden" id="buyerPostalCode" value="">
+                <input type="hidden" id="buyerAdditionalNo" value="">
+                <input type="hidden" id="buyerVAT" value="">
+                <input type="hidden" id="buyerCR" value="">
+                <input type="hidden" id="buyerCountry" value="Saudi Arabia | المملكة العربية السعودية">
+
+                <!-- Hidden seller fields (auto-filled from Settings) -->
+                <input type="hidden" id="sellerName" value="">
+                <input type="hidden" id="sellerBuildingNo" value="">
+                <input type="hidden" id="sellerStreet" value="">
+                <input type="hidden" id="sellerDistrict" value="">
+                <input type="hidden" id="sellerCity" value="">
+                <input type="hidden" id="sellerPostalCode" value="">
+                <input type="hidden" id="sellerAdditionalNo" value="">
+                <input type="hidden" id="sellerVAT" value="">
+                <input type="hidden" id="sellerCR" value="">
+                <input type="hidden" id="sellerCountry" value="Saudi Arabia | المملكة العربية السعودية">
+                <img id="logoImage" src="" alt="" style="display:none;">
+
+                <!-- Items -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-row">
+                            <div class="card-icon">📦</div>
+                            <div><div class="card-title">Invoice Items</div></div>
+                        </div>
+                        <button class="btn btn-warning btn-sm" onclick="showItemSelector()">📋 From Library</button>
+                    </div>
+
+                    <div class="items-table-wrap">
+                        <div>
+                            <table class="items-table" id="itemsTable">
+                                <thead>
+                                    <tr>
+                                        <th style="width:26%">Description</th>
+                                        <th style="width:8%">Qty</th>
+                                        <th style="width:11%">Price</th>
+                                        <th style="width:7%">Disc%</th>
+                                        <th style="width:11%">Net</th>
+                                        <th style="width:7%">VAT%</th>
+                                        <th style="width:11%">VAT</th>
+                                        <th style="width:11%">Total</th>
+                                        <th style="width:3%"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="itemsBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <button class="btn btn-success btn-sm" style="margin-top:12px;" onclick="addInvoiceItem()">➕ Add Item</button>
+                </div>
+
+                <!-- Totals -->
+                <div class="totals-section">
+                    <div class="total-row"><span class="total-label">Subtotal (Before Disc)</span><span class="total-value" id="subtotalBeforeDiscountDisplay">0.00 <span class="currency-symbol">SAR</span></span></div>
+                    <div class="total-row"><span class="total-label">Item Discounts</span><span class="total-value" id="itemDiscountsDisplay">0.00 <span class="currency-symbol">SAR</span></span></div>
+                    <div class="total-row"><span class="total-label">Subtotal (After Disc)</span><span class="total-value" id="subtotalAfterItemDiscountDisplay">0.00 <span class="currency-symbol">SAR</span></span></div>
+                    <div class="total-row"><span class="total-label">Invoice Discount <input type="number" id="invoiceDiscountPercent" value="0" min="0" max="100" step="0.01" onchange="calculateTotals()"> %</span><span class="total-value" id="invoiceDiscountDisplay">0.00 <span class="currency-symbol">SAR</span></span></div>
+                    <div class="total-row"><span class="total-label">Subtotal (Before VAT)</span><span class="total-value" id="subtotalDisplay">0.00 <span class="currency-symbol">SAR</span></span></div>
+                    <div class="total-row"><span class="total-label">Total VAT | الضريبة</span><span class="total-value" id="vatTotalDisplay">0.00 <span class="currency-symbol">SAR</span></span></div>
+                    <div class="total-row grand-total"><span class="total-label">Grand Total | الإجمالي</span><span class="total-value" id="grandTotalDisplay">0.00 <span class="currency-symbol">SAR</span></span></div>
+                    <div class="total-row"><span class="total-label">Status</span><span class="total-value" id="statusDisplay">Unpaid</span></div>
+                </div>
+
+                <!-- Payment Tracking -->
+                <div class="payment-tracking-section" id="paymentTrackingSection" style="display:none;">
+                    <h4>💰 Payment Tracking | تتبع الدفعات</h4>
+                    <div id="paymentsContainer"></div>
+                    <button class="btn btn-success btn-sm" onclick="addPayment()">➕ Add Payment</button>
+                    <div style="margin-top:14px;padding:14px;background:var(--green-bg);border-radius:var(--r-md);">
+                        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+                            <strong>Total Paid</strong>
+                            <span id="totalPaidDisplay" style="color:var(--green);font-weight:700;font-family:var(--font-mono);">0.00 <span class="currency-symbol">SAR</span></span>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;">
+                            <strong>Remaining</strong>
+                            <span id="remainingDisplay" style="color:var(--red);font-weight:700;font-family:var(--font-mono);">0.00 <span class="currency-symbol">SAR</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action buttons -->
+                <div class="card" style="background:linear-gradient(135deg,var(--shell),var(--shell-rim));border-color:rgba(255,255,255,0.08);">
+                    <div class="btn-row" style="margin-bottom:10px;">
+                        <button class="btn btn-success" onclick="saveCurrentInvoice()">💾 Save Invoice</button>
+                        <button class="btn btn-warning" onclick="generateQRCode()">🔲 Generate QR</button>
+                    </div>
+                    <div class="btn-row">
+                        <button class="btn btn-primary" onclick="openPreview()">👁️ Preview & Print</button>
+                        <button class="btn btn-whatsapp" onclick="shareToWhatsApp()">📱 WhatsApp</button>
+                    </div>
+                    <button class="btn" style="width:100%;margin-top:10px;background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.12);color:rgba(255,255,255,0.6);" onclick="newInvoice()">📄 New Invoice</button>
+                </div>
+
+            </div>
+            <!-- END DASHBOARD -->
+
+
+            <!-- ══════════════════════════════════════════
+                 PAGE: SETTINGS (Seller Info)
+            ══════════════════════════════════════════ -->
+            <div id="page-settings" class="page">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h1>⚙️ Settings</h1>
+                        <p>Configure your seller info — auto-loaded into every invoice</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-row">
+                            <div class="card-icon">🏢</div>
+                            <div><div class="card-title">Seller Information</div><div class="card-subtitle">This info will appear on all invoices</div></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Company / Seller Name ✱</label>
+                        <input type="text" id="settingsSellerName" placeholder="Your Company Name">
+                    </div>
+                    <div class="form-row" style="margin-top:12px;">
+                        <div class="form-group"><label>VAT Number ✱</label><input type="text" id="settingsSellerVAT" placeholder="3XXXXXXXXXX3"></div>
+                        <div class="form-group"><label>CR Number</label><input type="text" id="settingsSellerCR" placeholder="XXXXXXXXXX"></div>
+                    </div>
+                    <div class="form-row" style="margin-top:12px;">
+                        <div class="form-group"><label>Phone</label><input type="tel" id="settingsSellerPhone" placeholder="+966 5X XXX XXXX"></div>
+                        <div class="form-group"><label>Email</label><input type="email" id="settingsSellerEmail" placeholder="info@company.com"></div>
+                    </div>
+
+                    <h3 style="margin:18px 0 12px;font-size:11px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.8px;">📍 Address</h3>
+                    <div class="address-grid">
+                        <div class="form-group"><label>Building No</label><input type="text" id="settingsSellerBuildingNo" placeholder="1234"></div>
+                        <div class="form-group"><label>Street</label><input type="text" id="settingsSellerStreet" placeholder="King Fahd Road"></div>
+                        <div class="form-group"><label>District</label><input type="text" id="settingsSellerDistrict" placeholder="Al Olaya"></div>
+                        <div class="form-group"><label>City</label><input type="text" id="settingsSellerCity" placeholder="Riyadh"></div>
+                        <div class="form-group"><label>Postal Code</label><input type="text" id="settingsSellerPostalCode" placeholder="12345"></div>
+                        <div class="form-group"><label>Additional No</label><input type="text" id="settingsSellerAdditionalNo" placeholder="1234"></div>
+                    </div>
+                    <div class="form-group" style="margin-top:12px;">
+                        <label>Country</label>
+                        <select id="settingsSellerCountry">
+                            <option value="Saudi Arabia | المملكة العربية السعودية">Saudi Arabia</option>
+                            <option value="UAE | الإمارات">UAE</option>
+                            <option value="Egypt | مصر">Egypt</option>
+                            <option value="Kuwait | الكويت">Kuwait</option>
+                        </select>
+                    </div>
+
+                    <h3 style="margin:18px 0 12px;font-size:11px;font-weight:700;color:var(--ink-3);text-transform:uppercase;letter-spacing:0.8px;">🖼️ Company Logo</h3>
+                    <div class="form-group">
+                        <input type="file" id="settingsSellerLogo" accept="image/*" onchange="previewSettingsLogo()">
+                        <div class="logo-preview" id="settingsLogoPreview" style="display:none;">
+                            <img id="settingsLogoImage" src="" alt="Logo">
+                        </div>
+                    </div>
+
+                    <div class="btn-row" style="margin-top:20px;">
+                        <button class="btn btn-success" onclick="saveSettings()">💾 Save Settings</button>
+                        <button class="btn btn-ghost" onclick="clearSettings()">🗑️ Clear</button>
+                    </div>
+                </div>
+
+                <!-- Invoice Defaults -->
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-title-row">
+                            <div class="card-icon">📝</div>
+                            <div><div class="card-title">Invoice Defaults</div><div class="card-subtitle">Auto-filled on every new invoice</div></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>🏦 Bank Details | التفاصيل البنكية</label>
+                        <textarea id="settingsBankDetails" placeholder="Bank Name: Al Rajhi Bank&#10;Account Name: Your Company&#10;Account Number: 1234567890&#10;IBAN: SA00 0000 0000 0000 0000 0000&#10;SWIFT: RJHISARI" style="min-height:110px;"></textarea>
+                    </div>
+
+                    <div class="form-group" style="margin-top:12px;">
+                        <label>📋 Terms & Conditions | الشروط والأحكام</label>
+                        <textarea id="settingsTerms" placeholder="1. Payment due within 30 days&#10;2. All prices are exclusive of VAT&#10;3. Goods once sold are non-returnable&#10;4. Disputes subject to local jurisdiction" style="min-height:110px;"></textarea>
+                    </div>
+
+                    <div class="form-group" style="margin-top:12px;">
+                        <label>✏️ Default Footer Text</label>
+                        <textarea id="settingsFooterText" placeholder="Thank you for your business | شكراً لتعاملكم معنا">Thank you for your business | شكراً لتعاملكم معنا&#10;This is a computer-generated invoice | هذه فاتورة إلكترونية</textarea>
+                    </div>
+
+                    <button class="btn btn-success btn-full" onclick="saveSettings()" style="margin-top:16px;">💾 Save All Defaults</button>
+                </div>
+            </div>
+            <!-- END SETTINGS -->
+
+
+            <!-- ══════════════════════════════════════════
+                 PAGE: CUSTOMERS
+            ══════════════════════════════════════════ -->
+            <div id="page-customers" class="page">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h1>👥 Customers</h1>
+                        <p>Manage your customer database</p>
+                    </div>
+                    <div class="page-header-actions">
+                        <button class="btn btn-primary btn-sm" onclick="openCustomerModal()">➕ Add Customer</button>
+                    </div>
+                </div>
+
+                <div class="data-table-wrap">
+                    <div class="table-scroll">
+                        <table class="data-table" id="customersTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>VAT Number</th>
+                                    <th>Phone</th>
+                                    <th>City</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersTableBody">
+                                <tr class="empty-row"><td colspan="6">No customers yet. Click "Add Customer" to get started.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END CUSTOMERS -->
+
+
+            <!-- ══════════════════════════════════════════
+                 PAGE: ITEMS
+            ══════════════════════════════════════════ -->
+            <div id="page-items" class="page">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h1>📦 Items Library</h1>
+                        <p>Manage your products and services catalog</p>
+                    </div>
+                    <div class="page-header-actions">
+                        <button class="btn btn-primary btn-sm" onclick="openItemModal()">➕ Add Item</button>
+                    </div>
+                </div>
+
+                <div class="data-table-wrap">
+                    <div class="table-scroll">
+                        <table class="data-table" id="itemsLibTable">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Item Name</th>
+                                    <th>Description</th>
+                                    <th>Unit Price</th>
+                                    <th>VAT %</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="itemsLibTableBody">
+                                <tr class="empty-row"><td colspan="6">No items yet. Click "Add Item" to get started.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END ITEMS -->
+
+
+            <!-- ══════════════════════════════════════════
+                 PAGE: SAVED INVOICES
+            ══════════════════════════════════════════ -->
+            <div id="page-saved" class="page">
+                <div class="page-header">
+                    <div class="page-header-left">
+                        <h1>💾 Saved Invoices</h1>
+                        <p>View, manage and export your invoices</p>
+                    </div>
+                </div>
+
+                <div class="data-table-wrap">
+                    <div class="table-scroll">
+                        <table class="data-table" id="savedInvoicesTable">
+                            <thead>
+                                <tr>
+                                    <th>Invoice #</th>
+                                    <th>Date</th>
+                                    <th>Customer</th>
+                                    <th>Total</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="savedInvoicesBody">
+                                <tr class="empty-row"><td colspan="6">No saved invoices. Create your first invoice from the Dashboard.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- END SAVED INVOICES -->
+
+
+            <!-- ══════════════════════════════════════════
+                 PAGE: ABOUT
+            ══════════════════════════════════════════ -->
+            <div id="page-about" class="page">
+                <div class="about-hero">
+                    <div class="about-hero-icon">📄</div>
+                    <h1>Ready<span>Invoice</span></h1>
+                    <p>Professional · Offline · Lightweight</p>
+                </div>
+
+                <div class="about-detail-card">
+                    <div class="about-detail-row">
+                        <div class="about-detail-icon">📱</div>
+                        <div>
+                            <div class="about-detail-label">Application</div>
+                            <div class="about-detail-value">ReadyInvoice v3.0</div>
+                        </div>
+                    </div>
+                    <div class="about-detail-row">
+                        <div class="about-detail-icon">👨‍💻</div>
+                        <div>
+                            <div class="about-detail-label">Author</div>
+                            <div class="about-detail-value">Amaar Hassan</div>
+                        </div>
+                    </div>
+                    <div class="about-detail-row">
+                        <div class="about-detail-icon">📞</div>
+                        <div>
+                            <div class="about-detail-label">Phone / WhatsApp</div>
+                            <div class="about-detail-value">00201000123876</div>
+                        </div>
+                    </div>
+                    <div class="about-detail-row">
+                        <div class="about-detail-icon">🌍</div>
+                        <div>
+                            <div class="about-detail-label">Compliance</div>
+                            <div class="about-detail-value">ZATCA E-Invoice Standard</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-detail-card">
+                    <div class="about-detail-row" style="padding-top:0;">
+                        <div class="about-detail-icon">📋</div>
+                        <div>
+                            <div class="about-detail-label">Description</div>
+                            <div class="about-detail-value" style="font-size:13px;font-weight:400;color:var(--ink-2);line-height:1.6;margin-top:4px;">
+                                Professional lightweight offline invoice system built in pure HTML, CSS, and JavaScript. Supports ZATCA e-invoice QR codes, multiple currencies, customer management, item library, payment tracking, and one-page PDF export. No backend required — runs entirely in the browser.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-detail-card">
+                    <div style="margin-bottom:12px;">
+                        <div class="about-detail-label" style="margin-bottom:8px;">Built with</div>
+                        <div class="about-tech-chips">
+                            <span class="tech-chip">HTML5</span>
+                            <span class="tech-chip">CSS3</span>
+                            <span class="tech-chip">Vanilla JS</span>
+                            <span class="tech-chip">LocalStorage</span>
+                            <span class="tech-chip">ZATCA QR</span>
+                            <span class="tech-chip">Web Crypto API</span>
+                            <span class="tech-chip">No Framework</span>
+                            <span class="tech-chip">No Backend</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align:center;padding:20px 0;color:var(--ink-4);font-size:12px;">
+                    ReadyInvoice © 2024 · Made with ❤️ by Amaar Hassan
+                </div>
+            </div>
+            <!-- END ABOUT -->
+
+        </div><!-- end .page-content -->
+    </div><!-- end .main-area -->
+</div><!-- end .app-layout -->
+
+
+<!-- ═══════════════════════════════════════════════════════
+     INVOICE PREVIEW OVERLAY
+═══════════════════════════════════════════════════════ -->
+<div id="preview-overlay">
+    <div class="preview-topbar">
+        <button class="btn btn-ghost btn-sm" onclick="closePreview()">← Back</button>
+        <div class="preview-topbar-title">📄 Invoice Preview</div>
+        <button class="btn btn-sm" style="background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.2);" onclick="window.print()">🖨️ Print</button>
+        <button class="btn btn-success btn-sm" onclick="window.print()">📄 PDF</button>
+        <button class="btn btn-whatsapp btn-sm" onclick="shareToWhatsApp()">📱 WhatsApp</button>
+    </div>
+    <div class="preview-scroll">
+        <div class="editable-section" style="max-width:800px;margin:0 auto 16px;">
+            <h4>Edit Header</h4>
+            <textarea id="headerText" placeholder="Custom header text (optional)"></textarea>
+        </div>
+        <div class="editable-section" style="max-width:800px;margin:0 auto 16px;">
+            <h4>Edit Footer</h4>
+            <textarea id="footerText">Thank you for your business | شكراً لتعاملكم معنا
+This is a computer-generated invoice | هذه فاتورة إلكترونية</textarea>
+        </div>
+        <div class="invoice-preview-doc" id="invoicePreview">
+            <!-- Generated by JS -->
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     CUSTOMER MODAL
+═══════════════════════════════════════════════════════ -->
+<div id="customerModal" class="modal">
+    <div class="modal-content">
+        <h3 id="customerModalTitle">Add Customer</h3>
+        <input type="hidden" id="editCustomerIndex" value="">
+
+        <div class="form-group"><label>Customer Name ✱</label><input type="text" id="modalCustomerName" placeholder="Full name or company"></div>
+        <div class="form-row" style="margin-top:10px;">
+            <div class="form-group"><label>VAT Number</label><input type="text" id="modalCustomerVAT" placeholder="3XXXXXXXXXX3"></div>
+            <div class="form-group"><label>CR Number</label><input type="text" id="modalCustomerCR" placeholder="XXXXXXXXXX"></div>
+        </div>
+        <div class="form-row" style="margin-top:10px;">
+            <div class="form-group"><label>Phone</label><input type="tel" id="modalCustomerPhone" placeholder="+966 5X XXX XXXX"></div>
+            <div class="form-group"><label>Email</label><input type="email" id="modalCustomerEmail" placeholder="customer@email.com"></div>
+        </div>
+        <div class="address-grid" style="margin-top:10px;">
+            <div class="form-group"><label>Building No</label><input type="text" id="modalCustomerBuildingNo"></div>
+            <div class="form-group"><label>Street</label><input type="text" id="modalCustomerStreet"></div>
+            <div class="form-group"><label>District</label><input type="text" id="modalCustomerDistrict"></div>
+            <div class="form-group"><label>City</label><input type="text" id="modalCustomerCity" placeholder="Riyadh"></div>
+            <div class="form-group"><label>Postal Code</label><input type="text" id="modalCustomerPostalCode"></div>
+            <div class="form-group">
+                <label>Country</label>
+                <select id="modalCustomerCountry">
+                    <option value="Saudi Arabia | المملكة العربية السعودية">Saudi Arabia</option>
+                    <option value="UAE | الإمارات">UAE</option>
+                    <option value="Egypt | مصر">Egypt</option>
+                    <option value="Kuwait | الكويت">Kuwait</option>
+                    <option value="Qatar | قطر">Qatar</option>
+                    <option value="Bahrain | البحرين">Bahrain</option>
+                    <option value="Oman | عُمان">Oman</option>
+                </select>
+            </div>
+        </div>
+        <div class="btn-row" style="margin-top:18px;">
+            <button class="btn btn-success" onclick="saveCustomer()">💾 Save Customer</button>
+            <button class="btn btn-ghost" onclick="closeCustomerModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     ITEM MODAL
+═══════════════════════════════════════════════════════ -->
+<div id="itemModal" class="modal">
+    <div class="modal-content">
+        <h3 id="itemModalTitle">Add Item</h3>
+        <input type="hidden" id="editItemIndex" value="">
+        <div class="form-group"><label>Item Name ✱</label><input type="text" id="modalItemName" placeholder="Product or service name"></div>
+        <div class="form-group" style="margin-top:10px;"><label>Description</label><input type="text" id="modalItemDesc" placeholder="Short description"></div>
+        <div class="form-row" style="margin-top:10px;">
+            <div class="form-group"><label>Unit Price ✱</label><input type="number" id="modalItemPrice" value="0" min="0" step="0.01"></div>
+            <div class="form-group"><label>VAT %</label><input type="number" id="modalItemVAT" value="15" min="0" max="100"></div>
+        </div>
+        <div class="btn-row" style="margin-top:18px;">
+            <button class="btn btn-success" onclick="saveItemLib()">💾 Save Item</button>
+            <button class="btn btn-ghost" onclick="closeItemModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     ITEM SELECTOR MODAL (Invoice page "From Library")
+═══════════════════════════════════════════════════════ -->
+<div id="itemSelectorModal" class="modal">
+    <div class="modal-content">
+        <h3>Select Item from Library</h3>
+        <div id="itemSelectorList"></div>
+        <button class="btn btn-ghost btn-full" style="margin-top:14px;" onclick="closeItemSelector()">✕ Close</button>
+    </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════
+     MAIN APPLICATION JAVASCRIPT
+═══════════════════════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ════════════════════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════════════════════ */
+const PAGE_TITLES = {
+    dashboard: '🏠 Dashboard',
+    settings:  '⚙️ Settings',
+    customers: '👥 Customers',
+    items:     '📦 Items Library',
+    saved:     '💾 Saved Invoices',
+    about:     'ℹ️ About'
+};
+
+function showPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // Deactivate all nav items
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+    // Show target
+    const pg = document.getElementById('page-' + pageId);
+    if (pg) pg.classList.add('active');
+
+    // Activate nav item
+    const navItem = document.querySelector(`.nav-item[data-page="${pageId}"]`);
+    if (navItem) navItem.classList.add('active');
+
+    // Update top bar title
+    document.getElementById('topBarTitle').textContent = PAGE_TITLES[pageId] || pageId;
+
+    // Scroll to top
+    document.getElementById('pageContent').scrollTop = 0;
+
+    // Page-specific load actions
+    if (pageId === 'saved') { renderSavedInvoicesTable(); }
+    if (pageId === 'customers') { renderCustomersTable(); }
+    if (pageId === 'items') { renderItemsTable(); }
+    if (pageId === 'settings') { loadSettingsForm(); }
+
+    // Close mobile sidebar
+    closeSidebar();
+}
+
+function toggleSidebar() {
+    document.getElementById('sidebar').classList.toggle('open');
+    document.getElementById('sidebar-overlay').classList.toggle('show');
+}
+function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('show');
+}
+
+/* ════════════════════════════════════════════════════════
+   PREVIEW OVERLAY
+════════════════════════════════════════════════════════ */
+function openPreview() {
+    generateInvoicePreview();
+    document.getElementById('preview-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+function closePreview() {
+    document.getElementById('preview-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+/* ════════════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════════════ */
+window.onload = function() {
+    setTodayDate();
+    generateInvoiceNumber();
+    addInvoiceItem();
+    updateStatusDisplay();
+    updateCurrencyDisplay();
+    loadBuyersList();
+    loadSettingsIntoInvoice(); // Auto-load seller from settings
+    updateStats();
+    updateInvoiceBadge();
+};
+
+/* ════════════════════════════════════════════════════════
+   SETTINGS
+════════════════════════════════════════════════════════ */
+function saveSettings() {
+    const settings = {
+        name:         document.getElementById('settingsSellerName').value.trim(),
+        vat:          document.getElementById('settingsSellerVAT').value.trim(),
+        cr:           document.getElementById('settingsSellerCR').value.trim(),
+        phone:        document.getElementById('settingsSellerPhone').value.trim(),
+        email:        document.getElementById('settingsSellerEmail').value.trim(),
+        buildingNo:   document.getElementById('settingsSellerBuildingNo').value.trim(),
+        street:       document.getElementById('settingsSellerStreet').value.trim(),
+        district:     document.getElementById('settingsSellerDistrict').value.trim(),
+        city:         document.getElementById('settingsSellerCity').value.trim(),
+        postalCode:   document.getElementById('settingsSellerPostalCode').value.trim(),
+        additionalNo: document.getElementById('settingsSellerAdditionalNo').value.trim(),
+        country:      document.getElementById('settingsSellerCountry').value,
+        footerText:   document.getElementById('settingsFooterText').value,
+        terms:        document.getElementById('settingsTerms').value,
+        bankDetails:  document.getElementById('settingsBankDetails').value,
+        logo:         document.getElementById('settingsLogoImage').src || ''
+    };
+    localStorage.setItem('ri_settings', JSON.stringify(settings));
+    loadSettingsIntoInvoice();
+    alert('✅ Settings saved! Seller info will auto-load into your invoices.');
+}
+
+function clearSettings() {
+    if (!confirm('Clear all settings?')) return;
+    localStorage.removeItem('ri_settings');
+    loadSettingsForm();
+    alert('✅ Settings cleared.');
+}
+
+function loadSettingsForm() {
+    const s = JSON.parse(localStorage.getItem('ri_settings') || '{}');
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    set('settingsSellerName', s.name);
+    set('settingsSellerVAT', s.vat);
+    set('settingsSellerCR', s.cr);
+    set('settingsSellerPhone', s.phone);
+    set('settingsSellerEmail', s.email);
+    set('settingsSellerBuildingNo', s.buildingNo);
+    set('settingsSellerStreet', s.street);
+    set('settingsSellerDistrict', s.district);
+    set('settingsSellerCity', s.city);
+    set('settingsSellerPostalCode', s.postalCode);
+    set('settingsSellerAdditionalNo', s.additionalNo);
+    set('settingsSellerCountry', s.country);
+    set('settingsFooterText', s.footerText);
+    set('settingsTerms', s.terms);
+    set('settingsBankDetails', s.bankDetails);
+    if (s.logo) {
+        document.getElementById('settingsLogoImage').src = s.logo;
+        document.getElementById('settingsLogoPreview').style.display = 'block';
+    }
+}
+
+function loadSettingsIntoInvoice() {
+    const s = JSON.parse(localStorage.getItem('ri_settings') || '{}');
+    const sset = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    sset('sellerName', s.name);
+    sset('sellerVAT', s.vat);
+    sset('sellerCR', s.cr);
+    sset('sellerBuildingNo', s.buildingNo);
+    sset('sellerStreet', s.street);
+    sset('sellerDistrict', s.district);
+    sset('sellerCity', s.city);
+    sset('sellerPostalCode', s.postalCode);
+    sset('sellerAdditionalNo', s.additionalNo);
+    sset('sellerCountry', s.country);
+    if (s.logo) {
+        const img = document.getElementById('logoImage');
+        if (img) img.src = s.logo;
+    }
+    if (s.footerText) {
+        const ft = document.getElementById('footerText');
+        if (ft && !ft.value) ft.value = s.footerText;
+    }
+}
+
+function previewSettingsLogo() {
+    const file = document.getElementById('settingsSellerLogo').files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = e => {
+            document.getElementById('settingsLogoImage').src = e.target.result;
+            document.getElementById('settingsLogoPreview').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+/* ════════════════════════════════════════════════════════
+   CUSTOMERS CRUD
+════════════════════════════════════════════════════════ */
+function getCustomers() { return JSON.parse(localStorage.getItem('zatca_buyers') || '[]'); }
+function setCustomers(arr) { localStorage.setItem('zatca_buyers', JSON.stringify(arr)); }
+
+function openCustomerModal(index) {
+    const modal = document.getElementById('customerModal');
+    const isEdit = index !== undefined;
+    document.getElementById('customerModalTitle').textContent = isEdit ? 'Edit Customer' : 'Add Customer';
+    document.getElementById('editCustomerIndex').value = isEdit ? index : '';
+
+    // Clear fields
+    ['modalCustomerName','modalCustomerVAT','modalCustomerCR','modalCustomerPhone',
+     'modalCustomerEmail','modalCustomerBuildingNo','modalCustomerStreet',
+     'modalCustomerDistrict','modalCustomerCity','modalCustomerPostalCode'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+
+    if (isEdit) {
+        const c = getCustomers()[index];
+        if (c) {
+            document.getElementById('modalCustomerName').value = c.name || '';
+            document.getElementById('modalCustomerVAT').value = c.vat || '';
+            document.getElementById('modalCustomerCR').value = c.cr || '';
+            document.getElementById('modalCustomerPhone').value = c.phone || '';
+            document.getElementById('modalCustomerEmail').value = c.email || '';
+            document.getElementById('modalCustomerBuildingNo').value = c.buildingNo || '';
+            document.getElementById('modalCustomerStreet').value = c.street || '';
+            document.getElementById('modalCustomerDistrict').value = c.district || '';
+            document.getElementById('modalCustomerCity').value = c.city || '';
+            document.getElementById('modalCustomerPostalCode').value = c.postalCode || '';
+            document.getElementById('modalCustomerCountry').value = c.country || 'Saudi Arabia | المملكة العربية السعودية';
+        }
+    }
+    modal.classList.add('open');
+}
+
+function closeCustomerModal() {
+    document.getElementById('customerModal').classList.remove('open');
+}
+
+function saveCustomer() {
+    const name = document.getElementById('modalCustomerName').value.trim();
+    if (!name) { alert('⚠️ Please enter customer name!'); return; }
+
+    const data = {
+        name,
+        vat:         document.getElementById('modalCustomerVAT').value.trim(),
+        cr:          document.getElementById('modalCustomerCR').value.trim(),
+        phone:       document.getElementById('modalCustomerPhone').value.trim(),
+        email:       document.getElementById('modalCustomerEmail').value.trim(),
+        buildingNo:  document.getElementById('modalCustomerBuildingNo').value.trim(),
+        street:      document.getElementById('modalCustomerStreet').value.trim(),
+        district:    document.getElementById('modalCustomerDistrict').value.trim(),
+        city:        document.getElementById('modalCustomerCity').value.trim(),
+        postalCode:  document.getElementById('modalCustomerPostalCode').value.trim(),
+        country:     document.getElementById('modalCustomerCountry').value,
+        additionalNo:''
+    };
+
+    const customers = getCustomers();
+    const editIdx = document.getElementById('editCustomerIndex').value;
+    if (editIdx !== '') {
+        customers[parseInt(editIdx)] = data;
+    } else {
+        customers.push(data);
+    }
+    setCustomers(customers);
+    renderCustomersTable();
+    loadBuyersList();
+    updateStats();
+    closeCustomerModal();
+    alert('✅ Customer saved!');
+}
+
+function deleteCustomer(index) {
+    if (!confirm('Delete this customer?')) return;
+    const c = getCustomers();
+    c.splice(index, 1);
+    setCustomers(c);
+    renderCustomersTable();
+    loadBuyersList();
+    updateStats();
+}
+
+function renderCustomersTable() {
+    const customers = getCustomers();
+    const tbody = document.getElementById('customersTableBody');
+    if (!tbody) return;
+    if (customers.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No customers yet. Click "Add Customer" to get started.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = customers.map((c, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td><strong>${esc(c.name)}</strong></td>
+            <td class="td-mono">${esc(c.vat) || '—'}</td>
+            <td>${esc(c.phone) || '—'}</td>
+            <td>${esc(c.city) || '—'}</td>
+            <td>
+                <div class="td-actions">
+                    <button class="tbl-btn tbl-btn-edit" onclick="openCustomerModal(${i})">✏️ Edit</button>
+                    <button class="tbl-btn tbl-btn-del" onclick="deleteCustomer(${i})">🗑️ Delete</button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+/* ════════════════════════════════════════════════════════
+   ITEMS LIBRARY CRUD
+════════════════════════════════════════════════════════ */
+function getItemsLib() { return JSON.parse(localStorage.getItem('zatca_items') || '[]'); }
+function setItemsLib(arr) { localStorage.setItem('zatca_items', JSON.stringify(arr)); }
+
+function openItemModal(index) {
+    const isEdit = index !== undefined;
+    document.getElementById('itemModalTitle').textContent = isEdit ? 'Edit Item' : 'Add Item';
+    document.getElementById('editItemIndex').value = isEdit ? index : '';
+    document.getElementById('modalItemName').value = '';
+    document.getElementById('modalItemDesc').value = '';
+    document.getElementById('modalItemPrice').value = '0';
+    document.getElementById('modalItemVAT').value = '15';
+
+    if (isEdit) {
+        const item = getItemsLib()[index];
+        if (item) {
+            document.getElementById('modalItemName').value = item.name || item.desc || '';
+            document.getElementById('modalItemDesc').value = item.desc2 || item.desc || '';
+            document.getElementById('modalItemPrice').value = item.price || 0;
+            document.getElementById('modalItemVAT').value = item.vat || 15;
+        }
+    }
+    document.getElementById('itemModal').classList.add('open');
+}
+
+function closeItemModal() { document.getElementById('itemModal').classList.remove('open'); }
+
+function saveItemLib() {
+    const name = document.getElementById('modalItemName').value.trim();
+    if (!name) { alert('⚠️ Please enter item name!'); return; }
+
+    const data = {
+        name:  name,
+        desc:  name, // legacy compat
+        desc2: document.getElementById('modalItemDesc').value.trim(),
+        price: parseFloat(document.getElementById('modalItemPrice').value) || 0,
+        vat:   parseFloat(document.getElementById('modalItemVAT').value) || 15
+    };
+
+    const items = getItemsLib();
+    const editIdx = document.getElementById('editItemIndex').value;
+    if (editIdx !== '') {
+        items[parseInt(editIdx)] = data;
+    } else {
+        items.push(data);
+    }
+    setItemsLib(items);
+    renderItemsTable();
+    closeItemModal();
+    alert('✅ Item saved!');
+}
+
+function deleteItemLib(index) {
+    if (!confirm('Delete this item?')) return;
+    const items = getItemsLib();
+    items.splice(index, 1);
+    setItemsLib(items);
+    renderItemsTable();
+}
+
+function renderItemsTable() {
+    const items = getItemsLib();
+    const tbody = document.getElementById('itemsLibTableBody');
+    if (!tbody) return;
+    if (items.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No items yet. Click "Add Item" to get started.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = items.map((item, i) => `
+        <tr>
+            <td>${i + 1}</td>
+            <td><strong>${esc(item.name || item.desc)}</strong></td>
+            <td style="color:var(--ink-3);font-size:12px;">${esc(item.desc2 || '—')}</td>
+            <td class="td-mono">${(item.price || 0).toFixed(2)}</td>
+            <td><span class="badge" style="background:#EFF6FF;color:#2563EB;">${item.vat || 15}%</span></td>
+            <td>
+                <div class="td-actions">
+                    <button class="tbl-btn tbl-btn-edit" onclick="openItemModal(${i})">✏️ Edit</button>
+                    <button class="tbl-btn tbl-btn-del" onclick="deleteItemLib(${i})">🗑️ Delete</button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+/* ════════════════════════════════════════════════════════
+   SAVED INVOICES TABLE
+════════════════════════════════════════════════════════ */
+function renderSavedInvoicesTable() {
+    const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
+    const tbody = document.getElementById('savedInvoicesBody');
+    if (!tbody) return;
+    if (invoices.length === 0) {
+        tbody.innerHTML = '<tr class="empty-row"><td colspan="6">No saved invoices. Create your first invoice from the Dashboard.</td></tr>';
+        return;
+    }
+    tbody.innerHTML = invoices.map((inv, i) => {
+        const statusClass = inv.status === 'Paid' ? 'badge-paid' : inv.status === 'Partial' ? 'badge-partial' : 'badge-unpaid';
+        return `<tr>
+            <td><strong class="td-mono">${esc(inv.invoiceNumber)}</strong></td>
+            <td>${esc(inv.invoiceDate)}</td>
+            <td>${esc(inv.buyer?.name || '—')}</td>
+            <td class="td-mono">${esc(inv.totals?.grandTotal || '—')}</td>
+            <td><span class="badge ${statusClass}">${esc(inv.status)}</span></td>
+            <td>
+                <div class="td-actions">
+                    <button class="tbl-btn tbl-btn-load" onclick="loadInvoiceFromTable(${i})">📂 Load</button>
+                    <button class="tbl-btn tbl-btn-view" onclick="viewInvoiceFromTable(${i})">👁 View</button>
+                    <button class="tbl-btn tbl-btn-del" onclick="deleteInvoiceFromTable(${i})">🗑️</button>
+                </div>
+            </td>
+        </tr>`;
+    }).join('');
+}
+
+function loadInvoiceFromTable(index) {
+    loadInvoice(index);
+    showPage('dashboard');
+}
+
+function viewInvoiceFromTable(index) {
+    loadInvoice(index);
+    openPreview();
+}
+
+function deleteInvoiceFromTable(index) {
+    if (!confirm('Delete this invoice?')) return;
+    let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
+    invoices.splice(index, 1);
+    localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
+    renderSavedInvoicesTable();
+    updateStats();
+    updateInvoiceBadge();
+}
+
+/* ════════════════════════════════════════════════════════
+   BUYER DROPDOWN  (links customers → invoice)
+════════════════════════════════════════════════════════ */
+function loadBuyersList() {
+    const customers = getCustomers();
+    const select = document.getElementById('savedBuyersList');
+    if (!select) return;
+    select.innerHTML = '<option value="">— Select customer or enter below —</option>';
+    customers.forEach((c, i) => {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = c.name + (c.city ? ` · ${c.city}` : '');
+        select.appendChild(opt);
+    });
+}
+
+function loadSelectedBuyer() {
+    const index = document.getElementById('savedBuyersList').value;
+    const chip = document.getElementById('selectedCustomerChip');
+    if (index === '') {
+        // Clear all hidden buyer fields
+        ['buyerName','buyerBuildingNo','buyerStreet','buyerDistrict','buyerCity',
+         'buyerPostalCode','buyerAdditionalNo','buyerVAT','buyerCR'].forEach(id => {
+            const el = document.getElementById(id); if (el) el.value = '';
+        });
+        document.getElementById('buyerCountry').value = 'Saudi Arabia | المملكة العربية السعودية';
+        if (chip) chip.style.display = 'none';
+        return;
+    }
+    const customers = getCustomers();
+    const c = customers[parseInt(index)];
+    if (!c) return;
+    const s = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    s('buyerName', c.name);
+    s('buyerBuildingNo', c.buildingNo);
+    s('buyerStreet', c.street);
+    s('buyerDistrict', c.district);
+    s('buyerCity', c.city);
+    s('buyerPostalCode', c.postalCode);
+    s('buyerAdditionalNo', c.additionalNo);
+    s('buyerVAT', c.vat);
+    s('buyerCR', c.cr);
+    const cc = document.getElementById('buyerCountry');
+    if (cc && c.country) cc.value = c.country;
+    // Show chip
+    if (chip) {
+        chip.style.display = 'flex';
+        const namEl = document.getElementById('chipCustomerName');
+        const metEl = document.getElementById('chipCustomerMeta');
+        if (namEl) namEl.textContent = c.name;
+        if (metEl) {
+            const parts = [];
+            if (c.city) parts.push(c.city);
+            if (c.vat) parts.push('VAT: ' + c.vat);
+            if (c.phone) parts.push(c.phone);
+            metEl.textContent = parts.join(' · ');
+        }
+    }
+}
+
+/* ════════════════════════════════════════════════════════
+   CURRENCY & STATUS
+════════════════════════════════════════════════════════ */
+function updateCurrencyDisplay() {
+    const currency = document.getElementById('invoiceCurrency').value;
+    document.querySelectorAll('.currency-symbol').forEach(s => s.textContent = currency);
+    calculateTotals();
+}
+function getCurrency() { return document.getElementById('invoiceCurrency').value; }
+
+function updateStatusDisplay() {
+    const status = document.getElementById('invoiceStatus').value;
+    const disp = document.getElementById('statusDisplay');
+    const tracking = document.getElementById('paymentTrackingSection');
+    const classes = { Paid:'status-paid', Unpaid:'status-unpaid', Partial:'status-partial' };
+    const texts  = { Paid:'Paid | مدفوع', Unpaid:'Unpaid | غير مدفوع', Partial:'Partial | دفع جزئي' };
+    if (disp) { disp.className = 'total-value ' + (classes[status]||''); disp.textContent = texts[status]||status; }
+    if (tracking) tracking.style.display = status === 'Partial' ? 'block' : 'none';
+}
+
+/* ════════════════════════════════════════════════════════
+   INVOICE ITEMS TABLE
+════════════════════════════════════════════════════════ */
+let itemRowCount = 0;
+
+function addInvoiceItem(desc='', price=0, vat=15) {
+    itemRowCount++;
+    const tbody = document.getElementById('itemsBody');
+    const row = document.createElement('tr');
+    row.id = `item-row-${itemRowCount}`;
+    row.innerHTML = `
+        <td><input type="text" value="${esc(desc)}" placeholder="Description" onchange="calculateTotals()"></td>
+        <td><input type="number" value="1" min="0" step="0.01" onchange="calculateRowTotal(${itemRowCount})" style="text-align:center;"></td>
+        <td><input type="number" value="${price}" min="0" step="0.01" onchange="calculateRowTotal(${itemRowCount})" style="text-align:right;"></td>
+        <td><input type="number" value="0" min="0" max="100" step="0.01" onchange="calculateRowTotal(${itemRowCount})" style="text-align:center;"></td>
+        <td><input type="number" value="${price}" readonly style="text-align:right;background:var(--surface-3);"></td>
+        <td><input type="number" value="${vat}" min="0" max="100" step="0.01" onchange="calculateRowTotal(${itemRowCount})" style="text-align:center;"></td>
+        <td><input type="number" value="0" readonly style="text-align:right;background:var(--surface-3);"></td>
+        <td><input type="number" value="${price}" readonly style="text-align:right;background:var(--surface-3);font-weight:600;"></td>
+        <td><button class="remove-btn" onclick="removeItem(${itemRowCount})">✕</button></td>
+    `;
+    tbody.appendChild(row);
+    calculateRowTotal(itemRowCount);
+}
+
+function calculateRowTotal(rowId) {
+    const row = document.getElementById(`item-row-${rowId}`);
+    if (!row) return;
+    const inputs = row.querySelectorAll('input');
+    const qty = parseFloat(inputs[1].value) || 0;
+    const price = parseFloat(inputs[2].value) || 0;
+    const discPct = parseFloat(inputs[3].value) || 0;
+    const vatPct = parseFloat(inputs[5].value) || 0;
+    const subtotal = qty * price;
+    const discAmt = subtotal * (discPct / 100);
+    const afterDisc = subtotal - discAmt;
+    const vatAmt = afterDisc * (vatPct / 100);
+    inputs[4].value = afterDisc.toFixed(2);
+    inputs[6].value = vatAmt.toFixed(2);
+    inputs[7].value = (afterDisc + vatAmt).toFixed(2);
+    calculateTotals();
+}
+
+function removeItem(rowId) {
+    const row = document.getElementById(`item-row-${rowId}`);
+    if (row) { row.remove(); calculateTotals(); }
+}
+
+function calculateTotals() {
+    const rows = document.querySelectorAll('#itemsBody tr');
+    let subtotalBD = 0, itemDiscs = 0, subtotalAD = 0, totalVAT = 0;
+    rows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        if (inputs.length < 8) return;
+        const qty = parseFloat(inputs[1].value)||0;
+        const price = parseFloat(inputs[2].value)||0;
+        const discPct = parseFloat(inputs[3].value)||0;
+        const vatPct = parseFloat(inputs[5].value)||0;
+        const sub = qty * price;
+        const disc = sub * (discPct/100);
+        const after = sub - disc;
+        subtotalBD += sub; itemDiscs += disc; subtotalAD += after;
+        totalVAT += after * (vatPct/100);
+    });
+    const invDiscPct = parseFloat(document.getElementById('invoiceDiscountPercent').value)||0;
+    const invDisc = subtotalAD * (invDiscPct/100);
+    const subtotalBV = subtotalAD - invDisc;
+    const grand = subtotalBV + totalVAT;
+    const cur = getCurrency();
+    const fmt = (n) => `${n.toFixed(2)} <span class="currency-symbol">${cur}</span>`;
+    document.getElementById('subtotalBeforeDiscountDisplay').innerHTML = fmt(subtotalBD);
+    document.getElementById('itemDiscountsDisplay').innerHTML = fmt(itemDiscs);
+    document.getElementById('subtotalAfterItemDiscountDisplay').innerHTML = fmt(subtotalAD);
+    document.getElementById('invoiceDiscountDisplay').innerHTML = fmt(invDisc);
+    document.getElementById('subtotalDisplay').innerHTML = fmt(subtotalBV);
+    document.getElementById('vatTotalDisplay').innerHTML = fmt(totalVAT);
+    document.getElementById('grandTotalDisplay').innerHTML = fmt(grand);
+    updatePaymentSummary(grand);
+}
+
+/* ════════════════════════════════════════════════════════
+   PAYMENT TRACKING
+════════════════════════════════════════════════════════ */
+let paymentCount = 0;
+
+function addPayment() {
+    paymentCount++;
+    const container = document.getElementById('paymentsContainer');
+    const div = document.createElement('div');
+    div.className = 'payment-item';
+    div.id = `payment-${paymentCount}`;
+    div.innerHTML = `
+        <div class="form-group"><label>Date</label><input type="date" value="${new Date().toISOString().split('T')[0]}" onchange="updatePaymentSummary()"></div>
+        <div class="form-group"><label>Amount</label><input type="number" value="0" min="0" step="0.01" onchange="updatePaymentSummary()"></div>
+        <div class="form-group"><label>Method</label>
+            <select onchange="updatePaymentSummary()">
+                <option>Cash</option><option>Bank Transfer</option>
+                <option>Credit Card</option><option>Cheque</option>
+            </select>
+        </div>
+        <div class="form-group" style="display:flex;align-items:flex-end;">
+            <button onclick="removePayment(${paymentCount})" style="background:var(--red-bg);color:var(--red);border:1px solid rgba(224,92,92,0.2);border-radius:8px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;width:100%;min-height:40px;">✕</button>
+        </div>
+    `;
+    container.appendChild(div);
+}
+
+function removePayment(id) {
+    const el = document.getElementById(`payment-${id}`);
+    if (el) { el.remove(); updatePaymentSummary(); }
+}
+
+function updatePaymentSummary(grandTotal) {
+    let totalPaid = 0;
+    document.querySelectorAll('.payment-item').forEach(item => {
+        const amtEl = item.querySelectorAll('input')[1];
+        if (amtEl) totalPaid += parseFloat(amtEl.value)||0;
+    });
+    if (!grandTotal) {
+        const gt = document.getElementById('grandTotalDisplay');
+        if (gt) grandTotal = parseFloat(gt.textContent.replace(/[^0-9.-]+/g,''))||0;
+    }
+    const remaining = (grandTotal||0) - totalPaid;
+    const cur = getCurrency();
+    const tpEl = document.getElementById('totalPaidDisplay');
+    const rmEl = document.getElementById('remainingDisplay');
+    if (tpEl) tpEl.innerHTML = `${totalPaid.toFixed(2)} <span class="currency-symbol">${cur}</span>`;
+    if (rmEl) rmEl.innerHTML = `${remaining.toFixed(2)} <span class="currency-symbol">${cur}</span>`;
+}
+
+/* ════════════════════════════════════════════════════════
+   DATES & INVOICE NUMBER
+════════════════════════════════════════════════════════ */
+function setTodayDate() {
+    document.getElementById('invoiceDate').value = new Date().toISOString().split('T')[0];
+}
+
+function generateInvoiceNumber() {
+    const saved = JSON.parse(localStorage.getItem('zatca_invoices')||'[]');
+    const year = new Date().getFullYear();
+    document.getElementById('invoiceNumber').value = `INV-${year}-${String(saved.length+1).padStart(4,'0')}`;
+}
+
+/* ════════════════════════════════════════════════════════
+   SAVE / LOAD INVOICES
+════════════════════════════════════════════════════════ */
+let currentInvoiceId = null;
+
+function collectInvoiceData() {
+    const rows = document.querySelectorAll('#itemsBody tr');
+    const items = [];
+    rows.forEach(row => {
+        const inputs = row.querySelectorAll('input');
+        if (inputs.length >= 8) {
+            items.push({
+                desc: inputs[0].value, qty: inputs[1].value,
+                price: inputs[2].value, disc: inputs[3].value,
+                afterDisc: inputs[4].value, vatPct: inputs[5].value,
+                vatAmt: inputs[6].value, total: inputs[7].value
+            });
+        }
+    });
+    const pyItems = document.querySelectorAll('.payment-item');
+    const paymentsData = [];
+    pyItems.forEach(item => {
+        const inp = item.querySelectorAll('input,select');
+        if (inp.length >= 3) paymentsData.push({ date: inp[0].value, amount: inp[1].value, method: inp[2].value });
+    });
+    return {
+        id: currentInvoiceId || Date.now(),
+        invoiceNumber: document.getElementById('invoiceNumber').value,
+        invoiceDate: document.getElementById('invoiceDate').value,
+        invoiceDueDate: document.getElementById('invoiceDueDate').value,
+        invoiceReference: document.getElementById('invoiceReference').value,
+        currency: document.getElementById('invoiceCurrency').value,
+        status: document.getElementById('invoiceStatus').value,
+        bankDetails: (JSON.parse(localStorage.getItem('ri_settings')||'{}').bankDetails)||'',
+        termsConditions: (JSON.parse(localStorage.getItem('ri_settings')||'{}').terms)||'',
+        headerText: document.getElementById('headerText').value,
+        footerText: document.getElementById('footerText').value,
+        invoiceDiscountPercent: document.getElementById('invoiceDiscountPercent').value,
+        seller: {
+            name: document.getElementById('sellerName').value,
+            buildingNo: document.getElementById('sellerBuildingNo').value,
+            street: document.getElementById('sellerStreet').value,
+            district: document.getElementById('sellerDistrict').value,
+            city: document.getElementById('sellerCity').value,
+            country: document.getElementById('sellerCountry').value,
+            postalCode: document.getElementById('sellerPostalCode').value,
+            additionalNo: document.getElementById('sellerAdditionalNo').value,
+            vat: document.getElementById('sellerVAT').value,
+            cr: document.getElementById('sellerCR').value,
+            logo: document.getElementById('logoImage').src
+        },
+        buyer: {
+            name: document.getElementById('buyerName').value,
+            buildingNo: document.getElementById('buyerBuildingNo').value,
+            street: document.getElementById('buyerStreet').value,
+            district: document.getElementById('buyerDistrict').value,
+            city: document.getElementById('buyerCity').value,
+            country: document.getElementById('buyerCountry').value,
+            postalCode: document.getElementById('buyerPostalCode').value,
+            additionalNo: document.getElementById('buyerAdditionalNo').value,
+            vat: document.getElementById('buyerVAT').value,
+            cr: document.getElementById('buyerCR').value
+        },
+        items, payments: paymentsData,
+        totals: {
+            subtotalBeforeDiscount: document.getElementById('subtotalBeforeDiscountDisplay').textContent,
+            itemDiscounts: document.getElementById('itemDiscountsDisplay').textContent,
+            subtotalAfterItemDiscount: document.getElementById('subtotalAfterItemDiscountDisplay').textContent,
+            invoiceDiscount: document.getElementById('invoiceDiscountDisplay').textContent,
+            subtotal: document.getElementById('subtotalDisplay').textContent,
+            vatTotal: document.getElementById('vatTotalDisplay').textContent,
+            grandTotal: document.getElementById('grandTotalDisplay').textContent
+        }
+    };
+}
+
+function saveCurrentInvoice() {
+    const data = collectInvoiceData();
+    let invoices = JSON.parse(localStorage.getItem('zatca_invoices')||'[]');
+    if (currentInvoiceId !== null) {
+        const idx = invoices.findIndex(inv => inv.id === currentInvoiceId);
+        if (idx >= 0) { invoices[idx] = { ...data, id: currentInvoiceId }; }
+        else { invoices.push(data); }
+    } else {
+        invoices.push(data);
+        currentInvoiceId = data.id;
+    }
+    localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
+    updateStats();
+    updateInvoiceBadge();
+    alert('✅ Invoice saved!');
+}
+
+function loadInvoice(index) {
+    const invoices = JSON.parse(localStorage.getItem('zatca_invoices')||'[]');
+    const inv = invoices[index];
+    if (!inv) return;
+    currentInvoiceId = inv.id;
+    const s = (id, val) => { const el = document.getElementById(id); if (el) el.value = val||''; };
+    s('invoiceNumber', inv.invoiceNumber);
+    s('invoiceDate', inv.invoiceDate);
+    s('invoiceDueDate', inv.invoiceDueDate);
+    s('invoiceReference', inv.invoiceReference);
+    s('invoiceCurrency', inv.currency||'SAR');
+    s('invoiceStatus', inv.status||'Unpaid');
+    s('headerText', inv.headerText);
+    s('footerText', inv.footerText);
+    s('invoiceDiscountPercent', inv.invoiceDiscountPercent||'0');
+    if (inv.seller) {
+        s('sellerName', inv.seller.name);
+        s('sellerBuildingNo', inv.seller.buildingNo);
+        s('sellerStreet', inv.seller.street);
+        s('sellerDistrict', inv.seller.district);
+        s('sellerCity', inv.seller.city);
+        s('sellerPostalCode', inv.seller.postalCode);
+        s('sellerAdditionalNo', inv.seller.additionalNo);
+        s('sellerVAT', inv.seller.vat);
+        s('sellerCR', inv.seller.cr);
+        s('sellerCountry', inv.seller.country);
+        if (inv.seller.logo && inv.seller.logo !== window.location.href) {
+            document.getElementById('logoImage').src = inv.seller.logo;
+        }
+    }
+    if (inv.buyer) {
+        s('buyerName', inv.buyer.name);
+        s('buyerBuildingNo', inv.buyer.buildingNo);
+        s('buyerStreet', inv.buyer.street);
+        s('buyerDistrict', inv.buyer.district);
+        s('buyerCity', inv.buyer.city);
+        s('buyerPostalCode', inv.buyer.postalCode);
+        s('buyerAdditionalNo', inv.buyer.additionalNo);
+        s('buyerVAT', inv.buyer.vat);
+        s('buyerCR', inv.buyer.cr);
+        const cc = document.getElementById('buyerCountry');
+        if (cc && inv.buyer.country) cc.value = inv.buyer.country;
+    }
+    document.getElementById('itemsBody').innerHTML = '';
+    itemRowCount = 0;
+    if (inv.items) {
+        inv.items.forEach(item => {
+            addInvoiceItem(item.desc, parseFloat(item.price)||0, parseFloat(item.vatPct)||15);
+            const rows = document.querySelectorAll('#itemsBody tr');
+            const lastRow = rows[rows.length-1];
+            if (lastRow) {
+                const inputs = lastRow.querySelectorAll('input');
+                inputs[1].value = item.qty||1;
+                inputs[3].value = item.disc||0;
+                calculateRowTotal(itemRowCount);
+            }
+        });
+    }
+    document.getElementById('paymentsContainer').innerHTML = '';
+    paymentCount = 0;
+    if (inv.payments) {
+        inv.payments.forEach(p => {
+            addPayment();
+            const el = document.getElementById(`payment-${paymentCount}`);
+            if (el) {
+                const inputs = el.querySelectorAll('input,select');
+                if (inputs[0]) inputs[0].value = p.date||'';
+                if (inputs[1]) inputs[1].value = p.amount||0;
+                if (inputs[2]) inputs[2].value = p.method||'Cash';
+            }
+        });
+    }
+    // Restore customer dropdown chip if buyer matches a saved customer
+    if (inv.buyer && inv.buyer.name) {
+        const customers = getCustomers();
+        const cidx = customers.findIndex(c => c.name === inv.buyer.name);
+        const sel = document.getElementById('savedBuyersList');
+        const chip = document.getElementById('selectedCustomerChip');
+        if (cidx >= 0 && sel) {
+            sel.value = cidx;
+            const c = customers[cidx];
+            if (chip) {
+                chip.style.display = 'flex';
+                const namEl = document.getElementById('chipCustomerName');
+                const metEl = document.getElementById('chipCustomerMeta');
+                if (namEl) namEl.textContent = c.name;
+                if (metEl) {
+                    const parts = [];
+                    if (c.city) parts.push(c.city);
+                    if (c.vat) parts.push('VAT: ' + c.vat);
+                    if (c.phone) parts.push(c.phone);
+                    metEl.textContent = parts.join(' · ');
+                }
+            }
+        } else if (chip) { chip.style.display = 'none'; }
+    }
+    updateStatusDisplay();
+    updateCurrencyDisplay();
+    calculateTotals();
+    alert('✅ Invoice loaded!');
+}
+
+function newInvoice() {
+    if (!confirm('Start a new invoice? Unsaved changes will be lost.')) return;
+    currentInvoiceId = null;
+    document.getElementById('itemsBody').innerHTML = '';
+    itemRowCount = 0;
+    document.getElementById('paymentsContainer').innerHTML = '';
+    paymentCount = 0;
+    document.getElementById('invoiceDiscountPercent').value = '0';
+    document.getElementById('invoiceReference').value = '';
+    document.getElementById('invoiceStatus').value = 'Unpaid';
+    document.getElementById('headerText').value = '';
+    // Reset buyer
+    document.getElementById('savedBuyersList').value = '';
+    const chip = document.getElementById('selectedCustomerChip');
+    if (chip) chip.style.display = 'none';
+    ['buyerName','buyerBuildingNo','buyerStreet','buyerDistrict','buyerCity',
+     'buyerPostalCode','buyerAdditionalNo','buyerVAT','buyerCR'].forEach(id => {
+        const el = document.getElementById(id); if (el) el.value = '';
+    });
+    setTodayDate();
+    generateInvoiceNumber();
+    addInvoiceItem();
+    updateStatusDisplay();
+    updateCurrencyDisplay();
+    loadSettingsIntoInvoice();
+    document.getElementById('pageContent').scrollTop = 0;
+}
+
+function deleteInvoice(index) {
+    if (!confirm('Delete this invoice?')) return;
+    let invoices = JSON.parse(localStorage.getItem('zatca_invoices')||'[]');
+    invoices.splice(index, 1);
+    localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
+    renderSavedInvoicesTable();
+    updateStats();
+    updateInvoiceBadge();
+}
+
+/* ════════════════════════════════════════════════════════
+   ITEM SELECTOR (From Library in invoice)
+════════════════════════════════════════════════════════ */
+function showItemSelector() {
+    const items = getItemsLib();
+    const container = document.getElementById('itemSelectorList');
+    if (items.length === 0) {
+        container.innerHTML = '<p style="text-align:center;color:var(--ink-3);padding:20px;">No items in library. Add items in the Items page.</p>';
+    } else {
+        container.innerHTML = items.map((item, i) => `
+            <div onclick="addItemFromLibrary(${i})" style="padding:14px 16px;border-bottom:1px solid var(--surface-3);cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:background 0.15s;" onmouseover="this.style.background='var(--surface-2)'" onmouseout="this.style.background=''">
+                <div>
+                    <div style="font-weight:600;font-size:14px;">${esc(item.name||item.desc)}</div>
+                    <div style="font-size:12px;color:var(--ink-3);margin-top:2px;">${(item.price||0).toFixed(2)} · VAT ${item.vat||15}%</div>
+                </div>
+                <span style="color:var(--coral);font-size:22px;font-weight:700;">+</span>
             </div>
         `).join('');
+    }
+    document.getElementById('itemSelectorModal').classList.add('open');
+}
 
-        // Click history item to reload
-        historyList.querySelectorAll('.history-item').forEach(item => {
-            item.addEventListener('click', function() {
-                document.getElementById('deviceInput').value = this.dataset.device;
-                showResult(this.dataset.device, this.dataset.code);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            });
-        });
+function addItemFromLibrary(index) {
+    const item = getItemsLib()[index];
+    if (item) addInvoiceItem(item.name||item.desc, item.price||0, item.vat||15);
+    closeItemSelector();
+}
+function closeItemSelector() { document.getElementById('itemSelectorModal').classList.remove('open'); }
+
+/* ════════════════════════════════════════════════════════
+   QR CODE GENERATION (ZATCA)
+════════════════════════════════════════════════════════ */
+function generateQRCode() {
+    const sellerName = document.getElementById('sellerName').value.trim();
+    const sellerVAT = document.getElementById('sellerVAT').value.trim();
+    const invoiceDate = document.getElementById('invoiceDate').value;
+    const grandTotal = document.getElementById('grandTotalDisplay').textContent.replace(/[^0-9.]/g,'');
+    const vatTotal = document.getElementById('vatTotalDisplay').textContent.replace(/[^0-9.]/g,'');
+    if (!sellerName || !sellerVAT) { alert('⚠️ Please configure Seller Name and VAT in Settings first!'); return; }
+    function toTLV(tag, value) {
+        const vb = new TextEncoder().encode(value);
+        const r = new Uint8Array(2 + vb.length);
+        r[0]=tag; r[1]=vb.length; r.set(vb,2); return r;
+    }
+    function concat(...arrs) {
+        const total = arrs.reduce((s,a)=>s+a.length,0);
+        const r = new Uint8Array(total); let o=0;
+        arrs.forEach(a=>{r.set(a,o);o+=a.length;}); return r;
+    }
+    const tlv = concat(
+        toTLV(1,sellerName), toTLV(2,sellerVAT),
+        toTLV(3,invoiceDate+'T00:00:00Z'),
+        toTLV(4,parseFloat(grandTotal).toFixed(2)),
+        toTLV(5,parseFloat(vatTotal).toFixed(2))
+    );
+    let bin=''; tlv.forEach(b=>bin+=String.fromCharCode(b));
+    localStorage.setItem('zatca_qr_current', btoa(bin));
+    alert('✅ QR Code generated! Click Preview to view it on the invoice.');
+}
+
+/* ════════════════════════════════════════════════════════
+   INVOICE PREVIEW GENERATION
+════════════════════════════════════════════════════════ */
+function generateInvoicePreview() {
+    const g = id => { const el = document.getElementById(id); return el ? el.value : ''; };
+    const sellerData = {
+        name: g('sellerName'), buildingNo: g('sellerBuildingNo'),
+        street: g('sellerStreet'), district: g('sellerDistrict'),
+        city: g('sellerCity'), country: g('sellerCountry'),
+        postalCode: g('sellerPostalCode'), additionalNo: g('sellerAdditionalNo'),
+        vat: g('sellerVAT'), cr: g('sellerCR'),
+        logo: document.getElementById('logoImage').src
+    };
+    const buyerData = {
+        name: g('buyerName'), buildingNo: g('buyerBuildingNo'),
+        street: g('buyerStreet'), district: g('buyerDistrict'),
+        city: g('buyerCity'), country: g('buyerCountry'),
+        postalCode: g('buyerPostalCode'), additionalNo: g('buyerAdditionalNo'),
+        vat: g('buyerVAT'), cr: g('buyerCR')
+    };
+    const invoiceNumber = g('invoiceNumber');
+    const invoiceDate = g('invoiceDate');
+    const invoiceDueDate = g('invoiceDueDate');
+    const invoiceReference = g('invoiceReference');
+    const currency = getCurrency();
+    // Bank details & terms come from Settings defaults (not per-invoice fields)
+    const _settings = JSON.parse(localStorage.getItem('ri_settings') || '{}');
+    const bankDetails = _settings.bankDetails || '';
+    const termsConditions = _settings.terms || '';
+    const headerText = g('headerText');
+    const footerText = g('footerText');
+    const invoiceStatus = g('invoiceStatus');
+    let statusClass = 'status-unpaid', statusText = 'Unpaid | غير مدفوع';
+    if (invoiceStatus==='Paid'){statusClass='status-paid';statusText='Paid | مدفوع';}
+    else if (invoiceStatus==='Partial'){statusClass='status-partial';statusText='Partial | دفع جزئي';}
+
+    const sbd = document.getElementById('subtotalBeforeDiscountDisplay').textContent;
+    const idc = document.getElementById('itemDiscountsDisplay').textContent;
+    const sad = document.getElementById('subtotalAfterItemDiscountDisplay').textContent;
+    const idd = document.getElementById('invoiceDiscountDisplay').textContent;
+    const sub = document.getElementById('subtotalDisplay').textContent;
+    const vat = document.getElementById('vatTotalDisplay').textContent;
+    const grd = document.getElementById('grandTotalDisplay').textContent;
+
+    const rows = document.querySelectorAll('#itemsBody tr');
+    let itemsHTML = '';
+    rows.forEach((row, i) => {
+        const inputs = row.querySelectorAll('input');
+        if (inputs.length >= 8) {
+            itemsHTML += `<tr>
+                <td style="padding:5px;border:1px solid #E5E7EB;">${i+1}</td>
+                <td style="padding:5px;border:1px solid #E5E7EB;">${esc(inputs[0].value)}</td>
+                <td style="padding:5px;border:1px solid #E5E7EB;text-align:center;">${inputs[1].value}</td>
+                <td style="padding:5px;border:1px solid #E5E7EB;text-align:right;">${inputs[2].value}</td>
+                <td style="padding:5px;border:1px solid #E5E7EB;text-align:center;">${inputs[3].value}%</td>
+                <td style="padding:5px;border:1px solid #E5E7EB;text-align:right;">${inputs[4].value}</td>
+                <td style="padding:5px;border:1px solid #E5E7EB;text-align:center;">${inputs[5].value}%</td>
+                <td style="padding:5px;border:1px solid #E5E7EB;text-align:right;">${inputs[6].value}</td>
+                <td style="padding:5px;border:1px solid #E5E7EB;text-align:right;font-weight:bold;">${inputs[7].value}</td>
+            </tr>`;
+        }
+    });
+
+    const qrData = localStorage.getItem('zatca_qr_current');
+    const qrHTML = qrData ? `<img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrData)}" alt="ZATCA QR" style="width:90px;height:90px;">` : '<div style="width:90px;height:90px;background:#F3F4F6;border:1px dashed #D1D5DB;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#9CA3AF;">No QR</div>';
+
+    function buildAddr(d) {
+        if (!d.buildingNo && !d.street && !d.city) return '';
+        return `<table class="address-table"><tr><th>Bldg No</th><th>Street</th><th>District</th></tr>
+            <tr><td>${d.buildingNo||'-'}</td><td>${d.street||'-'}</td><td>${d.district||'-'}</td></tr>
+            <tr><th>City</th><th>Country</th><th>Postal</th></tr>
+            <tr><td>${d.city||'-'}</td><td>${(d.country||'').split('|')[0].trim()}</td><td>${d.postalCode||'-'}</td></tr></table>`;
     }
 
-    /* ── Show result ── */
-    function showResult(deviceCode, activationCode) {
-        const resultCard = document.getElementById('resultCard');
-        document.getElementById('resultCode').textContent = activationCode;
-        document.getElementById('resultDevice').textContent = `Device: ${deviceCode.toUpperCase()}`;
-        resultCard.classList.remove('visible');
-        // Force reflow for animation replay
-        void resultCard.offsetWidth;
-        resultCard.classList.add('visible');
+    let paymentsHTML = '';
+    const paymentItems = document.querySelectorAll('.payment-item');
+    if (paymentItems.length > 0) {
+        const pd = [];
+        paymentItems.forEach(item => {
+            const inp = item.querySelectorAll('input,select');
+            const p = { date: inp[0]?.value||'', amount: parseFloat(inp[1]?.value)||0, method: inp[2]?.value||'' };
+            pd.push(p);
+        });
+        const totalPaid = pd.reduce((s,p)=>s+(p.amount||0),0);
+        const remaining = (parseFloat(grd.replace(/[^0-9.-]+/g,''))||0) - totalPaid;
+        paymentsHTML = `<div data-section="payments" style="margin:10px 0;padding:10px;border:1px solid #E5E7EB;border-radius:6px;">
+            <h4 style="font-size:11px;margin-bottom:8px;font-weight:600;">Payment History</h4>
+            <table style="width:100%;border-collapse:collapse;font-size:10px;">
+                <thead><tr><th style="padding:4px;border:1px solid #E5E7EB;background:#F9FAFB;">Date</th><th style="padding:4px;border:1px solid #E5E7EB;background:#F9FAFB;">Amount</th><th style="padding:4px;border:1px solid #E5E7EB;background:#F9FAFB;">Method</th></tr></thead>
+                <tbody>${pd.map(p=>`<tr><td style="padding:4px;border:1px solid #E5E7EB;">${p.date}</td><td style="padding:4px;border:1px solid #E5E7EB;text-align:right;">${p.amount.toFixed(2)} ${currency}</td><td style="padding:4px;border:1px solid #E5E7EB;">${p.method}</td></tr>`).join('')}</tbody>
+            </table>
+            <div style="margin-top:8px;padding-top:8px;border-top:1px solid #E5E7EB;font-size:10px;">
+                <div style="display:flex;justify-content:space-between;"><strong>Total Paid:</strong><span style="color:#16A34A;font-weight:bold;">${totalPaid.toFixed(2)} ${currency}</span></div>
+                <div style="display:flex;justify-content:space-between;margin-top:4px;"><strong>Remaining:</strong><span style="color:#DC2626;font-weight:bold;">${remaining.toFixed(2)} ${currency}</span></div>
+            </div></div>`;
     }
 
-    /* ── Generate ── */
-    document.getElementById('generateBtn').addEventListener('click', async function() {
-        const input = document.getElementById('deviceInput');
-        const errorMsg = document.getElementById('errorMsg');
-        const deviceCode = input.value.trim().toUpperCase();
+    const invDiscVal = parseFloat(idd.replace(/[^0-9.-]+/g,''));
+    const itemDiscVal = parseFloat(idc.replace(/[^0-9.-]+/g,''));
 
-        // Reset error
-        input.classList.remove('error');
-        errorMsg.classList.remove('show');
+    document.getElementById('invoicePreview').innerHTML = `
+        ${headerText?`<div style="text-align:center;padding:8px;background:#EFF6FF;margin-bottom:12px;font-size:10px;border-radius:6px;border:1px solid #BFDBFE;">${headerText}</div>`:''}
+        <div class="invoice-header">
+            <div class="logo-and-info">
+                ${sellerData.logo&&sellerData.logo!==window.location.href?`<div class="logo-section"><img src="${sellerData.logo}" alt="Logo" style="max-width:130px;max-height:55px;"></div>`:''}
+                <div class="company-info">
+                    ${sellerData.name?`<div><strong>${esc(sellerData.name)}</strong></div>`:''}
+                    ${sellerData.vat?`<div>VAT: ${esc(sellerData.vat)}</div>`:''}
+                    ${sellerData.cr?`<div>CR: ${esc(sellerData.cr)}</div>`:''}
+                    ${sellerData.city?`<div>${esc(sellerData.city)}</div>`:''}
+                </div>
+            </div>
+            <div class="title-section">
+                <h1>TAX INVOICE<br><span style="font-size:12px;font-weight:600;color:#4B5563;">فاتورة ضريبية</span></h1>
+                <div class="status-badge ${statusClass}" style="margin-top:6px;">${statusText}</div>
+            </div>
+            <div class="qr-section-header">${qrHTML}</div>
+        </div>
+        <div class="invoice-details-grid">
+            <div class="info-row"><span class="info-label">Invoice #:</span><span style="font-weight:700;">${esc(invoiceNumber)}</span></div>
+            <div class="info-row"><span class="info-label">Date:</span><span>${esc(invoiceDate)}</span></div>
+            ${invoiceDueDate?`<div class="info-row"><span class="info-label">Due:</span><span style="color:#DC2626;font-weight:bold;">${esc(invoiceDueDate)}</span></div>`:''}
+            ${invoiceReference?`<div class="info-row"><span class="info-label">Ref:</span><span>${esc(invoiceReference)}</span></div>`:''}
+            <div class="info-row"><span class="info-label">Currency:</span><span style="font-weight:700;color:#2563EB;">${currency}</span></div>
+        </div>
+        <div class="invoice-info">
+            <div class="info-box">
+                <h3>Seller | البائع</h3>
+                ${sellerData.name?`<div class="info-row"><span class="info-label">Name:</span><span>${esc(sellerData.name)}</span></div>`:''}
+                ${buildAddr(sellerData)}
+                ${sellerData.vat?`<div class="info-row"><span class="info-label">VAT:</span><span>${esc(sellerData.vat)}</span></div>`:''}
+                ${sellerData.cr?`<div class="info-row"><span class="info-label">CR:</span><span>${esc(sellerData.cr)}</span></div>`:''}
+            </div>
+            <div class="info-box">
+                <h3>Buyer | المشتري</h3>
+                ${buyerData.name?`<div class="info-row"><span class="info-label">Name:</span><span>${esc(buyerData.name)}</span></div>`:''}
+                ${buildAddr(buyerData)}
+                ${buyerData.vat?`<div class="info-row"><span class="info-label">VAT:</span><span>${esc(buyerData.vat)}</span></div>`:''}
+                ${buyerData.cr?`<div class="info-row"><span class="info-label">CR:</span><span>${esc(buyerData.cr)}</span></div>`:''}
+            </div>
+        </div>
+        <div style="margin:10px 0 6px;font-size:11px;font-weight:600;">Invoice Items | بنود الفاتورة</div>
+        <table style="width:100%;border-collapse:collapse;font-size:10px;">
+            <thead>
+                <tr>
+                    <th style="padding:4px 5px;border:1px solid #E5E7EB;background:#1E3A8A;color:#fff;width:4%">#</th>
+                    <th style="padding:4px 5px;border:1px solid #E5E7EB;background:#1E3A8A;color:#fff;width:26%">Description</th>
+                    <th style="padding:4px 5px;border:1px solid #E5E7EB;background:#1E3A8A;color:#fff;width:8%">Qty</th>
+                    <th style="padding:4px 5px;border:1px solid #E5E7EB;background:#1E3A8A;color:#fff;width:10%">Price</th>
+                    <th style="padding:4px 5px;border:1px solid #E5E7EB;background:#1E3A8A;color:#fff;width:7%">Disc%</th>
+                    <th style="padding:4px 5px;border:1px solid #E5E7EB;background:#1E3A8A;color:#fff;width:10%">Net</th>
+                    <th style="padding:4px 5px;border:1px solid #E5E7EB;background:#1E3A8A;color:#fff;width:7%">VAT%</th>
+                    <th style="padding:4px 5px;border:1px solid #E5E7EB;background:#1E3A8A;color:#fff;width:10%">VAT</th>
+                    <th style="padding:4px 5px;border:1px solid #E5E7EB;background:#1E3A8A;color:#fff;width:11%">Total</th>
+                </tr>
+            </thead>
+            <tbody>${itemsHTML}</tbody>
+        </table>
+        <div class="totals-section">
+            <div class="total-row"><span class="total-label">Subtotal (Before Disc):</span><span class="total-value">${sbd}</span></div>
+            ${itemDiscVal>0?`<div class="total-row"><span class="total-label">Item Discounts:</span><span class="total-value" style="color:#16A34A;">- ${idc}</span></div>`:''}
+            <div class="total-row"><span class="total-label">Subtotal (After Disc):</span><span class="total-value">${sad}</span></div>
+            ${invDiscVal>0?`<div class="total-row"><span class="total-label">Invoice Discount (${document.getElementById('invoiceDiscountPercent').value}%):</span><span class="total-value" style="color:#16A34A;">- ${idd}</span></div>`:''}
+            <div class="total-row"><span class="total-label">Subtotal (Before VAT):</span><span class="total-value">${sub}</span></div>
+            <div class="total-row"><span class="total-label">Total VAT | الضريبة:</span><span class="total-value">${vat}</span></div>
+            <div class="total-row grand-total"><span class="total-label">Grand Total | الإجمالي:</span><span class="total-value">${grd}</span></div>
+            <div class="total-row"><span class="total-label">Status:</span><span class="total-value ${statusClass}">${statusText}</span></div>
+        </div>
+        ${paymentsHTML}
+        ${bankDetails?`<div data-section="bank" style="margin:10px 0;padding:10px;border:1px solid #E5E7EB;border-radius:6px;background:#F9FAFB;"><h4 style="font-size:10px;margin-bottom:6px;font-weight:600;">Bank Details | التفاصيل البنكية</h4><p style="white-space:pre-line;font-size:9.5px;color:#4B5563;">${esc(bankDetails)}</p></div>`:''}
+        ${termsConditions?`<div data-section="terms" style="margin:10px 0;padding:10px;border:1px solid #2563EB;border-radius:6px;background:#EFF6FF;"><h4 style="font-size:10px;margin-bottom:6px;color:#2563EB;font-weight:600;">Terms & Conditions</h4><p style="white-space:pre-line;font-size:9.5px;color:#1E40AF;">${esc(termsConditions)}</p></div>`:''}
+        <div class="invoice-footer">${(footerText||'').split('\n').map(l=>`<p>${l}</p>`).join('')}</div>
+    `;
+}
 
-        if (deviceCode.length < 4) {
-            input.classList.add('error');
-            errorMsg.classList.add('show');
-            input.focus();
-            return;
-        }
+/* ════════════════════════════════════════════════════════
+   WHATSAPP SHARE
+════════════════════════════════════════════════════════ */
+function shareToWhatsApp() {
+    const n = document.getElementById('invoiceNumber').value;
+    const t = document.getElementById('grandTotalDisplay').textContent;
+    const d = document.getElementById('invoiceDate').value;
+    const dd = document.getElementById('invoiceDueDate').value;
+    const st = document.getElementById('invoiceStatus').value;
+    const cur = getCurrency();
+    let msg = `📄 *Invoice ${n}*\n\nDate: ${d}\n`;
+    if (dd) msg += `Due Date: ${dd}\n`;
+    msg += `Total: ${t}\nStatus: ${st}\nCurrency: ${cur}\n\nThank you for your business.\nشكراً لتعاملكم معنا.`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+}
 
-        this.disabled = true;
-        this.innerHTML = '<span>⏳</span><span>Generating...</span>';
+/* ════════════════════════════════════════════════════════
+   STATS
+════════════════════════════════════════════════════════ */
+function updateStats() {
+    const invoices = JSON.parse(localStorage.getItem('zatca_invoices')||'[]');
+    const customers = getCustomers();
+    document.getElementById('statTotal').textContent = invoices.length;
+    document.getElementById('statPaid').textContent = invoices.filter(i=>i.status==='Paid').length;
+    document.getElementById('statUnpaid').textContent = invoices.filter(i=>i.status==='Unpaid').length;
+    document.getElementById('statCustomers').textContent = customers.length;
+}
 
-        const code = await generateActivationCode(deviceCode);
+function updateInvoiceBadge() {
+    const invoices = JSON.parse(localStorage.getItem('zatca_invoices')||'[]');
+    const badge = document.getElementById('invoiceBadge');
+    if (badge) badge.textContent = invoices.length;
+}
 
-        showResult(deviceCode, code);
-        addToHistory(deviceCode, code);
+/* ════════════════════════════════════════════════════════
+   UTILITY
+════════════════════════════════════════════════════════ */
+function esc(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 
-        this.disabled = false;
-        this.innerHTML = '<span>⚡</span><span>Generate Code | توليد الرمز</span>';
+// Close modals on backdrop click
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) this.classList.remove('open');
     });
+});
 
-    /* Auto-uppercase input */
-    document.getElementById('deviceInput').addEventListener('input', function() {
-        const pos = this.selectionStart;
-        this.value = this.value.toUpperCase();
-        this.setSelectionRange(pos, pos);
-        this.classList.remove('error');
-        document.getElementById('errorMsg').classList.remove('show');
-    });
-
-    /* Enter key */
-    document.getElementById('deviceInput').addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') document.getElementById('generateBtn').click();
-    });
-
-    /* ── Copy button ── */
-    document.getElementById('copyBtn').addEventListener('click', function() {
-        const code = document.getElementById('resultCode').textContent;
-        navigator.clipboard.writeText(code).then(() => {
-            this.innerHTML = '✅ Copied!';
-            setTimeout(() => { this.innerHTML = '📋 Copy'; }, 2000);
-        }).catch(() => {
-            // Fallback
-            const ta = document.createElement('textarea');
-            ta.value = code; ta.style.position = 'fixed'; ta.style.opacity = '0';
-            document.body.appendChild(ta); ta.select(); document.execCommand('copy');
-            document.body.removeChild(ta);
-            this.innerHTML = '✅ Copied!';
-            setTimeout(() => { this.innerHTML = '📋 Copy'; }, 2000);
-        });
-    });
-
-    /* ── WhatsApp share ── */
-    document.getElementById('waBtn').addEventListener('click', function() {
-        const code = document.getElementById('resultCode').textContent;
-        const device = document.getElementById('deviceInput').value.trim().toUpperCase();
-        const msg = `مرحباً 👋\n\nرمز تفعيل نظام ZATCA الخاص بك:\n\n*${code}*\n\nأدخل هذا الرمز في شاشة التفعيل.\nDevice Code: ${device}\n\nشكراً 🙏`;
-        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
-    });
-
-    /* ── Clear history ── */
-    document.getElementById('clearHistoryBtn').addEventListener('click', function() {
-        if (confirm('Clear all history?')) {
-            localStorage.removeItem(HISTORY_KEY);
-            renderHistory();
-        }
-    });
-
-    /* ── Init ── */
-    renderHistory();
-    document.getElementById('deviceInput').focus();
-
-})();
 </script>
 </body>
 </html>
