@@ -2,2941 +2,557 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="theme-color" content="#0D1B2A">
-    <title>ZATCA فاتورة</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <title>ZATCA Admin — Code Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-
-/* ═══════════════════════════════════════════════════════
-   ZATCA MOBILE  —  "MIDNIGHT DOCUMENT" DESIGN SYSTEM
-   Sora display · IBM Plex Sans body · IBM Plex Mono data
-   Obsidian shell · White cards · Coral accent
-   ALL PRINT RULES PRESERVED AT BOTTOM — DO NOT EDIT BELOW
-═══════════════════════════════════════════════════════ */
-
-:root {
-    /* App Shell */
-    --shell:         #0D1B2A;
-    --shell-mid:     #132236;
-    --shell-rim:     #1C3050;
-
-    /* Accent */
-    --coral:         #FF5C3A;
-    --coral-dim:     #FF7A5C;
-    --coral-pale:    #FFF1EE;
-    --coral-glow:    rgba(255,92,58,0.18);
-
-    /* Status */
-    --green:         #2EC4A9;
-    --green-bg:      #E6FAF7;
-    --red:           #E05C5C;
-    --red-bg:        #FDEAEA;
-    --amber:         #F4A93A;
-    --amber-bg:      #FEF4E1;
-
-    /* Text */
-    --ink:           #0F1E2E;
-    --ink-2:         #4A5A70;
-    --ink-3:         #8A9BB0;
-    --ink-4:         #C0CEDF;
-
-    /* Surface */
-    --surface:       #FFFFFF;
-    --surface-2:     #F6F9FC;
-    --surface-3:     #EDF2F8;
-    --border:        #E4EAF3;
-
-    /* Typography */
-    --font-display:  'Sora', system-ui, sans-serif;
-    --font-body:     'IBM Plex Sans', system-ui, sans-serif;
-    --font-mono:     'IBM Plex Mono', 'Fira Code', monospace;
-
-    /* Radii */
-    --r-xs:  8px;
-    --r-sm:  12px;
-    --r-md:  16px;
-    --r-lg:  22px;
-    --r-xl:  28px;
-    --r-pill:100px;
-
-    /* Shadows */
-    --shadow-card:  0 2px 16px rgba(13,27,42,0.08), 0 1px 3px rgba(13,27,42,0.04);
-    --shadow-float: 0 8px 32px rgba(13,27,42,0.16), 0 2px 8px rgba(13,27,42,0.08);
-    --shadow-nav:   0 -4px 40px rgba(13,27,42,0.35);
-
-    /* Motion */
-    --ease:   cubic-bezier(0.4, 0, 0.2, 1);
-    --dur:    0.22s;
-
-    /* Safe areas */
-    --sat: env(safe-area-inset-top, 0px);
-    --sab: env(safe-area-inset-bottom, 0px);
-    --sal: env(safe-area-inset-left, 0px);
-    --sar: env(safe-area-inset-right, 0px);
-}
-
-/* ── Reset ─────────────────────────────────────────── */
-*, *::before, *::after {
-    margin: 0; padding: 0; box-sizing: border-box;
-    -webkit-tap-highlight-color: transparent;
-    -webkit-font-smoothing: antialiased;
-}
-
-/* ── App shell ─────────────────────────────────────── */
-html, body {
-    height: 100%; overflow: hidden;
-    font-family: var(--font-body);
-    font-size: 15px; color: var(--ink);
-    background: var(--shell);
-    overscroll-behavior: none;
-}
-
-/* ═══════════════════════════════════════════════════════
-   LICENSE LOCK SCREEN
-═══════════════════════════════════════════════════════ */
-#license-lock-overlay {
-    position: fixed; inset: 0;
-    background: var(--shell);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 999999;
-    font-family: var(--font-display);
-    padding: calc(var(--sat) + 20px) 24px calc(var(--sab) + 20px) 24px;
-    overflow-y: auto;
-}
-
-/* Mesh background */
-#license-lock-overlay::before {
-    content: '';
-    position: fixed; inset: 0; pointer-events: none;
-    background:
-        radial-gradient(ellipse 60% 50% at 20% 20%, rgba(255,92,58,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(46,196,169,0.08) 0%, transparent 60%),
-        radial-gradient(ellipse 80% 60% at 50% 50%, rgba(28,48,80,0.6) 0%, transparent 70%);
-}
-
-#license-lock-overlay.hidden { display: none; }
-
-.lock-container {
-    width: 100%; max-width: 400px;
-    position: relative; z-index: 1;
-    animation: lockAppear 0.5s var(--ease) both;
-}
-
-@keyframes lockAppear {
-    from { opacity: 0; transform: translateY(24px) scale(0.97); }
-    to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.lock-header { text-align: center; margin-bottom: 32px; }
-
-.lock-logo {
-    display: flex; align-items: center; justify-content: center; gap: 14px;
-    margin-bottom: 16px;
-}
-
-.lock-logo-icon {
-    width: 56px; height: 56px;
-    background: linear-gradient(135deg, var(--coral), #FF8060);
-    border-radius: 18px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 26px;
-    box-shadow: 0 8px 24px rgba(255,92,58,0.35);
-}
-
-.lock-logo-title {
-    font-family: var(--font-display);
-    font-size: 30px; font-weight: 800;
-    color: #FFFFFF; letter-spacing: -1px; margin: 0;
-}
-.lock-logo-title span { color: var(--coral-dim); }
-.lock-logo-subtitle {
-    font-size: 11px; color: rgba(255,255,255,0.4);
-    margin-top: 4px; letter-spacing: 1.5px; text-transform: uppercase;
-    font-weight: 500;
-}
-
-.lock-step-indicator {
-    display: flex; justify-content: center; gap: 14px; margin: 28px 0;
-}
-.lock-step { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.lock-step-circle {
-    width: 50px; height: 50px; border-radius: 50%;
-    background: rgba(255,255,255,0.07);
-    border: 2px solid rgba(255,255,255,0.12);
-    color: rgba(255,255,255,0.35);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: 700;
-    transition: all 0.3s var(--ease);
-}
-.lock-step.active .lock-step-circle {
-    background: var(--coral);
-    border-color: var(--coral);
-    color: #fff;
-    box-shadow: 0 4px 20px rgba(255,92,58,0.4);
-}
-.lock-step-label {
-    font-size: 10px; color: rgba(255,255,255,0.3);
-    text-align: center; font-weight: 500; line-height: 1.3;
-}
-.lock-step.active .lock-step-label { color: rgba(255,255,255,0.7); }
-
-/* Lock card */
-.lock-card {
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: var(--r-xl);
-    padding: 28px 24px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    box-shadow: 0 16px 48px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1);
-}
-
-.lock-field { margin-bottom: 18px; }
-.lock-field label {
-    display: block; font-size: 11px;
-    color: rgba(255,255,255,0.45);
-    margin-bottom: 8px; font-weight: 600;
-    text-align: right; direction: rtl;
-    text-transform: uppercase; letter-spacing: 0.8px;
-    font-family: var(--font-body);
-}
-.lock-field input {
-    width: 100%; padding: 15px 16px;
-    background: rgba(255,255,255,0.07);
-    border: 1.5px solid rgba(255,255,255,0.12);
-    border-radius: var(--r-md); font-size: 15px;
-    color: #FFFFFF; font-family: var(--font-mono);
-    transition: all var(--dur) var(--ease); text-align: center;
-    -webkit-appearance: none;
-    min-height: 52px;
-}
-.lock-field input::placeholder { color: rgba(255,255,255,0.2); font-family: var(--font-body); }
-.lock-field input:focus {
-    outline: none;
-    border-color: var(--coral);
-    background: rgba(255,255,255,0.1);
-    box-shadow: 0 0 0 4px rgba(255,92,58,0.15);
-}
-.lock-field input[readonly] {
-    color: rgba(255,255,255,0.35);
-    cursor: default; font-size: 12px;
-}
-
-.device-numbers {
-    font-size: 11px; color: rgba(255,92,58,0.8);
-    margin-top: 6px; text-align: center; font-weight: 600;
-    letter-spacing: 0.5px; font-family: var(--font-mono);
-}
-
-.lock-btn {
-    width: 100%; padding: 16px;
-    border: none; border-radius: var(--r-md);
-    font-size: 15px; font-weight: 700;
-    cursor: pointer; transition: all var(--dur) var(--ease);
-    margin-bottom: 12px; display: flex;
-    align-items: center; justify-content: center; gap: 8px;
-    font-family: var(--font-display); letter-spacing: 0.2px;
-    min-height: 54px;
-}
-.lock-btn:active { transform: scale(0.97); }
-.lock-btn-primary {
-    background: linear-gradient(135deg, var(--coral), #FF7A5C);
-    color: #FFFFFF;
-    box-shadow: 0 6px 24px rgba(255,92,58,0.4);
-}
-.lock-btn-primary:hover { box-shadow: 0 8px 28px rgba(255,92,58,0.5); }
-.lock-btn-secondary {
-    background: rgba(46,196,169,0.15);
-    border: 1px solid rgba(46,196,169,0.3);
-    color: var(--green);
-}
-.lock-btn-secondary:hover { background: rgba(46,196,169,0.2); }
-.lock-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
-
-.lock-error {
-    background: rgba(224,92,92,0.15);
-    border: 1px solid rgba(224,92,92,0.3);
-    color: #FFA5A5; padding: 12px 16px;
-    border-radius: var(--r-sm); font-size: 13px;
-    text-align: center; margin-top: 16px; display: none;
-    font-weight: 500;
-}
-.lock-error.show { display: block; animation: shake 0.4s; }
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    25% { transform: translateX(-8px); }
-    75% { transform: translateX(8px); }
-}
-
-.lock-footer {
-    text-align: center; margin-top: 24px;
-    font-size: 11px; color: rgba(255,255,255,0.2);
-    direction: rtl; font-weight: 500; letter-spacing: 0.3px;
-}
-.lock-footer .lock-footer-icon { color: rgba(255,92,58,0.5); margin: 0 4px; }
-
-
-/* ═══════════════════════════════════════════════════════
-   APP CHROME
-═══════════════════════════════════════════════════════ */
-
-/* ── Status bar spacer ─── */
-.app-status-bar {
-    height: var(--sat);
-    background: var(--shell);
-    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
-}
-
-/* ── Top header ─────────── */
-.app-header {
-    position: fixed;
-    top: var(--sat); left: 0; right: 0;
-    height: 62px;
-    background: var(--shell);
-    border-bottom: 1px solid rgba(255,255,255,0.05);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 20px;
-    z-index: 100;
-}
-
-.header-brand {
-    display: flex; align-items: center; gap: 10px;
-}
-.header-logo-dot {
-    width: 32px; height: 32px;
-    background: linear-gradient(135deg, var(--coral), #FF8060);
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    box-shadow: 0 3px 10px rgba(255,92,58,0.35);
-    flex-shrink: 0;
-}
-.header-title {
-    font-family: var(--font-display);
-    font-size: 17px; font-weight: 700;
-    color: #FFFFFF; letter-spacing: -0.3px;
-}
-.header-title span { color: var(--coral-dim); }
-
-.header-section-name {
-    font-size: 12px; font-weight: 600;
-    color: rgba(255,255,255,0.35);
-    text-transform: uppercase; letter-spacing: 1px;
-    font-family: var(--font-body);
-}
-
-/* ── Bottom nav bar ─────── */
-.tabs {
-    position: fixed;
-    bottom: 0; left: 0; right: 0;
-    background: rgba(13,27,42,0.92);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-top: 1px solid rgba(255,255,255,0.08);
-    padding: 8px calc(var(--sal) + 8px) calc(var(--sab) + 8px) calc(var(--sar) + 8px);
-    display: flex; align-items: center; justify-content: space-around;
-    z-index: 100;
-    box-shadow: var(--shadow-nav);
-    overflow: hidden;
-}
-/* hide scrollbar if any */
-.tabs::-webkit-scrollbar { display: none; }
-
-.tab {
-    flex: 1; min-width: 0;
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
-    gap: 4px;
-    padding: 8px 4px;
-    background: transparent; border: none;
-    cursor: pointer; transition: all var(--dur) var(--ease);
-    border-radius: var(--r-sm);
-    min-height: 56px; max-height: 64px;
-    position: relative;
-    font-family: var(--font-body);
-    -webkit-tap-highlight-color: transparent;
-}
-.tab:active { transform: scale(0.92); }
-
-/* Tab emoji icon */
-.tab-icon {
-    font-size: 20px;
-    line-height: 1;
-    display: block;
-    transition: all var(--dur) var(--ease);
-}
-/* Tab label */
-.tab-label {
-    font-size: 10px; font-weight: 600;
-    color: rgba(255,255,255,0.28);
-    text-align: center; transition: all var(--dur) var(--ease);
-    line-height: 1; white-space: nowrap;
-    text-transform: uppercase; letter-spacing: 0.5px;
-}
-.tab.active .tab-label {
-    color: var(--coral);
-}
-
-/* Active indicator pip */
-.tab.active::after {
-    content: '';
-    position: absolute; bottom: -2px;
-    left: 50%; transform: translateX(-50%);
-    width: 24px; height: 3px;
-    background: var(--coral);
-    border-radius: var(--r-pill);
-    box-shadow: 0 0 8px rgba(255,92,58,0.5);
-}
-
-/* Inject readable labels as pseudo-content via data */
-/* We keep inner HTML as emoji + span labels */
-
-
-/* ═══════════════════════════════════════════════════════
-   SCROLL AREA  (main content viewport)
-═══════════════════════════════════════════════════════ */
-.container {
-    position: fixed;
-    top: calc(var(--sat) + 62px);
-    bottom: calc(var(--sab) + 72px);
-    left: 0; right: 0;
-    overflow: hidden;
-    background: var(--surface-2);
-}
-
-/* Each section scrolls independently */
-.section {
-    display: none;
-    position: absolute; inset: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior: contain;
-    padding: 20px 16px 32px 16px;
-    background: var(--surface-2);
-    animation: sectionIn 0.28s var(--ease) both;
-}
-.section.active { display: block; }
-
-@keyframes sectionIn {
-    from { opacity: 0; transform: translateY(12px); }
-    to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Invoice section needs less bottom padding */
-.section.invoice-section { padding-bottom: 24px; }
-
-
-/* ═══════════════════════════════════════════════════════
-   SECTION HEADERS (inside scroll area)
-═══════════════════════════════════════════════════════ */
-.section-heading {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 20px;
-}
-.section-heading-icon {
-    width: 38px; height: 38px;
-    background: linear-gradient(135deg, var(--coral), #FF7A5C);
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px;
-    box-shadow: 0 4px 12px rgba(255,92,58,0.3);
-    flex-shrink: 0;
-}
-.section-heading-text h2 {
-    font-family: var(--font-display);
-    font-size: 20px; font-weight: 700;
-    color: var(--ink); letter-spacing: -0.3px;
-    margin: 0;
-}
-.section-heading-text p {
-    font-size: 12px; color: var(--ink-3);
-    margin: 2px 0 0 0; font-weight: 500;
-}
-
-/* ── old h2 / h3 reset ─── */
-h2 {
-    font-family: var(--font-display);
-    font-size: 20px; font-weight: 700;
-    color: var(--ink); letter-spacing: -0.3px;
-    margin: 0 0 18px 0;
-    border-bottom: none;
-    padding-bottom: 0;
-}
-h2::after { display: none; }
-
-h3 {
-    font-size: 11px; font-weight: 700;
-    color: var(--ink-3);
-    margin: 22px 0 10px 0;
-    text-transform: uppercase; letter-spacing: 0.9px;
-    font-family: var(--font-body);
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   STEP WIZARD HEADER  (Invoice section)
-═══════════════════════════════════════════════════════ */
-.wizard-steps {
-    display: flex; align-items: center;
-    gap: 0; margin-bottom: 22px;
-    background: var(--surface);
-    border-radius: var(--r-lg);
-    padding: 4px;
-    box-shadow: var(--shadow-card);
-}
-.wizard-step {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; gap: 4px;
-    padding: 10px 4px;
-    border-radius: 14px;
-    cursor: pointer; transition: all var(--dur) var(--ease);
-}
-.wizard-step-num {
-    width: 26px; height: 26px;
-    border-radius: 50%;
-    background: var(--surface-3);
-    color: var(--ink-3);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700;
-    transition: all var(--dur) var(--ease);
-    font-family: var(--font-display);
-}
-.wizard-step-label {
-    font-size: 9px; font-weight: 700;
-    color: var(--ink-4);
-    text-transform: uppercase; letter-spacing: 0.5px;
-    text-align: center;
-}
-.wizard-step.done .wizard-step-num {
-    background: var(--green-bg);
-    color: var(--green);
-}
-.wizard-step.active .wizard-step-num {
-    background: var(--coral);
-    color: #FFFFFF;
-    box-shadow: 0 3px 10px rgba(255,92,58,0.35);
-}
-.wizard-step.active .wizard-step-label { color: var(--coral); }
-
-
-/* ═══════════════════════════════════════════════════════
-   CARDS
-═══════════════════════════════════════════════════════ */
-.card {
-    background: var(--surface);
-    border-radius: var(--r-lg);
-    padding: 18px 18px;
-    margin-bottom: 14px;
-    box-shadow: var(--shadow-card);
-    border: 1px solid rgba(228,234,243,0.8);
-}
-.card-title {
-    font-size: 11px; font-weight: 700;
-    color: var(--ink-3);
-    text-transform: uppercase; letter-spacing: 0.8px;
-    margin-bottom: 14px;
-    display: flex; align-items: center; gap: 7px;
-    font-family: var(--font-body);
-}
-.card-title-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--coral);
-    flex-shrink: 0;
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   FORM ELEMENTS
-═══════════════════════════════════════════════════════ */
-.form-group {
-    margin-bottom: 14px;
-}
-.form-group:last-child { margin-bottom: 0; }
-
-.form-group label {
-    display: block;
-    margin-bottom: 7px;
-    font-weight: 600;
-    color: var(--ink-2);
-    font-size: 12px;
-    letter-spacing: 0.2px;
-    font-family: var(--font-body);
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select {
-    width: 100%;
-    padding: 13px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--r-sm);
-    font-size: 15px;
-    font-family: var(--font-body);
-    color: var(--ink);
-    background: var(--surface-2);
-    transition: all var(--dur) var(--ease);
-    -webkit-appearance: none; appearance: none;
-    min-height: 48px;
-}
-.form-group input:focus,
-.form-group textarea:focus,
-.form-group select:focus {
-    outline: none;
-    border-color: var(--coral);
-    background: var(--surface);
-    box-shadow: 0 0 0 4px rgba(255,92,58,0.1);
-}
-.form-group input[readonly] {
-    background: var(--surface-3);
-    color: var(--coral);
-    font-family: var(--font-mono);
-    font-size: 13px; font-weight: 500;
-    cursor: default;
-}
-.form-group textarea {
-    min-height: 90px; resize: vertical; line-height: 1.6;
-}
-.form-group select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238A9BB0' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 14px center;
-    padding-right: 38px;
-}
-
-/* Two column form row */
-.form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 0;
-}
-.form-row .form-group { margin-bottom: 0; }
-
-/* Full-width override */
-.form-row.cols-1 { grid-template-columns: 1fr; }
-.form-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
-
-/* Address grid — 2 col on mobile */
-.address-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-}
-.address-grid .form-group { margin-bottom: 0; }
-
-
-/* ═══════════════════════════════════════════════════════
-   BUTTONS
-═══════════════════════════════════════════════════════ */
-.btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
-    padding: 13px 20px; min-height: 50px;
-    background: linear-gradient(135deg, var(--shell), var(--shell-mid));
-    color: rgba(255,255,255,0.85); border: 1.5px solid rgba(255,255,255,0.1);
-    border-radius: var(--r-md);
-    cursor: pointer; font-size: 14px; font-weight: 600;
-    font-family: var(--font-display);
-    transition: all var(--dur) var(--ease);
-    margin-right: 0; margin-bottom: 10px;
-    letter-spacing: 0.1px; width: 100%;
-    box-shadow: 0 2px 8px rgba(13,27,42,0.2);
-}
-.btn:active { transform: scale(0.97); }
-
-.btn-primary-action {
-    background: linear-gradient(135deg, var(--coral), #FF7A5C);
-    color: #FFFFFF; border-color: transparent;
-    box-shadow: 0 4px 18px rgba(255,92,58,0.35);
-}
-.btn-primary-action:active { box-shadow: none; }
-
-.btn-success {
-    background: linear-gradient(135deg, #1AAF97, var(--green));
-    color: #FFFFFF; border-color: transparent;
-    box-shadow: 0 4px 14px rgba(46,196,169,0.3);
-}
-.btn-danger {
-    background: linear-gradient(135deg, #C94A4A, var(--red));
-    color: #FFFFFF; border-color: transparent;
-    box-shadow: 0 4px 14px rgba(224,92,92,0.25);
-}
-.btn-warning {
-    background: linear-gradient(135deg, #D4881A, var(--amber));
-    color: #FFFFFF; border-color: transparent;
-    box-shadow: 0 4px 14px rgba(244,169,58,0.3);
-}
-.btn-whatsapp {
-    background: linear-gradient(135deg, #128C45, #25D366);
-    color: #FFFFFF; border-color: transparent;
-    box-shadow: 0 4px 14px rgba(37,211,102,0.25);
-}
-
-.btn-small {
-    min-height: 42px; padding: 10px 16px;
-    font-size: 13px; border-radius: var(--r-sm);
-}
-.btn-row {
-    display: flex; gap: 10px; flex-wrap: wrap;
-    margin-top: 4px;
-}
-.btn-row .btn { flex: 1; min-width: 120px; margin-bottom: 0; }
-.btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
-
-
-/* ═══════════════════════════════════════════════════════
-   ITEMS TABLE  (horizontal scroll)
-═══════════════════════════════════════════════════════ */
-.items-table-container {
-    border-radius: var(--r-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-card);
-    background: var(--surface);
-    margin: 14px 0;
-    border: 1px solid var(--border);
-}
-.items-table-container > div {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-
-.items-table {
-    width: 100%; border-collapse: collapse;
-    font-size: 12px; background: var(--surface);
-    min-width: 620px;
-}
-.items-table thead th {
-    background: var(--shell);
-    color: rgba(255,255,255,0.55);
-    font-weight: 700; font-size: 10px;
-    text-transform: uppercase; letter-spacing: 0.7px;
-    padding: 13px 10px;
-    text-align: left; border-bottom: none;
-    font-family: var(--font-body);
-}
-.items-table thead th:first-child { border-radius: 0; padding-left: 14px; }
-.items-table tbody tr {
-    border-bottom: 1px solid var(--surface-3);
-    transition: background var(--dur);
-}
-.items-table tbody tr:last-child { border-bottom: none; }
-.items-table tbody tr:nth-child(even) { background: var(--surface-2); }
-.items-table td {
-    padding: 10px 10px;
-    color: var(--ink); vertical-align: middle;
-}
-.items-table td:first-child { padding-left: 14px; }
-.items-table td:last-child { padding-right: 10px; }
-
-.items-table input {
-    width: 100%; padding: 8px 10px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--r-xs); font-size: 13px;
-    font-family: var(--font-body);
-    background: var(--surface-2); color: var(--ink);
-    transition: all var(--dur) var(--ease);
-    min-height: 38px;
-}
-.items-table input:focus {
-    outline: none; border-color: var(--coral);
-    background: var(--surface);
-    box-shadow: 0 0 0 3px rgba(255,92,58,0.1);
-}
-.items-table .remove-btn {
-    background: var(--red-bg); color: var(--red);
-    border: 1px solid rgba(224,92,92,0.2);
-    padding: 7px 10px; border-radius: var(--r-xs);
-    cursor: pointer; font-size: 12px; font-weight: 600;
-    transition: all var(--dur) var(--ease);
-    min-height: 34px;
-    font-family: var(--font-body);
-}
-.items-table .remove-btn:active {
-    background: var(--red); color: #fff;
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   TOTALS CARD
-═══════════════════════════════════════════════════════ */
-.totals-section {
-    background: var(--surface);
-    border-radius: var(--r-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-card);
-    margin-top: 16px;
-    border: 1px solid var(--border);
-}
-.total-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 13px 18px;
-    border-bottom: 1px solid var(--surface-3);
-    font-size: 13px;
-}
-.total-row:last-child { border-bottom: none; }
-.total-label {
-    color: var(--ink-2); font-weight: 500; flex: 1;
-    padding-right: 16px; font-size: 13px;
-}
-.total-value {
-    font-weight: 700; color: var(--ink);
-    font-family: var(--font-mono);
-    font-size: 14px; text-align: right; min-width: 100px;
-    flex-shrink: 0;
-}
-/* Grand total row */
-.grand-total {
-    background: var(--shell) !important;
-    border-bottom: none !important;
-}
-.grand-total .total-label {
-    color: rgba(255,255,255,0.6) !important;
-    font-size: 14px; font-weight: 600;
-}
-.grand-total .total-value {
-    color: var(--coral) !important;
-    font-size: 22px !important; font-weight: 800 !important;
-    letter-spacing: -0.5px;
-}
-
-/* Inline discount input */
-#invoiceDiscountPercent {
-    width: 60px !important;
-    min-height: unset !important;
-    padding: 5px 8px !important;
-    border-radius: var(--r-xs) !important;
-    border: 1.5px solid var(--border) !important;
-    font-size: 13px !important;
-    font-family: var(--font-mono) !important;
-    background: var(--surface-2) !important;
-    color: var(--ink) !important;
-    display: inline-block !important;
-    vertical-align: middle;
-    margin-left: 6px;
-}
-#invoiceDiscountPercent:focus {
-    outline: none !important;
-    border-color: var(--coral) !important;
-    box-shadow: 0 0 0 3px rgba(255,92,58,0.1) !important;
-}
-
-.currency-symbol {
-    font-weight: 700; color: var(--ink-3);
-    font-family: var(--font-mono); font-size: 11px;
-    margin-left: 3px;
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   STATUS BADGES
-═══════════════════════════════════════════════════════ */
-.status-badge {
-    display: inline-flex; align-items: center;
-    padding: 5px 14px; border-radius: var(--r-pill);
-    font-weight: 700; font-size: 11px;
-    letter-spacing: 0.3px; text-transform: uppercase;
-    font-family: var(--font-body);
-}
-.status-paid { background: var(--green-bg); color: var(--green); }
-.status-unpaid { background: var(--red-bg); color: var(--red); }
-.status-partial { background: var(--amber-bg); color: #A06B10; }
-
-
-/* ═══════════════════════════════════════════════════════
-   SAVED LISTS
-═══════════════════════════════════════════════════════ */
-.saved-list {
-    background: var(--surface);
-    border-radius: var(--r-lg);
-    box-shadow: var(--shadow-card);
-    overflow: hidden;
-    margin: 12px 0;
-    border: 1px solid var(--border);
-    max-height: none;
-}
-.saved-item {
-    padding: 15px 18px;
-    display: flex; justify-content: space-between; align-items: center;
-    font-size: 14px; color: var(--ink);
-    border-bottom: 1px solid var(--surface-3);
-    cursor: pointer; transition: background var(--dur);
-    background: var(--surface);
-}
-.saved-item:last-child { border-bottom: none; }
-.saved-item:active { background: var(--coral-pale); }
-
-
-/* ═══════════════════════════════════════════════════════
-   INVOICE ITEM CARDS (saved invoices list)
-═══════════════════════════════════════════════════════ */
-.invoice-item {
-    background: var(--surface);
-    border-radius: var(--r-lg);
-    padding: 16px 18px;
-    margin-bottom: 10px;
-    border-left: 4px solid var(--coral);
-    box-shadow: var(--shadow-card);
-    transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
-    border: 1px solid var(--border);
-    border-left: 4px solid var(--coral);
-}
-.invoice-item:active { transform: scale(0.99); box-shadow: none; }
-.invoice-item-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
-.invoice-item-number { font-weight: 700; color: var(--ink); font-size: 15px; font-family: var(--font-display); }
-.invoice-item-date { font-size: 12px; color: var(--ink-3); font-family: var(--font-mono); }
-.invoice-item-details { font-size: 13px; color: var(--ink-2); }
-
-
-/* ═══════════════════════════════════════════════════════
-   PAYMENT TRACKING
-═══════════════════════════════════════════════════════ */
-.payment-tracking-section {
-    background: var(--surface);
-    border-radius: var(--r-lg);
-    padding: 18px;
-    margin: 16px 0;
-    box-shadow: var(--shadow-card);
-    border: 1px solid var(--border);
-}
-.payment-tracking-section h4 {
-    font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 14px;
-    font-family: var(--font-display);
-}
-.payment-item {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 10px; margin-bottom: 10px; padding: 12px;
-    background: var(--surface-2); border-radius: var(--r-md);
-    border: 1px solid var(--border); align-items: center;
-}
-.payment-item .form-group { margin-bottom: 0; }
-.payment-item .form-group input,
-.payment-item .form-group select {
-    min-height: 42px; font-size: 13px;
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   LOGO PREVIEW
-═══════════════════════════════════════════════════════ */
-.logo-preview {
-    display: inline-block; margin: 12px 0;
-    border: 2px dashed var(--border);
-    padding: 14px; border-radius: var(--r-md);
-    background: var(--surface-2); max-width: 220px;
-}
-.logo-preview img { max-width: 100%; max-height: 80px; }
-
-
-/* ═══════════════════════════════════════════════════════
-   EDITABLE SECTIONS (header/footer/terms)
-═══════════════════════════════════════════════════════ */
-.editable-section {
-    background: var(--surface);
-    border-radius: var(--r-lg);
-    padding: 18px;
-    margin: 14px 0;
-    box-shadow: var(--shadow-card);
-    border: 1px solid var(--border);
-}
-.editable-section h3 {
-    font-size: 11px; color: var(--coral);
-    font-weight: 700; text-transform: uppercase;
-    letter-spacing: 0.8px; margin: 0 0 12px 0;
-}
-.editable-section textarea {
-    width: 100%; padding: 12px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--r-sm); min-height: 86px;
-    font-size: 14px; font-family: var(--font-body);
-    background: var(--surface-2); color: var(--ink);
-    resize: vertical; transition: all var(--dur) var(--ease);
-}
-.editable-section textarea:focus {
-    outline: none; border-color: var(--coral);
-    background: var(--surface);
-    box-shadow: 0 0 0 4px rgba(255,92,58,0.1);
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   MODAL
-═══════════════════════════════════════════════════════ */
-.modal {
-    display: none; position: fixed; inset: 0;
-    background: rgba(10,18,28,0.7);
-    z-index: 500; overflow: auto;
-    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
-    padding: 20px 16px calc(var(--sab) + 20px) 16px;
-    align-items: flex-end;
-}
-.modal[style*="block"] { display: flex !important; flex-direction: column; justify-content: flex-end; }
-.modal-content {
-    background: var(--surface); width: 100%;
-    padding: 24px 20px; border-radius: 24px 24px 0 0;
-    max-height: 80vh; overflow-y: auto;
-    box-shadow: 0 -8px 40px rgba(0,0,0,0.3);
-    animation: sheetUp 0.3s var(--ease) both;
-}
-@keyframes sheetUp {
-    from { transform: translateY(100%); }
-    to   { transform: translateY(0); }
-}
-.modal-content h2 { margin-bottom: 16px; font-size: 18px; }
-
-
-/* ═══════════════════════════════════════════════════════
-   INVOICE PREVIEW DOCUMENT
-═══════════════════════════════════════════════════════ */
-.invoice-preview {
-    background: #FFFFFF;
-    border-radius: var(--r-lg);
-    box-shadow: var(--shadow-float);
-    padding: 20px;
-    font-size: 11px;
-    border: 1px solid var(--border);
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-}
-.invoice-header {
-    display: grid; grid-template-columns: 1fr;
-    gap: 14px; margin-bottom: 16px; padding-bottom: 14px;
-    border-bottom: 2px solid #2D4EA2;
-}
-.invoice-header .logo-and-info { display: flex; flex-direction: column; gap: 8px; }
-.invoice-header .logo-section img { max-width: 150px; max-height: 60px; }
-.invoice-header .company-info { font-size: 10px; line-height: 1.6; color: #4B5563; }
-.invoice-header .company-info strong { color: #111827; }
-.invoice-header .title-section { text-align: left; }
-.invoice-header .qr-section-header { text-align: left; }
-.invoice-header h1 { color: #111827; margin-bottom: 6px; font-size: 18px; font-weight: 700; font-family: var(--font-display); }
-.invoice-details-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; font-size: 10px; }
-.invoice-info { display: grid; grid-template-columns: 1fr; gap: 12px; margin-bottom: 14px; }
-.info-box { border: 1px solid #E5E7EB; padding: 10px; border-radius: 8px; background: #F9FAFB; }
-.info-box h3 { background: #2D4EA2; color: #FFFFFF; padding: 7px; margin: -10px -10px 10px -10px; border-radius: 6px 6px 0 0; font-size: 12px; font-weight: 700; text-transform: none; letter-spacing: normal; margin-bottom: 10px; }
-.info-box h4 { font-size: 10px; margin: 10px 0 6px 0; color: #111827; border-bottom: 1px solid #E5E7EB; padding-bottom: 4px; font-weight: 600; }
-.address-table { width: 100%; border-collapse: collapse; margin-top: 6px; font-size: 9px; }
-.address-table th, .address-table td { padding: 3px; text-align: left; border: 1px solid #E5E7EB; }
-.address-table th { background: #F3F4F6; font-weight: 600; font-size: 8px; }
-.info-row { display: flex; margin-bottom: 5px; font-size: 10px; }
-.info-label { font-weight: 600; min-width: 100px; color: #111827; }
-.invoice-footer { text-align: center; margin-top: 16px; padding-top: 12px; border-top: 1px solid #E5E7EB; font-size: 10px; color: #6B7280; }
-
-/* Totals inside invoice preview */
-.invoice-preview .totals-section {
-    margin-top: 14px;
-    background: #F9FAFB; padding: 14px;
-    border-radius: 8px;
-    border: 1px solid #E5E7EB;
-    box-shadow: none;
-}
-.invoice-preview .total-row { padding: 7px 0; font-size: 11px; }
-.invoice-preview .total-label { color: #4B5563; min-width: 180px; font-size: 11px; }
-.invoice-preview .total-value { font-size: 12px; min-width: 90px; }
-.invoice-preview .grand-total { background: #EFF6FF !important; border-radius: 0 0 6px 6px; }
-.invoice-preview .grand-total .total-label { color: #1E40AF !important; font-size: 12px !important; }
-.invoice-preview .grand-total .total-value { color: #1E40AF !important; font-size: 14px !important; }
-
-
-/* ═══════════════════════════════════════════════════════
-   DISCOUNT BADGE
-═══════════════════════════════════════════════════════ */
-.discount-badge {
-    background: var(--green-bg); color: var(--green);
-    padding: 3px 10px; border-radius: var(--r-pill);
-    font-size: 11px; font-weight: 700; display: inline-flex; align-items: center;
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   SECTION-0 & SECTION-1: Smart card grouping
-═══════════════════════════════════════════════════════ */
-#section-0 > .form-group,
-#section-1 > .form-group {
-    background: var(--surface); border-radius: var(--r-lg);
-    padding: 18px; box-shadow: var(--shadow-card);
-    border: 1px solid rgba(228,234,243,0.8); margin-bottom: 14px;
-}
-#section-0 > .form-row,
-#section-1 > .form-row {
-    background: var(--surface); border-radius: var(--r-lg);
-    padding: 18px; box-shadow: var(--shadow-card);
-    border: 1px solid rgba(228,234,243,0.8); margin-bottom: 14px;
-}
-#section-0 > .address-grid,
-#section-1 > .address-grid {
-    background: var(--surface); border-radius: var(--r-lg);
-    padding: 18px; box-shadow: var(--shadow-card);
-    border: 1px solid rgba(228,234,243,0.8); margin-bottom: 14px;
-}
-#section-0 > .address-grid .form-group,
-#section-1 > .address-grid .form-group {
-    background: transparent !important;
-    padding: 0 !important; box-shadow: none !important;
-    border: none !important; margin-bottom: 0 !important;
-}
-
-#section-2 > .form-group,
-#section-2 > .form-row {
-    background: var(--surface); border-radius: var(--r-lg);
-    padding: 18px; box-shadow: var(--shadow-card);
-    border: 1px solid rgba(228,234,243,0.8); margin-bottom: 14px;
-}
-
-#section-3 > .form-row {
-    background: var(--surface); border-radius: var(--r-lg);
-    padding: 18px; box-shadow: var(--shadow-card);
-    border: 1px solid rgba(228,234,243,0.8); margin-bottom: 14px;
-}
-#section-3 > .form-group {
-    background: var(--surface); border-radius: var(--r-lg);
-    padding: 18px; box-shadow: var(--shadow-card);
-    border: 1px solid rgba(228,234,243,0.8); margin-bottom: 14px;
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   PREVIEW SECTION ACTION BAR
-═══════════════════════════════════════════════════════ */
-.preview-actions {
-    display: flex; flex-direction: column; gap: 10px;
-    margin-bottom: 16px;
-}
-#section-5 > div[style*="text-align: center"] {
-    text-align: unset !important;
-    display: flex !important; flex-direction: column !important; gap: 10px !important;
-    margin-bottom: 16px !important;
-}
-#section-5 > div[style*="text-align: center"] .btn {
-    width: 100% !important; margin: 0 !important;
-}
-
-
-/* ═══════════════════════════════════════════════════════
-   MISC UTILITY
-═══════════════════════════════════════════════════════ */
-/* br spacers */
-section br, .section br { display: none; }
-
-/* Section-level h2 gets section heading treatment */
-.section > h2:first-child { display: none; } /* we add heading via card-title or section-heading */
-
-
-/* ═══════════════════════════════════════════════════════
-   PRINT — FULLY PRESERVED
-═══════════════════════════════════════════════════════ */
-@media print {
-    body {
-        background: #FFFFFF; padding: 0;
-        overflow: visible; height: auto;
-    }
-    html { overflow: visible; height: auto; }
-    .app-status-bar,
-    .app-header,
-    .tabs,
-    #license-lock-overlay { display: none !important; }
-    .container {
-        position: static !important;
-        overflow: visible !important;
-        top: auto; bottom: auto; left: auto; right: auto;
-        background: #FFFFFF;
-    }
-    .section {
-        position: static !important;
-        overflow: visible !important;
-        padding: 0 !important;
-        background: #FFFFFF;
-    }
-    .section:not(.invoice-section),
-    .btn,
-    .editable-section { display: none !important; }
-    .invoice-section {
-        display: block !important;
-    }
-    .invoice-preview {
-        padding: 10mm !important; font-size: 9px !important;
-        border: none !important; box-shadow: none !important;
-        border-radius: 0 !important;
-    }
-    @page { size: A4; margin: 10mm; }
-}
-
+        :root {
+            --shell:      #0D1B2A;
+            --shell-mid:  #132236;
+            --shell-rim:  #1C3050;
+            --coral:      #FF5C3A;
+            --coral-dim:  #FF7A5C;
+            --green:      #2EC4A9;
+            --green-bg:   rgba(46,196,169,0.12);
+            --green-bdr:  rgba(46,196,169,0.3);
+            --red:        #E05C5C;
+            --red-bg:     rgba(224,92,92,0.12);
+            --red-bdr:    rgba(224,92,92,0.3);
+            --amber:      #F4A93A;
+            --font-d:     'Sora', system-ui, sans-serif;
+            --font-m:     'IBM Plex Mono', monospace;
+            --ease:       cubic-bezier(0.4,0,0.2,1);
+        }
+
+        *, *::before, *::after {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        html, body {
+            min-height: 100%;
+            font-family: var(--font-d);
+            background: var(--shell);
+            color: #fff;
+            overscroll-behavior: none;
+        }
+
+        /* ── Mesh background ── */
+        body::before {
+            content: '';
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+            background:
+                radial-gradient(ellipse 70% 55% at 15% 10%, rgba(255,92,58,0.14) 0%, transparent 60%),
+                radial-gradient(ellipse 55% 45% at 85% 85%, rgba(46,196,169,0.10) 0%, transparent 60%),
+                radial-gradient(ellipse 90% 70% at 50% 50%, rgba(28,48,80,0.55) 0%, transparent 75%);
+        }
+
+        .page {
+            position: relative; z-index: 1;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-start;
+            padding: 40px 20px 60px;
+        }
+
+        /* ── Header ── */
+        .header {
+            text-align: center; margin-bottom: 36px;
+        }
+        .logo-wrap {
+            display: inline-flex; align-items: center; gap: 14px;
+            margin-bottom: 14px;
+        }
+        .logo-icon {
+            width: 58px; height: 58px;
+            background: linear-gradient(135deg, var(--coral), #FF8060);
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px;
+            box-shadow: 0 8px 28px rgba(255,92,58,0.4);
+        }
+        .logo-title {
+            font-size: 32px; font-weight: 800;
+            letter-spacing: -1px; line-height: 1;
+        }
+        .logo-title span { color: var(--coral-dim); }
+        .logo-sub {
+            font-size: 11px; color: rgba(255,255,255,0.35);
+            letter-spacing: 2px; text-transform: uppercase;
+            font-weight: 600; margin-top: 4px;
+        }
+        .header-badge {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: rgba(255,92,58,0.12);
+            border: 1px solid rgba(255,92,58,0.25);
+            border-radius: 100px;
+            padding: 6px 16px; font-size: 12px; font-weight: 700;
+            color: var(--coral-dim); letter-spacing: 0.5px;
+        }
+
+        /* ── Main card ── */
+        .card {
+            width: 100%; max-width: 480px;
+            background: rgba(255,255,255,0.055);
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 28px;
+            padding: 32px 28px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.08);
+            margin-bottom: 20px;
+        }
+
+        .card-title {
+            font-size: 13px; font-weight: 700;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase; letter-spacing: 1.2px;
+            margin-bottom: 22px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .card-title-dot {
+            width: 7px; height: 7px; border-radius: 50%;
+            background: var(--coral); flex-shrink: 0;
+        }
+
+        /* ── Field ── */
+        .field { margin-bottom: 20px; }
+        .field:last-of-type { margin-bottom: 0; }
+
+        .field label {
+            display: block; font-size: 11px; font-weight: 700;
+            color: rgba(255,255,255,0.42);
+            text-transform: uppercase; letter-spacing: 0.9px;
+            margin-bottom: 9px;
+        }
+
+        .field input {
+            width: 100%; padding: 16px 18px;
+            background: rgba(255,255,255,0.07);
+            border: 1.5px solid rgba(255,255,255,0.12);
+            border-radius: 14px; font-size: 16px;
+            color: #FFFFFF; font-family: var(--font-m);
+            transition: all 0.2s var(--ease);
+            -webkit-appearance: none;
+            min-height: 56px; text-align: center;
+            letter-spacing: 4px; font-weight: 700;
+            text-transform: uppercase;
+        }
+        .field input::placeholder {
+            color: rgba(255,255,255,0.18);
+            font-family: var(--font-d); letter-spacing: 0;
+            font-size: 14px; font-weight: 400;
+        }
+        .field input:focus {
+            outline: none;
+            border-color: var(--coral);
+            background: rgba(255,255,255,0.1);
+            box-shadow: 0 0 0 4px rgba(255,92,58,0.18);
+        }
+        .field-hint {
+            margin-top: 7px; font-size: 11px;
+            color: rgba(255,255,255,0.3); text-align: center;
+            font-family: var(--font-d); font-weight: 500;
+        }
+
+        /* ── Generate Button ── */
+        .btn-generate {
+            width: 100%; padding: 17px;
+            background: linear-gradient(135deg, var(--coral), #FF7A5C);
+            border: none; border-radius: 14px;
+            font-size: 15px; font-weight: 700;
+            color: #FFFFFF; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 9px;
+            font-family: var(--font-d); letter-spacing: 0.3px;
+            min-height: 56px; margin-top: 24px;
+            box-shadow: 0 6px 24px rgba(255,92,58,0.42);
+            transition: all 0.2s var(--ease);
+        }
+        .btn-generate:hover { box-shadow: 0 8px 30px rgba(255,92,58,0.55); transform: translateY(-1px); }
+        .btn-generate:active { transform: scale(0.97); box-shadow: none; }
+        .btn-generate:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; box-shadow: none !important; }
+
+        /* ── Result Card ── */
+        .result-card {
+            width: 100%; max-width: 480px;
+            background: var(--green-bg);
+            border: 1px solid var(--green-bdr);
+            border-radius: 28px; padding: 28px 28px 24px;
+            text-align: center;
+            animation: popIn 0.38s var(--ease) both;
+            display: none;
+        }
+        .result-card.visible { display: block; }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.93) translateY(16px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .result-label {
+            font-size: 11px; font-weight: 700;
+            color: rgba(46,196,169,0.65);
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 12px;
+        }
+
+        .result-code {
+            font-family: var(--font-m);
+            font-size: 44px; font-weight: 700;
+            color: var(--green);
+            letter-spacing: 10px;
+            line-height: 1;
+            text-shadow: 0 0 30px rgba(46,196,169,0.4);
+            margin-bottom: 10px;
+            word-break: break-all;
+        }
+
+        .result-device {
+            font-size: 11px; color: rgba(255,255,255,0.3);
+            font-family: var(--font-m); letter-spacing: 2px;
+            margin-bottom: 22px;
+        }
+
+        .btn-row {
+            display: flex; gap: 10px;
+        }
+
+        .btn-copy, .btn-whatsapp {
+            flex: 1; padding: 14px 10px;
+            border: none; border-radius: 12px;
+            font-size: 13px; font-weight: 700;
+            cursor: pointer; display: flex;
+            align-items: center; justify-content: center; gap: 7px;
+            font-family: var(--font-d);
+            transition: all 0.2s var(--ease);
+            min-height: 48px;
+        }
+        .btn-copy {
+            background: rgba(46,196,169,0.18);
+            border: 1px solid var(--green-bdr);
+            color: var(--green);
+        }
+        .btn-copy:active { background: rgba(46,196,169,0.3); }
+
+        .btn-whatsapp {
+            background: rgba(37,211,102,0.15);
+            border: 1px solid rgba(37,211,102,0.3);
+            color: #25D366;
+        }
+        .btn-whatsapp:active { background: rgba(37,211,102,0.25); }
+
+        /* ── History ── */
+        .history-card {
+            width: 100%; max-width: 480px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            overflow: hidden;
+            display: none;
+        }
+        .history-card.visible { display: block; }
+
+        .history-header {
+            padding: 16px 22px;
+            font-size: 11px; font-weight: 700;
+            color: rgba(255,255,255,0.35);
+            text-transform: uppercase; letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .history-clear {
+            font-size: 11px; font-weight: 600;
+            color: var(--red); cursor: pointer;
+            background: none; border: none;
+            font-family: var(--font-d); letter-spacing: 0;
+            text-transform: none;
+        }
+
+        .history-list { max-height: 260px; overflow-y: auto; }
+
+        .history-item {
+            padding: 14px 22px;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer; transition: background 0.15s;
+        }
+        .history-item:last-child { border-bottom: none; }
+        .history-item:hover { background: rgba(255,255,255,0.04); }
+        .history-item:active { background: rgba(255,255,255,0.08); }
+
+        .history-item-left {}
+        .history-device {
+            font-family: var(--font-m); font-size: 14px;
+            font-weight: 700; color: rgba(255,255,255,0.75);
+            letter-spacing: 2px; margin-bottom: 3px;
+        }
+        .history-time {
+            font-size: 10px; color: rgba(255,255,255,0.25);
+            font-weight: 500;
+        }
+        .history-code {
+            font-family: var(--font-m); font-size: 18px;
+            font-weight: 700; color: var(--green);
+            letter-spacing: 3px;
+        }
+
+        /* ── Footer ── */
+        .footer {
+            margin-top: 32px; text-align: center;
+            font-size: 11px; color: rgba(255,255,255,0.18);
+            font-weight: 500; letter-spacing: 0.3px;
+        }
+        .footer span { color: rgba(255,92,58,0.45); margin: 0 4px; }
+
+        /* Error state */
+        .field input.error { border-color: var(--red) !important; box-shadow: 0 0 0 4px rgba(224,92,92,0.18) !important; }
+        .error-msg {
+            margin-top: 7px; font-size: 11px;
+            color: #FFA5A5; text-align: center;
+            font-weight: 600; display: none;
+        }
+        .error-msg.show { display: block; animation: shake 0.4s; }
+        @keyframes shake {
+            0%,100%{transform:translateX(0)} 25%{transform:translateX(-6px)} 75%{transform:translateX(6px)}
+        }
+
+        /* Scrollbar */
+        .history-list::-webkit-scrollbar { width: 4px; }
+        .history-list::-webkit-scrollbar-track { background: transparent; }
+        .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 4px; }
     </style>
 </head>
 <body>
+<div class="page">
 
-<!-- ═══════════════════════════════════════════════════════
-     LICENSE LOCK SCREEN  (ALL JS INTACT — DO NOT MODIFY)
-═══════════════════════════════════════════════════════ -->
-<div id="license-lock-overlay">
-    <div class="lock-container">
-        <div class="lock-header">
-            <div class="lock-logo">
-                <div class="lock-logo-icon">📄</div>
-                <div class="lock-logo-text">
-                    <h1 class="lock-logo-title">ZATCA <span>فاتورة</span></h1>
-                    <p class="lock-logo-subtitle">E-INVOICE · نظام الفواتير</p>
-                </div>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo-wrap">
+            <div class="logo-icon">🔑</div>
+            <div>
+                <div class="logo-title">ZATCA <span>Admin</span></div>
+                <div class="logo-sub">Code Generator</div>
             </div>
         </div>
+        <div class="header-badge">🔐 مولّد رموز التفعيل</div>
+    </div>
 
-        <div class="lock-step-indicator">
-            <div class="lock-step active">
-                <div class="lock-step-circle">🔐</div>
-                <div class="lock-step-label">التفعيل<br>Activation</div>
-            </div>
+    <!-- Input Card -->
+    <div class="card">
+        <div class="card-title"><span class="card-title-dot"></span>Generate Activation Code | توليد رمز تفعيل</div>
+
+        <div class="field">
+            <label>Customer Device Code | رمز جهاز العميل</label>
+            <input type="text" id="deviceInput"
+                   placeholder="e.g.  A3F7B2C1"
+                   maxlength="8"
+                   autocomplete="off"
+                   autocorrect="off"
+                   spellcheck="false">
+            <div class="field-hint">The 8-character code shown on the customer's device</div>
+            <div class="error-msg" id="errorMsg">⚠️ Please enter the device code (at least 4 characters)</div>
         </div>
 
-        <div class="lock-card">
-            <div class="lock-field">
-                <label>Device ID | معرّف الجهاز</label>
-                <input type="text" id="device-id-display" readonly>
-                <div class="device-numbers" id="device-numbers-display"></div>
-            </div>
+        <button class="btn-generate" id="generateBtn">
+            <span>⚡</span>
+            <span>Generate Code | توليد الرمز</span>
+        </button>
+    </div>
 
-            <div class="lock-field">
-                <label>Activation Passcode | رمز التفعيل</label>
-                <input type="text" id="passcode-input" placeholder="أدخل رمز التفعيل">
-            </div>
-
-            <button class="lock-btn lock-btn-secondary" id="request-passcode-btn">
-                <span>📱</span>
-                <span>طلب رمز عبر واتساب</span>
-            </button>
-
-            <button class="lock-btn lock-btn-primary" id="unlock-btn">
-                <span>🔓</span>
-                <span>تفعيل النظام | Activate</span>
-            </button>
-
-            <div class="lock-error" id="lock-error">
-                رمز التفعيل غير صحيح. يرجى المحاولة مرة أخرى.
-            </div>
+    <!-- Result Card -->
+    <div class="result-card" id="resultCard">
+        <div class="result-label">✅ Activation Code | رمز التفعيل</div>
+        <div class="result-code" id="resultCode">—</div>
+        <div class="result-device" id="resultDevice"></div>
+        <div class="btn-row">
+            <button class="btn-copy" id="copyBtn">📋 Copy</button>
+            <button class="btn-whatsapp" id="waBtn">💬 WhatsApp</button>
         </div>
+    </div>
 
-        <div class="lock-footer">
-            <span class="lock-footer-icon">🔒</span>
-            نظام محمي بترخيص إلكتروني | Licensed System v2.0
+    <!-- History Card -->
+    <div class="history-card" id="historyCard">
+        <div class="history-header">
+            <span>Recent Codes | السجل</span>
+            <button class="history-clear" id="clearHistoryBtn">Clear All</button>
         </div>
+        <div class="history-list" id="historyList"></div>
+    </div>
+
+    <div class="footer">
+        <span>🔒</span> ZATCA Admin Tool &nbsp;·&nbsp; v3.0 &nbsp;·&nbsp; Licensed System <span>🔒</span>
     </div>
 </div>
 
-<!-- LICENSE LOCK SCRIPT — UNTOUCHED -->
 <script>
 (function() {
-  'use strict';
-  
-  const WHATSAPP_NUMBER = '+966566958474';
-  const SALT = 'ZATCA_Invoice_2024_SecureKey_v1';
-  
-  function extractNumbers(deviceId) {
-    return deviceId.replace(/[^0-9]/g, '');
-  }
-  
-  function getOrCreateDeviceId() {
-    let deviceId = localStorage.getItem('app_device_id');
-    if (!deviceId) {
-      deviceId = crypto.randomUUID();
-      localStorage.setItem('app_device_id', deviceId);
+    'use strict';
+
+    const SALT = 'ZATCA_Invoice_2024_SecureKey_v1';
+    const WHATSAPP_NUMBER = '+966566958474';
+    const HISTORY_KEY = 'zatca_admin_history';
+
+    /* ── Crypto ── */
+    async function sha256(text) {
+        const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+        return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
     }
-    return deviceId;
-  }
-  
-  async function sha256(text) {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(text);
-    const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-    return hashHex;
-  }
-  
-  async function validatePasscode(deviceId, inputPasscode) {
-    const deviceNumbers = extractNumbers(deviceId);
-    const expectedHash = await sha256(deviceNumbers + SALT);
-    const inputHash = await sha256(inputPasscode + SALT);
-    return expectedHash === inputHash;
-  }
-  
-  function unlockApp() {
-    localStorage.setItem('app_unlocked', 'true');
-    document.getElementById('license-lock-overlay').classList.add('hidden');
-  }
-  
-  function isAppUnlocked() {
-    return localStorage.getItem('app_unlocked') === 'true';
-  }
-  
-  const deviceId = getOrCreateDeviceId();
-  const deviceNumbers = extractNumbers(deviceId);
-  
-  if (isAppUnlocked()) {
-    unlockApp();
-  } else {
-    document.getElementById('device-id-display').value = deviceId;
-    document.getElementById('device-numbers-display').textContent = `Numbers: ${deviceNumbers}`;
-    
-    document.getElementById('request-passcode-btn').addEventListener('click', function() {
-      const message = `السلام عليكم، أحتاج إلى رمز تفعيل نظام ZATCA\n\nDevice ID: ${deviceId}\nDevice Numbers: ${deviceNumbers}`;
-      const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER.replace('+', '')}?text=${encodeURIComponent(message)}`;
-      window.open(whatsappUrl, '_blank');
-    });
-    
-    document.getElementById('unlock-btn').addEventListener('click', async function() {
-      const passcodeInput = document.getElementById('passcode-input');
-      const errorDiv = document.getElementById('lock-error');
-      const inputPasscode = passcodeInput.value.trim();
-      
-      if (!inputPasscode) {
-        errorDiv.textContent = 'يرجى إدخال رمز التفعيل | Please enter passcode';
-        errorDiv.classList.add('show');
-        return;
-      }
-      
-      this.disabled = true;
-      this.innerHTML = '<span>⏳</span><span>جاري التحقق...</span>';
-      
-      const isValid = await validatePasscode(deviceId, inputPasscode);
-      
-      if (isValid) {
-        errorDiv.classList.remove('show');
-        this.innerHTML = '<span>✅</span><span>تم التفعيل بنجاح!</span>';
-        this.style.background = 'linear-gradient(135deg,#1AAF97,#2EC4A9)';
-        setTimeout(unlockApp, 800);
-      } else {
-        errorDiv.textContent = 'رمز التفعيل غير صحيح. يرجى المحاولة مرة أخرى.';
-        errorDiv.classList.add('show');
-        passcodeInput.value = '';
-        passcodeInput.focus();
+
+    async function generateActivationCode(deviceCode) {
+        const hash = await sha256(deviceCode.toUpperCase().trim() + SALT);
+        return hash.replace(/[^0-9]/g, '').substring(0, 8);
+    }
+
+    /* ── History ── */
+    function loadHistory() {
+        try { return JSON.parse(localStorage.getItem(HISTORY_KEY)) || []; }
+        catch { return []; }
+    }
+
+    function saveHistory(history) {
+        localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
+    }
+
+    function addToHistory(deviceCode, activationCode) {
+        const history = loadHistory();
+        // Remove duplicate
+        const filtered = history.filter(h => h.device !== deviceCode.toUpperCase());
+        filtered.unshift({
+            device: deviceCode.toUpperCase(),
+            code: activationCode,
+            time: new Date().toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' })
+        });
+        saveHistory(filtered);
+        renderHistory();
+    }
+
+    function renderHistory() {
+        const history = loadHistory();
+        const historyCard = document.getElementById('historyCard');
+        const historyList = document.getElementById('historyList');
+
+        if (history.length === 0) {
+            historyCard.classList.remove('visible');
+            return;
+        }
+
+        historyCard.classList.add('visible');
+        historyList.innerHTML = history.map((h, i) => `
+            <div class="history-item" data-code="${h.code}" data-device="${h.device}">
+                <div class="history-item-left">
+                    <div class="history-device">${h.device}</div>
+                    <div class="history-time">${h.time}</div>
+                </div>
+                <div class="history-code">${h.code}</div>
+            </div>
+        `).join('');
+
+        // Click history item to reload
+        historyList.querySelectorAll('.history-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.getElementById('deviceInput').value = this.dataset.device;
+                showResult(this.dataset.device, this.dataset.code);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    }
+
+    /* ── Show result ── */
+    function showResult(deviceCode, activationCode) {
+        const resultCard = document.getElementById('resultCard');
+        document.getElementById('resultCode').textContent = activationCode;
+        document.getElementById('resultDevice').textContent = `Device: ${deviceCode.toUpperCase()}`;
+        resultCard.classList.remove('visible');
+        // Force reflow for animation replay
+        void resultCard.offsetWidth;
+        resultCard.classList.add('visible');
+    }
+
+    /* ── Generate ── */
+    document.getElementById('generateBtn').addEventListener('click', async function() {
+        const input = document.getElementById('deviceInput');
+        const errorMsg = document.getElementById('errorMsg');
+        const deviceCode = input.value.trim().toUpperCase();
+
+        // Reset error
+        input.classList.remove('error');
+        errorMsg.classList.remove('show');
+
+        if (deviceCode.length < 4) {
+            input.classList.add('error');
+            errorMsg.classList.add('show');
+            input.focus();
+            return;
+        }
+
+        this.disabled = true;
+        this.innerHTML = '<span>⏳</span><span>Generating...</span>';
+
+        const code = await generateActivationCode(deviceCode);
+
+        showResult(deviceCode, code);
+        addToHistory(deviceCode, code);
+
         this.disabled = false;
-        this.innerHTML = '<span>🔓</span><span>تفعيل النظام | Activate</span>';
-      }
+        this.innerHTML = '<span>⚡</span><span>Generate Code | توليد الرمز</span>';
     });
-    
-    document.getElementById('passcode-input').addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-        document.getElementById('unlock-btn').click();
-      }
+
+    /* Auto-uppercase input */
+    document.getElementById('deviceInput').addEventListener('input', function() {
+        const pos = this.selectionStart;
+        this.value = this.value.toUpperCase();
+        this.setSelectionRange(pos, pos);
+        this.classList.remove('error');
+        document.getElementById('errorMsg').classList.remove('show');
     });
-  }
-  
+
+    /* Enter key */
+    document.getElementById('deviceInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') document.getElementById('generateBtn').click();
+    });
+
+    /* ── Copy button ── */
+    document.getElementById('copyBtn').addEventListener('click', function() {
+        const code = document.getElementById('resultCode').textContent;
+        navigator.clipboard.writeText(code).then(() => {
+            this.innerHTML = '✅ Copied!';
+            setTimeout(() => { this.innerHTML = '📋 Copy'; }, 2000);
+        }).catch(() => {
+            // Fallback
+            const ta = document.createElement('textarea');
+            ta.value = code; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+            document.body.removeChild(ta);
+            this.innerHTML = '✅ Copied!';
+            setTimeout(() => { this.innerHTML = '📋 Copy'; }, 2000);
+        });
+    });
+
+    /* ── WhatsApp share ── */
+    document.getElementById('waBtn').addEventListener('click', function() {
+        const code = document.getElementById('resultCode').textContent;
+        const device = document.getElementById('deviceInput').value.trim().toUpperCase();
+        const msg = `مرحباً 👋\n\nرمز تفعيل نظام ZATCA الخاص بك:\n\n*${code}*\n\nأدخل هذا الرمز في شاشة التفعيل.\nDevice Code: ${device}\n\nشكراً 🙏`;
+        window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`, '_blank');
+    });
+
+    /* ── Clear history ── */
+    document.getElementById('clearHistoryBtn').addEventListener('click', function() {
+        if (confirm('Clear all history?')) {
+            localStorage.removeItem(HISTORY_KEY);
+            renderHistory();
+        }
+    });
+
+    /* ── Init ── */
+    renderHistory();
+    document.getElementById('deviceInput').focus();
+
 })();
-</script>
-
-
-<!-- ═══════════════════════════════════════════════════════
-     APP STATUS BAR
-═══════════════════════════════════════════════════════ -->
-<div class="app-status-bar"></div>
-
-<!-- ═══════════════════════════════════════════════════════
-     TOP HEADER
-═══════════════════════════════════════════════════════ -->
-<div class="app-header">
-    <div class="header-brand">
-        <div class="header-logo-dot">📄</div>
-        <div>
-            <div class="header-title">ZATCA <span>فاتورة</span></div>
-        </div>
-    </div>
-    <div class="header-section-name" id="headerSectionName">Seller</div>
-</div>
-
-<!-- ═══════════════════════════════════════════════════════
-     MAIN CONTAINER  (scrollable area between header & nav)
-═══════════════════════════════════════════════════════ -->
-<div class="container">
-
-    <!-- ── SECTION 0: SELLER ──────────────────────────── -->
-    <div class="section active" id="section-0">
-        <h2>Seller Information | معلومات البائع</h2>
-
-        <div class="card" style="margin-bottom:14px;">
-            <div class="card-title"><span class="card-title-dot"></span>Saved Sellers | البائعون المحفوظون</div>
-            <div class="form-group" style="margin:0;">
-                <select id="savedSellersList" onchange="loadSelectedSeller()">
-                    <option value="">— Select or create new —</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Seller Name | اسم البائع ✱</label>
-            <input type="text" id="sellerName" placeholder="Enter seller name">
-        </div>
-
-        <div class="form-group">
-            <label>Company Logo | شعار الشركة</label>
-            <input type="file" id="sellerLogo" accept="image/*" onchange="previewLogo()">
-            <div class="logo-preview" id="logoPreview" style="display: none;">
-                <img id="logoImage" src="" alt="Logo">
-            </div>
-        </div>
-
-        <h3>📍 Address Details | تفاصيل العنوان</h3>
-
-        <div class="address-grid">
-            <div class="form-group">
-                <label>Building No</label>
-                <input type="text" id="sellerBuildingNo" placeholder="1234">
-            </div>
-            <div class="form-group">
-                <label>Street | الشارع</label>
-                <input type="text" id="sellerStreet" placeholder="King Fahd Road">
-            </div>
-            <div class="form-group">
-                <label>District | الحي</label>
-                <input type="text" id="sellerDistrict" placeholder="Al Olaya">
-            </div>
-            <div class="form-group">
-                <label>City | المدينة</label>
-                <input type="text" id="sellerCity" placeholder="Riyadh">
-            </div>
-            <div class="form-group">
-                <label>Country | الدولة</label>
-                <select id="sellerCountry">
-                    <option value="Saudi Arabia | المملكة العربية السعودية">Saudi Arabia | المملكة العربية السعودية</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Postal Code</label>
-                <input type="text" id="sellerPostalCode" placeholder="12345">
-            </div>
-            <div class="form-group">
-                <label>Additional No</label>
-                <input type="text" id="sellerAdditionalNo" placeholder="1234">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>VAT Number ✱</label>
-                <input type="text" id="sellerVAT" placeholder="3XXXXXXXXXX3">
-            </div>
-            <div class="form-group">
-                <label>CR Number</label>
-                <input type="text" id="sellerCR" placeholder="XXXXXXXXXX">
-            </div>
-        </div>
-
-        <div class="btn-row">
-            <button class="btn btn-success" onclick="saveSeller()">💾 Save Seller</button>
-            <button class="btn btn-danger" onclick="deleteSeller()">🗑️ Delete</button>
-        </div>
-    </div>
-
-
-    <!-- ── SECTION 1: BUYER ──────────────────────────── -->
-    <div class="section" id="section-1">
-        <h2>Buyer Information | معلومات المشتري</h2>
-
-        <div class="card" style="margin-bottom:14px;">
-            <div class="card-title"><span class="card-title-dot"></span>Saved Buyers | المشترون المحفوظون</div>
-            <div class="form-group" style="margin:0;">
-                <select id="savedBuyersList" onchange="loadSelectedBuyer()">
-                    <option value="">— Select or create new —</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Buyer Name | اسم المشتري ✱</label>
-            <input type="text" id="buyerName" placeholder="Enter buyer name">
-        </div>
-
-        <h3>📍 Address Details | تفاصيل العنوان</h3>
-
-        <div class="address-grid">
-            <div class="form-group">
-                <label>Building No</label>
-                <input type="text" id="buyerBuildingNo" placeholder="1234">
-            </div>
-            <div class="form-group">
-                <label>Street | الشارع</label>
-                <input type="text" id="buyerStreet" placeholder="King Fahd Road">
-            </div>
-            <div class="form-group">
-                <label>District | الحي</label>
-                <input type="text" id="buyerDistrict" placeholder="Al Olaya">
-            </div>
-            <div class="form-group">
-                <label>City | المدينة</label>
-                <input type="text" id="buyerCity" placeholder="Riyadh">
-            </div>
-            <div class="form-group">
-                <label>Country | الدولة</label>
-                <select id="buyerCountry">
-                    <option value="Saudi Arabia | المملكة العربية السعودية">Saudi Arabia | المملكة العربية السعودية</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Postal Code</label>
-                <input type="text" id="buyerPostalCode" placeholder="12345">
-            </div>
-            <div class="form-group">
-                <label>Additional No</label>
-                <input type="text" id="buyerAdditionalNo" placeholder="1234">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>VAT Number</label>
-                <input type="text" id="buyerVAT" placeholder="3XXXXXXXXXX3">
-            </div>
-            <div class="form-group">
-                <label>CR Number</label>
-                <input type="text" id="buyerCR" placeholder="XXXXXXXXXX">
-            </div>
-        </div>
-
-        <div class="btn-row">
-            <button class="btn btn-success" onclick="saveBuyer()">💾 Save Buyer</button>
-            <button class="btn btn-danger" onclick="deleteBuyer()">🗑️ Delete</button>
-        </div>
-    </div>
-
-
-    <!-- ── SECTION 2: ITEMS LIBRARY ──────────────────── -->
-    <div class="section" id="section-2">
-        <h2>Items Library | مكتبة البنود</h2>
-
-        <div class="card">
-            <div class="card-title"><span class="card-title-dot"></span>Add New Item | إضافة بند جديد</div>
-            <div class="form-group">
-                <label>Item Description | وصف البند</label>
-                <input type="text" id="itemDesc" placeholder="Product or Service Description">
-            </div>
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Unit Price</label>
-                    <input type="number" id="itemPrice" value="0" min="0" step="0.01">
-                </div>
-                <div class="form-group">
-                    <label>VAT %</label>
-                    <input type="number" id="itemVAT" value="15" min="0" max="100">
-                </div>
-            </div>
-            <button class="btn btn-success" onclick="saveItem()">💾 Save Item | حفظ البند</button>
-        </div>
-
-        <h3>📦 Saved Items | البنود المحفوظة</h3>
-        <div class="saved-list" id="savedItemsList"></div>
-    </div>
-
-
-    <!-- ── SECTION 3: INVOICE DETAILS ────────────────── -->
-    <div class="section" id="section-3">
-        <h2>Invoice Details | تفاصيل الفاتورة</h2>
-
-        <!-- Progress wizard -->
-        <div class="wizard-steps">
-            <div class="wizard-step done" onclick="showSection(0)">
-                <div class="wizard-step-num">✓</div>
-                <div class="wizard-step-label">Seller</div>
-            </div>
-            <div class="wizard-step done" onclick="showSection(1)">
-                <div class="wizard-step-num">✓</div>
-                <div class="wizard-step-label">Buyer</div>
-            </div>
-            <div class="wizard-step active">
-                <div class="wizard-step-num">3</div>
-                <div class="wizard-step-label">Invoice</div>
-            </div>
-            <div class="wizard-step" onclick="showSection(5)">
-                <div class="wizard-step-num">4</div>
-                <div class="wizard-step-label">Preview</div>
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>Invoice Date</label>
-                <input type="date" id="invoiceDate">
-            </div>
-            <div class="form-group">
-                <label>Due Date</label>
-                <input type="date" id="invoiceDueDate">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>Invoice # (Auto)</label>
-                <input type="text" id="invoiceNumber" readonly>
-            </div>
-            <div class="form-group">
-                <label>Reference</label>
-                <input type="text" id="invoiceReference" placeholder="REF-2024-001">
-            </div>
-        </div>
-
-        <div class="form-row">
-            <div class="form-group">
-                <label>Currency | العملة</label>
-                <select id="invoiceCurrency" onchange="updateCurrencyDisplay()">
-                    <option value="SAR">SAR - Saudi Riyal</option>
-                    <option value="USD">USD - US Dollar</option>
-                    <option value="EUR">EUR - Euro</option>
-                    <option value="GBP">GBP - British Pound</option>
-                    <option value="AED">AED - UAE Dirham</option>
-                    <option value="KWD">KWD - Kuwaiti Dinar</option>
-                    <option value="BHD">BHD - Bahraini Dinar</option>
-                    <option value="QAR">QAR - Qatari Riyal</option>
-                    <option value="OMR">OMR - Omani Rial</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Payment Status</label>
-                <select id="invoiceStatus" onchange="updateStatusDisplay()">
-                    <option value="Paid">Paid | مدفوع</option>
-                    <option value="Unpaid">Unpaid | غير مدفوع</option>
-                    <option value="Partial">Partial | دفع جزئي</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>Bank Details | التفاصيل البنكية</label>
-            <textarea id="bankDetails" placeholder="Bank Name, Account Number, IBAN"></textarea>
-        </div>
-
-        <h3>🧾 Invoice Items | بنود الفاتورة</h3>
-
-        <button class="btn btn-warning btn-small" style="margin-bottom:10px;" onclick="showItemSelector()">
-            📋 Add from Library | إضافة من المكتبة
-        </button>
-
-        <div class="items-table-container">
-            <div>
-                <table class="items-table" id="itemsTable">
-                    <thead>
-                        <tr>
-                            <th style="width:26%;">Description</th>
-                            <th style="width:8%;">Qty</th>
-                            <th style="width:12%;">Price</th>
-                            <th style="width:8%;">Disc%</th>
-                            <th style="width:12%;">Net</th>
-                            <th style="width:8%;">VAT%</th>
-                            <th style="width:12%;">VAT</th>
-                            <th style="width:11%;">Total</th>
-                            <th style="width:3%;"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="itemsBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <button class="btn btn-success btn-small" style="margin:10px 0;" onclick="addInvoiceItem()">
-            ➕ Add New Item | إضافة بند
-        </button>
-
-        <!-- Totals -->
-        <div class="totals-section">
-            <div class="total-row">
-                <span class="total-label">Subtotal (Before Disc)</span>
-                <span class="total-value" id="subtotalBeforeDiscountDisplay">0.00 <span class="currency-symbol">SAR</span></span>
-            </div>
-            <div class="total-row">
-                <span class="total-label">Item Discounts</span>
-                <span class="total-value" id="itemDiscountsDisplay">0.00 <span class="currency-symbol">SAR</span></span>
-            </div>
-            <div class="total-row">
-                <span class="total-label">Subtotal (After Disc)</span>
-                <span class="total-value" id="subtotalAfterItemDiscountDisplay">0.00 <span class="currency-symbol">SAR</span></span>
-            </div>
-            <div class="total-row">
-                <span class="total-label">Invoice Discount<input type="number" id="invoiceDiscountPercent" value="0" min="0" max="100" step="0.01" onchange="calculateTotals()"> %</span>
-                <span class="total-value" id="invoiceDiscountDisplay">0.00 <span class="currency-symbol">SAR</span></span>
-            </div>
-            <div class="total-row">
-                <span class="total-label">Subtotal (Before VAT)</span>
-                <span class="total-value" id="subtotalDisplay">0.00 <span class="currency-symbol">SAR</span></span>
-            </div>
-            <div class="total-row">
-                <span class="total-label">Total VAT | الضريبة</span>
-                <span class="total-value" id="vatTotalDisplay">0.00 <span class="currency-symbol">SAR</span></span>
-            </div>
-            <div class="total-row grand-total">
-                <span class="total-label">Grand Total | الإجمالي</span>
-                <span class="total-value" id="grandTotalDisplay">0.00 <span class="currency-symbol">SAR</span></span>
-            </div>
-            <div class="total-row">
-                <span class="total-label">Status | الحالة</span>
-                <span class="total-value" id="statusDisplay">Unpaid | غير مدفوع</span>
-            </div>
-        </div>
-
-        <!-- Payment Tracking -->
-        <div class="payment-tracking-section" id="paymentTrackingSection" style="display: none;">
-            <h4>💰 Payment Tracking | تتبع الدفعات</h4>
-            <div id="paymentsContainer"></div>
-            <button class="btn btn-success btn-small" onclick="addPayment()">➕ Add Payment</button>
-            <div style="margin-top:14px; padding:14px; background:var(--green-bg); border-radius:var(--r-md);">
-                <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-                    <strong style="color:var(--ink);">Total Paid | المدفوع</strong>
-                    <span id="totalPaidDisplay" style="color:var(--green); font-weight:700; font-family:var(--font-mono);">0.00 <span class="currency-symbol">SAR</span></span>
-                </div>
-                <div style="display:flex; justify-content:space-between;">
-                    <strong style="color:var(--ink);">Remaining | المتبقي</strong>
-                    <span id="remainingDisplay" style="color:var(--red); font-weight:700; font-family:var(--font-mono);">0.00 <span class="currency-symbol">SAR</span></span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Terms -->
-        <div class="editable-section">
-            <h3>📋 Terms & Conditions | الشروط والأحكام</h3>
-            <textarea id="termsConditions" placeholder="Enter terms and conditions...
-1. Payment due within 30 days
-2. All prices exclusive of VAT
-3. Goods sold are non-returnable"></textarea>
-        </div>
-
-        <div class="btn-row" style="margin-top:16px;">
-            <button class="btn btn-success" onclick="saveCurrentInvoice()">💾 Save Invoice</button>
-            <button class="btn btn-warning" onclick="generateQRCode()">🔲 QR Code</button>
-        </div>
-        <button class="btn btn-primary-action" style="margin-top:6px;" onclick="showSection(5)">
-            👁️ Preview Invoice | معاينة →
-        </button>
-        <button class="btn" onclick="newInvoice()" style="margin-top:6px;">📄 New Invoice</button>
-    </div>
-
-
-    <!-- ── SECTION 4: SAVED INVOICES ─────────────────── -->
-    <div class="section" id="section-4">
-        <h2>Saved Invoices | الفواتير المحفوظة</h2>
-        <div class="saved-list" id="savedInvoicesList"></div>
-    </div>
-
-
-    <!-- ── SECTION 5: INVOICE PREVIEW ───────────────── -->
-    <div class="section invoice-section" id="section-5">
-
-        <div style="text-align: center; margin-bottom: 20px;">
-            <button class="btn" onclick="window.print()">🖨️ Print | طباعة</button>
-            <button class="btn btn-success" onclick="saveAsPDF()">📄 Save as PDF</button>
-            <button class="btn btn-whatsapp" onclick="shareToWhatsApp()">📱 WhatsApp</button>
-        </div>
-
-        <div class="editable-section">
-            <h3>Edit Header | تعديل الرأس</h3>
-            <textarea id="headerText" placeholder="Enter custom header text (optional)"></textarea>
-        </div>
-
-        <div class="editable-section">
-            <h3>Edit Footer | تعديل التذييل</h3>
-            <textarea id="footerText">Thank you for your business | شكراً لتعاملكم معنا
-This is a computer-generated invoice | هذه فاتورة إلكترونية</textarea>
-        </div>
-
-        <div class="invoice-preview" id="invoicePreview">
-            <!-- Invoice content generated by JS -->
-        </div>
-    </div>
-
-</div><!-- end .container -->
-
-
-<!-- ═══════════════════════════════════════════════════════
-     BOTTOM NAVIGATION BAR
-     .tabs and .tab classes are used by showSection() JS
-═══════════════════════════════════════════════════════ -->
-<div class="tabs">
-    <button class="tab active" onclick="showSection(0)">
-        <span class="tab-icon">🏢</span>
-        <span class="tab-label">Seller</span>
-    </button>
-    <button class="tab" onclick="showSection(1)">
-        <span class="tab-icon">👤</span>
-        <span class="tab-label">Buyer</span>
-    </button>
-    <button class="tab" onclick="showSection(2)">
-        <span class="tab-icon">📦</span>
-        <span class="tab-label">Items</span>
-    </button>
-    <button class="tab" onclick="showSection(3)">
-        <span class="tab-icon">📄</span>
-        <span class="tab-label">Invoice</span>
-    </button>
-    <button class="tab" onclick="showSection(4)">
-        <span class="tab-icon">💾</span>
-        <span class="tab-label">Saved</span>
-    </button>
-    <button class="tab" onclick="showSection(5)">
-        <span class="tab-icon">👁️</span>
-        <span class="tab-label">Preview</span>
-    </button>
-</div>
-
-
-<!-- Item Selector Modal (bottom sheet) -->
-<div id="itemSelectorModal" class="modal">
-    <div class="modal-content">
-        <h2>Select Item | اختر البند</h2>
-        <div id="itemSelectorList" class="saved-list"></div>
-        <button class="btn btn-danger" style="margin-top:12px;" onclick="closeItemSelector()">✕ Close | إغلاق</button>
-    </div>
-</div>
-
-
-<!-- ═══════════════════════════════════════════════════════
-     ALL JS — COMPLETELY UNCHANGED
-═══════════════════════════════════════════════════════ -->
-<script>
-    // Global variables
-    let currentInvoiceId = null;
-    let payments = [];
-
-    // ==========================================
-    // INITIALIZATION
-    // ==========================================
-    window.onload = function() {
-        loadSellersList();
-        loadBuyersList();
-        loadItemsList();
-        loadSavedInvoices();
-        setTodayDate();
-        generateInvoiceNumber();
-        addInvoiceItem();
-        updateStatusDisplay();
-        updateCurrencyDisplay();
-    };
-
-    // ==========================================
-    // NAVIGATION
-    // ==========================================
-    function showSection(index) {
-        const sections = document.querySelectorAll('.section');
-        const tabs = document.querySelectorAll('.tab');
-        
-        sections.forEach((section, i) => {
-            section.classList.remove('active');
-            tabs[i].classList.remove('active');
-        });
-        
-        sections[index].classList.add('active');
-        tabs[index].classList.add('active');
-
-        // Update header name
-        const names = ['Seller','Buyer','Items','Invoice','Saved','Preview'];
-        const nameEl = document.getElementById('headerSectionName');
-        if (nameEl) nameEl.textContent = names[index] || '';
-
-        if (index === 4) {
-            loadSavedInvoices();
-        } else if (index === 5) {
-            generateInvoicePreview();
-        }
-    }
-
-    // ==========================================
-    // CURRENCY MANAGEMENT
-    // ==========================================
-    function updateCurrencyDisplay() {
-        const currency = document.getElementById('invoiceCurrency').value;
-        const currencySymbols = document.querySelectorAll('.currency-symbol');
-        currencySymbols.forEach(symbol => {
-            symbol.textContent = currency;
-        });
-        calculateTotals();
-    }
-
-    function getCurrency() {
-        return document.getElementById('invoiceCurrency').value;
-    }
-
-    // ==========================================
-    // LOGO PREVIEW
-    // ==========================================
-    function previewLogo() {
-        const file = document.getElementById('sellerLogo').files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('logoImage').src = e.target.result;
-                document.getElementById('logoPreview').style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    // ==========================================
-    // SELLER MANAGEMENT
-    // ==========================================
-    function saveSeller() {
-        const sellerName = document.getElementById('sellerName').value.trim();
-        if (!sellerName) {
-            alert('⚠️ Please enter seller name!');
-            return;
-        }
-
-        const logoFile = document.getElementById('sellerLogo').files[0];
-        let logoData = null;
-
-        if (logoFile) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                logoData = e.target.result;
-                saveSellerData(logoData);
-            };
-            reader.readAsDataURL(logoFile);
-        } else {
-            const existingLogo = document.getElementById('logoImage').src;
-            if (existingLogo && existingLogo !== window.location.href) {
-                logoData = existingLogo;
-            }
-            saveSellerData(logoData);
-        }
-    }
-
-    function saveSellerData(logoData) {
-        const sellerData = {
-            name: document.getElementById('sellerName').value.trim(),
-            buildingNo: document.getElementById('sellerBuildingNo').value.trim(),
-            street: document.getElementById('sellerStreet').value.trim(),
-            district: document.getElementById('sellerDistrict').value.trim(),
-            city: document.getElementById('sellerCity').value.trim(),
-            country: document.getElementById('sellerCountry').value,
-            postalCode: document.getElementById('sellerPostalCode').value.trim(),
-            additionalNo: document.getElementById('sellerAdditionalNo').value.trim(),
-            vat: document.getElementById('sellerVAT').value.trim(),
-            cr: document.getElementById('sellerCR').value.trim(),
-            logo: logoData
-        };
-
-        let sellers = JSON.parse(localStorage.getItem('zatca_sellers') || '[]');
-        const existingIndex = sellers.findIndex(s => s.name === sellerData.name);
-        
-        if (existingIndex >= 0) {
-            sellers[existingIndex] = sellerData;
-        } else {
-            sellers.push(sellerData);
-        }
-        
-        localStorage.setItem('zatca_sellers', JSON.stringify(sellers));
-        loadSellersList();
-        alert('✅ Seller saved successfully!');
-    }
-
-    function loadSellersList() {
-        const sellers = JSON.parse(localStorage.getItem('zatca_sellers') || '[]');
-        const select = document.getElementById('savedSellersList');
-        select.innerHTML = '<option value="">— Select or create new —</option>';
-        sellers.forEach((seller, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = seller.name;
-            select.appendChild(option);
-        });
-    }
-
-    function loadSelectedSeller() {
-        const index = document.getElementById('savedSellersList').value;
-        if (index === '') return;
-        
-        const sellers = JSON.parse(localStorage.getItem('zatca_sellers') || '[]');
-        const seller = sellers[parseInt(index)];
-        
-        if (seller) {
-            document.getElementById('sellerName').value = seller.name || '';
-            document.getElementById('sellerBuildingNo').value = seller.buildingNo || '';
-            document.getElementById('sellerStreet').value = seller.street || '';
-            document.getElementById('sellerDistrict').value = seller.district || '';
-            document.getElementById('sellerCity').value = seller.city || '';
-            document.getElementById('sellerPostalCode').value = seller.postalCode || '';
-            document.getElementById('sellerAdditionalNo').value = seller.additionalNo || '';
-            document.getElementById('sellerVAT').value = seller.vat || '';
-            document.getElementById('sellerCR').value = seller.cr || '';
-            
-            if (seller.logo) {
-                document.getElementById('logoImage').src = seller.logo;
-                document.getElementById('logoPreview').style.display = 'block';
-            }
-        }
-    }
-
-    function deleteSeller() {
-        const index = document.getElementById('savedSellersList').value;
-        if (index === '') {
-            alert('⚠️ Please select a seller to delete!');
-            return;
-        }
-        
-        if (!confirm('Delete this seller?')) return;
-        
-        let sellers = JSON.parse(localStorage.getItem('zatca_sellers') || '[]');
-        sellers.splice(parseInt(index), 1);
-        localStorage.setItem('zatca_sellers', JSON.stringify(sellers));
-        loadSellersList();
-        alert('✅ Seller deleted!');
-    }
-
-    // ==========================================
-    // BUYER MANAGEMENT
-    // ==========================================
-    function saveBuyer() {
-        const buyerName = document.getElementById('buyerName').value.trim();
-        if (!buyerName) {
-            alert('⚠️ Please enter buyer name!');
-            return;
-        }
-
-        const buyerData = {
-            name: buyerName,
-            buildingNo: document.getElementById('buyerBuildingNo').value.trim(),
-            street: document.getElementById('buyerStreet').value.trim(),
-            district: document.getElementById('buyerDistrict').value.trim(),
-            city: document.getElementById('buyerCity').value.trim(),
-            country: document.getElementById('buyerCountry').value,
-            postalCode: document.getElementById('buyerPostalCode').value.trim(),
-            additionalNo: document.getElementById('buyerAdditionalNo').value.trim(),
-            vat: document.getElementById('buyerVAT').value.trim(),
-            cr: document.getElementById('buyerCR').value.trim()
-        };
-
-        let buyers = JSON.parse(localStorage.getItem('zatca_buyers') || '[]');
-        const existingIndex = buyers.findIndex(b => b.name === buyerName);
-        
-        if (existingIndex >= 0) {
-            buyers[existingIndex] = buyerData;
-        } else {
-            buyers.push(buyerData);
-        }
-        
-        localStorage.setItem('zatca_buyers', JSON.stringify(buyers));
-        loadBuyersList();
-        alert('✅ Buyer saved successfully!');
-    }
-
-    function loadBuyersList() {
-        const buyers = JSON.parse(localStorage.getItem('zatca_buyers') || '[]');
-        const select = document.getElementById('savedBuyersList');
-        select.innerHTML = '<option value="">— Select or create new —</option>';
-        buyers.forEach((buyer, index) => {
-            const option = document.createElement('option');
-            option.value = index;
-            option.textContent = buyer.name;
-            select.appendChild(option);
-        });
-    }
-
-    function loadSelectedBuyer() {
-        const index = document.getElementById('savedBuyersList').value;
-        if (index === '') return;
-        
-        const buyers = JSON.parse(localStorage.getItem('zatca_buyers') || '[]');
-        const buyer = buyers[parseInt(index)];
-        
-        if (buyer) {
-            document.getElementById('buyerName').value = buyer.name || '';
-            document.getElementById('buyerBuildingNo').value = buyer.buildingNo || '';
-            document.getElementById('buyerStreet').value = buyer.street || '';
-            document.getElementById('buyerDistrict').value = buyer.district || '';
-            document.getElementById('buyerCity').value = buyer.city || '';
-            document.getElementById('buyerPostalCode').value = buyer.postalCode || '';
-            document.getElementById('buyerAdditionalNo').value = buyer.additionalNo || '';
-            document.getElementById('buyerVAT').value = buyer.vat || '';
-            document.getElementById('buyerCR').value = buyer.cr || '';
-        }
-    }
-
-    function deleteBuyer() {
-        const index = document.getElementById('savedBuyersList').value;
-        if (index === '') {
-            alert('⚠️ Please select a buyer to delete!');
-            return;
-        }
-        
-        if (!confirm('Delete this buyer?')) return;
-        
-        let buyers = JSON.parse(localStorage.getItem('zatca_buyers') || '[]');
-        buyers.splice(parseInt(index), 1);
-        localStorage.setItem('zatca_buyers', JSON.stringify(buyers));
-        loadBuyersList();
-        alert('✅ Buyer deleted!');
-    }
-
-    // ==========================================
-    // ITEMS LIBRARY
-    // ==========================================
-    function saveItem() {
-        const desc = document.getElementById('itemDesc').value.trim();
-        if (!desc) {
-            alert('⚠️ Please enter item description!');
-            return;
-        }
-
-        const itemData = {
-            desc: desc,
-            price: parseFloat(document.getElementById('itemPrice').value) || 0,
-            vat: parseFloat(document.getElementById('itemVAT').value) || 15
-        };
-
-        let items = JSON.parse(localStorage.getItem('zatca_items') || '[]');
-        const existingIndex = items.findIndex(i => i.desc === desc);
-        
-        if (existingIndex >= 0) {
-            items[existingIndex] = itemData;
-        } else {
-            items.push(itemData);
-        }
-        
-        localStorage.setItem('zatca_items', JSON.stringify(items));
-        loadItemsList();
-        alert('✅ Item saved!');
-    }
-
-    function loadItemsList() {
-        const items = JSON.parse(localStorage.getItem('zatca_items') || '[]');
-        const container = document.getElementById('savedItemsList');
-        
-        if (items.length === 0) {
-            container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink-3);font-size:13px;">No saved items yet</div>';
-            return;
-        }
-
-        container.innerHTML = items.map((item, index) => `
-            <div class="saved-item">
-                <div>
-                    <div style="font-weight:600;font-size:14px;">${item.desc}</div>
-                    <div style="font-size:12px;color:var(--ink-3);margin-top:2px;">${item.price.toFixed(2)} · VAT ${item.vat}%</div>
-                </div>
-                <button onclick="deleteItem(${index})" style="background:var(--red-bg);color:var(--red);border:none;border-radius:8px;padding:6px 12px;font-size:12px;font-weight:600;cursor:pointer;">Delete</button>
-            </div>
-        `).join('');
-    }
-
-    function deleteItem(index) {
-        if (!confirm('Delete this item?')) return;
-        let items = JSON.parse(localStorage.getItem('zatca_items') || '[]');
-        items.splice(index, 1);
-        localStorage.setItem('zatca_items', JSON.stringify(items));
-        loadItemsList();
-    }
-
-    // ==========================================
-    // ITEM SELECTOR MODAL
-    // ==========================================
-    function showItemSelector() {
-        const items = JSON.parse(localStorage.getItem('zatca_items') || '[]');
-        const container = document.getElementById('itemSelectorList');
-        
-        if (items.length === 0) {
-            container.innerHTML = '<div style="padding:20px;text-align:center;color:var(--ink-3);font-size:13px;">No saved items. Add items in the Items tab first.</div>';
-        } else {
-            container.innerHTML = items.map((item, index) => `
-                <div class="saved-item" onclick="addItemFromLibrary(${index})">
-                    <div>
-                        <div style="font-weight:600;">${item.desc}</div>
-                        <div style="font-size:12px;color:var(--ink-3);">${item.price.toFixed(2)} · VAT ${item.vat}%</div>
-                    </div>
-                    <span style="color:var(--coral);font-size:18px;">+</span>
-                </div>
-            `).join('');
-        }
-        
-        document.getElementById('itemSelectorModal').style.display = 'block';
-    }
-
-    function addItemFromLibrary(index) {
-        const items = JSON.parse(localStorage.getItem('zatca_items') || '[]');
-        const item = items[index];
-        
-        if (item) {
-            addInvoiceItem(item.desc, item.price, item.vat);
-        }
-        
-        closeItemSelector();
-    }
-
-    function closeItemSelector() {
-        document.getElementById('itemSelectorModal').style.display = 'none';
-    }
-
-    // ==========================================
-    // INVOICE ITEMS TABLE
-    // ==========================================
-    let itemRowCount = 0;
-
-    function addInvoiceItem(desc = '', price = 0, vat = 15) {
-        itemRowCount++;
-        const tbody = document.getElementById('itemsBody');
-        const row = document.createElement('tr');
-        row.id = `item-row-${itemRowCount}`;
-        
-        row.innerHTML = `
-            <td><input type="text" value="${desc}" placeholder="Description" onchange="calculateTotals()"></td>
-            <td><input type="number" value="1" min="0" step="0.01" onchange="calculateRowTotal(${itemRowCount})" style="text-align:center;"></td>
-            <td><input type="number" value="${price}" min="0" step="0.01" onchange="calculateRowTotal(${itemRowCount})" style="text-align:right;"></td>
-            <td><input type="number" value="0" min="0" max="100" step="0.01" onchange="calculateRowTotal(${itemRowCount})" style="text-align:center;"></td>
-            <td><input type="number" value="${price}" readonly style="text-align:right;background:var(--surface-3);"></td>
-            <td><input type="number" value="${vat}" min="0" max="100" step="0.01" onchange="calculateRowTotal(${itemRowCount})" style="text-align:center;"></td>
-            <td><input type="number" value="0" readonly style="text-align:right;background:var(--surface-3);"></td>
-            <td><input type="number" value="${price}" readonly style="text-align:right;background:var(--surface-3);font-weight:600;"></td>
-            <td><button class="remove-btn" onclick="removeItem(${itemRowCount})">✕</button></td>
-        `;
-        
-        tbody.appendChild(row);
-        calculateRowTotal(itemRowCount);
-    }
-
-    function calculateRowTotal(rowId) {
-        const row = document.getElementById(`item-row-${rowId}`);
-        if (!row) return;
-        
-        const inputs = row.querySelectorAll('input');
-        const qty = parseFloat(inputs[1].value) || 0;
-        const price = parseFloat(inputs[2].value) || 0;
-        const discPct = parseFloat(inputs[3].value) || 0;
-        const vatPct = parseFloat(inputs[5].value) || 0;
-        
-        const subtotal = qty * price;
-        const discAmt = subtotal * (discPct / 100);
-        const afterDisc = subtotal - discAmt;
-        const vatAmt = afterDisc * (vatPct / 100);
-        const total = afterDisc + vatAmt;
-        
-        inputs[4].value = afterDisc.toFixed(2);
-        inputs[6].value = vatAmt.toFixed(2);
-        inputs[7].value = total.toFixed(2);
-        
-        calculateTotals();
-    }
-
-    function removeItem(rowId) {
-        const row = document.getElementById(`item-row-${rowId}`);
-        if (row) {
-            row.remove();
-            calculateTotals();
-        }
-    }
-
-    function calculateTotals() {
-        const rows = document.querySelectorAll('#itemsBody tr');
-        let subtotalBeforeDiscount = 0;
-        let itemDiscounts = 0;
-        let subtotalAfterItemDiscount = 0;
-        let totalVAT = 0;
-        
-        rows.forEach(row => {
-            const inputs = row.querySelectorAll('input');
-            if (inputs.length < 8) return;
-            
-            const qty = parseFloat(inputs[1].value) || 0;
-            const price = parseFloat(inputs[2].value) || 0;
-            const discPct = parseFloat(inputs[3].value) || 0;
-            const vatPct = parseFloat(inputs[5].value) || 0;
-            
-            const subtotal = qty * price;
-            const discAmt = subtotal * (discPct / 100);
-            const afterDisc = subtotal - discAmt;
-            const vatAmt = afterDisc * (vatPct / 100);
-            
-            subtotalBeforeDiscount += subtotal;
-            itemDiscounts += discAmt;
-            subtotalAfterItemDiscount += afterDisc;
-            totalVAT += vatAmt;
-        });
-        
-        const invoiceDiscountPct = parseFloat(document.getElementById('invoiceDiscountPercent').value) || 0;
-        const invoiceDiscount = subtotalAfterItemDiscount * (invoiceDiscountPct / 100);
-        const subtotalBeforeVAT = subtotalAfterItemDiscount - invoiceDiscount;
-        const grandTotal = subtotalBeforeVAT + totalVAT;
-        
-        const currency = getCurrency();
-        
-        document.getElementById('subtotalBeforeDiscountDisplay').innerHTML = `${subtotalBeforeDiscount.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
-        document.getElementById('itemDiscountsDisplay').innerHTML = `${itemDiscounts.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
-        document.getElementById('subtotalAfterItemDiscountDisplay').innerHTML = `${subtotalAfterItemDiscount.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
-        document.getElementById('invoiceDiscountDisplay').innerHTML = `${invoiceDiscount.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
-        document.getElementById('subtotalDisplay').innerHTML = `${subtotalBeforeVAT.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
-        document.getElementById('vatTotalDisplay').innerHTML = `${totalVAT.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
-        document.getElementById('grandTotalDisplay').innerHTML = `${grandTotal.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
-        
-        updatePaymentSummary(grandTotal);
-    }
-
-    // ==========================================
-    // PAYMENT TRACKING
-    // ==========================================
-    function updateStatusDisplay() {
-        const status = document.getElementById('invoiceStatus').value;
-        const display = document.getElementById('statusDisplay');
-        const trackingSection = document.getElementById('paymentTrackingSection');
-        
-        if (status === 'Paid') {
-            display.className = 'total-value status-paid';
-            display.textContent = 'Paid | مدفوع';
-            trackingSection.style.display = 'none';
-        } else if (status === 'Unpaid') {
-            display.className = 'total-value status-unpaid';
-            display.textContent = 'Unpaid | غير مدفوع';
-            trackingSection.style.display = 'none';
-        } else if (status === 'Partial') {
-            display.className = 'total-value status-partial';
-            display.textContent = 'Partial | دفع جزئي';
-            trackingSection.style.display = 'block';
-        }
-    }
-
-    let paymentCount = 0;
-
-    function addPayment() {
-        paymentCount++;
-        const container = document.getElementById('paymentsContainer');
-        const div = document.createElement('div');
-        div.className = 'payment-item';
-        div.id = `payment-${paymentCount}`;
-        
-        div.innerHTML = `
-            <div class="form-group">
-                <label>Date</label>
-                <input type="date" value="${new Date().toISOString().split('T')[0]}" onchange="updatePaymentSummary()">
-            </div>
-            <div class="form-group">
-                <label>Amount</label>
-                <input type="number" value="0" min="0" step="0.01" onchange="updatePaymentSummary()">
-            </div>
-            <div class="form-group">
-                <label>Method</label>
-                <select onchange="updatePaymentSummary()">
-                    <option>Cash</option>
-                    <option>Bank Transfer</option>
-                    <option>Credit Card</option>
-                    <option>Cheque</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label style="opacity:0">Del</label>
-                <button onclick="removePayment(${paymentCount})" style="background:var(--red-bg);color:var(--red);border:1px solid rgba(224,92,92,0.2);border-radius:8px;padding:10px;font-size:13px;font-weight:600;cursor:pointer;width:100%;min-height:42px;">✕</button>
-            </div>
-        `;
-        
-        container.appendChild(div);
-    }
-
-    function removePayment(id) {
-        const el = document.getElementById(`payment-${id}`);
-        if (el) {
-            el.remove();
-            updatePaymentSummary();
-        }
-    }
-
-    function updatePaymentSummary(grandTotal) {
-        const paymentItems = document.querySelectorAll('.payment-item');
-        let totalPaid = 0;
-        
-        paymentItems.forEach(item => {
-            const amountInput = item.querySelectorAll('input')[1];
-            if (amountInput) totalPaid += parseFloat(amountInput.value) || 0;
-        });
-        
-        if (!grandTotal) {
-            const grandDisplay = document.getElementById('grandTotalDisplay');
-            if (grandDisplay) {
-                grandTotal = parseFloat(grandDisplay.textContent.replace(/[^0-9.-]+/g, '')) || 0;
-            }
-        }
-        
-        const remaining = (grandTotal || 0) - totalPaid;
-        const currency = getCurrency();
-        
-        const totalPaidEl = document.getElementById('totalPaidDisplay');
-        const remainingEl = document.getElementById('remainingDisplay');
-        
-        if (totalPaidEl) totalPaidEl.innerHTML = `${totalPaid.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
-        if (remainingEl) remainingEl.innerHTML = `${remaining.toFixed(2)} <span class="currency-symbol">${currency}</span>`;
-    }
-
-    // ==========================================
-    // DATES & INVOICE NUMBER
-    // ==========================================
-    function setTodayDate() {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('invoiceDate').value = today;
-    }
-
-    function generateInvoiceNumber() {
-        const saved = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        const num = saved.length + 1;
-        const year = new Date().getFullYear();
-        document.getElementById('invoiceNumber').value = `INV-${year}-${String(num).padStart(4, '0')}`;
-    }
-
-    // ==========================================
-    // SAVE / LOAD INVOICES
-    // ==========================================
-    function saveCurrentInvoice() {
-        const invoiceData = collectInvoiceData();
-        let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        
-        if (currentInvoiceId !== null) {
-            const idx = invoices.findIndex(inv => inv.id === currentInvoiceId);
-            if (idx >= 0) {
-                invoices[idx] = { ...invoiceData, id: currentInvoiceId };
-            } else {
-                invoices.push(invoiceData);
-            }
-        } else {
-            invoices.push(invoiceData);
-            currentInvoiceId = invoiceData.id;
-        }
-        
-        localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
-        alert('✅ Invoice saved!');
-    }
-
-    function collectInvoiceData() {
-        const rows = document.querySelectorAll('#itemsBody tr');
-        const items = [];
-        
-        rows.forEach(row => {
-            const inputs = row.querySelectorAll('input');
-            if (inputs.length >= 8) {
-                items.push({
-                    desc: inputs[0].value,
-                    qty: inputs[1].value,
-                    price: inputs[2].value,
-                    disc: inputs[3].value,
-                    afterDisc: inputs[4].value,
-                    vatPct: inputs[5].value,
-                    vatAmt: inputs[6].value,
-                    total: inputs[7].value
-                });
-            }
-        });
-
-        const paymentItems = document.querySelectorAll('.payment-item');
-        const paymentsData = [];
-        paymentItems.forEach(item => {
-            const inputs = item.querySelectorAll('input, select');
-            if (inputs.length >= 3) {
-                paymentsData.push({
-                    date: inputs[0].value,
-                    amount: inputs[1].value,
-                    method: inputs[2].value
-                });
-            }
-        });
-
-        return {
-            id: currentInvoiceId || Date.now(),
-            invoiceNumber: document.getElementById('invoiceNumber').value,
-            invoiceDate: document.getElementById('invoiceDate').value,
-            invoiceDueDate: document.getElementById('invoiceDueDate').value,
-            invoiceReference: document.getElementById('invoiceReference').value,
-            currency: document.getElementById('invoiceCurrency').value,
-            status: document.getElementById('invoiceStatus').value,
-            bankDetails: document.getElementById('bankDetails').value,
-            termsConditions: document.getElementById('termsConditions').value,
-            headerText: document.getElementById('headerText').value,
-            footerText: document.getElementById('footerText').value,
-            invoiceDiscountPercent: document.getElementById('invoiceDiscountPercent').value,
-            seller: {
-                name: document.getElementById('sellerName').value,
-                buildingNo: document.getElementById('sellerBuildingNo').value,
-                street: document.getElementById('sellerStreet').value,
-                district: document.getElementById('sellerDistrict').value,
-                city: document.getElementById('sellerCity').value,
-                country: document.getElementById('sellerCountry').value,
-                postalCode: document.getElementById('sellerPostalCode').value,
-                additionalNo: document.getElementById('sellerAdditionalNo').value,
-                vat: document.getElementById('sellerVAT').value,
-                cr: document.getElementById('sellerCR').value,
-                logo: document.getElementById('logoImage').src
-            },
-            buyer: {
-                name: document.getElementById('buyerName').value,
-                buildingNo: document.getElementById('buyerBuildingNo').value,
-                street: document.getElementById('buyerStreet').value,
-                district: document.getElementById('buyerDistrict').value,
-                city: document.getElementById('buyerCity').value,
-                country: document.getElementById('buyerCountry').value,
-                postalCode: document.getElementById('buyerPostalCode').value,
-                additionalNo: document.getElementById('buyerAdditionalNo').value,
-                vat: document.getElementById('buyerVAT').value,
-                cr: document.getElementById('buyerCR').value
-            },
-            items: items,
-            payments: paymentsData,
-            totals: {
-                subtotalBeforeDiscount: document.getElementById('subtotalBeforeDiscountDisplay').textContent,
-                itemDiscounts: document.getElementById('itemDiscountsDisplay').textContent,
-                subtotalAfterItemDiscount: document.getElementById('subtotalAfterItemDiscountDisplay').textContent,
-                invoiceDiscount: document.getElementById('invoiceDiscountDisplay').textContent,
-                subtotal: document.getElementById('subtotalDisplay').textContent,
-                vatTotal: document.getElementById('vatTotalDisplay').textContent,
-                grandTotal: document.getElementById('grandTotalDisplay').textContent
-            }
-        };
-    }
-
-    function loadSavedInvoices() {
-        const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        const container = document.getElementById('savedInvoicesList');
-        
-        if (invoices.length === 0) {
-            container.innerHTML = '<div style="padding:24px;text-align:center;color:var(--ink-3);font-size:14px;">No saved invoices yet.<br>Create your first invoice in the Invoice tab.</div>';
-            return;
-        }
-
-        container.innerHTML = invoices.map((inv, index) => `
-            <div class="invoice-item">
-                <div class="invoice-item-header">
-                    <span class="invoice-item-number">${inv.invoiceNumber}</span>
-                    <span class="invoice-item-date">${inv.invoiceDate}</span>
-                </div>
-                <div class="invoice-item-details">
-                    ${inv.seller?.name || ''} → ${inv.buyer?.name || ''} · ${inv.totals?.grandTotal || ''}
-                </div>
-                <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">
-                    <button onclick="loadInvoice(${index})" style="background:var(--coral-pale);color:var(--coral);border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;flex:1;">Load</button>
-                    <button onclick="deleteInvoice(${index})" style="background:var(--red-bg);color:var(--red);border:none;border-radius:8px;padding:7px 14px;font-size:12px;font-weight:600;cursor:pointer;flex:1;">Delete</button>
-                </div>
-            </div>
-        `).join('');
-    }
-
-    function loadInvoice(index) {
-        const invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        const inv = invoices[index];
-        if (!inv) return;
-
-        currentInvoiceId = inv.id;
-        
-        document.getElementById('invoiceNumber').value = inv.invoiceNumber || '';
-        document.getElementById('invoiceDate').value = inv.invoiceDate || '';
-        document.getElementById('invoiceDueDate').value = inv.invoiceDueDate || '';
-        document.getElementById('invoiceReference').value = inv.invoiceReference || '';
-        document.getElementById('invoiceCurrency').value = inv.currency || 'SAR';
-        document.getElementById('invoiceStatus').value = inv.status || 'Unpaid';
-        document.getElementById('bankDetails').value = inv.bankDetails || '';
-        document.getElementById('termsConditions').value = inv.termsConditions || '';
-        document.getElementById('headerText').value = inv.headerText || '';
-        document.getElementById('footerText').value = inv.footerText || '';
-        document.getElementById('invoiceDiscountPercent').value = inv.invoiceDiscountPercent || '0';
-
-        if (inv.seller) {
-            document.getElementById('sellerName').value = inv.seller.name || '';
-            document.getElementById('sellerBuildingNo').value = inv.seller.buildingNo || '';
-            document.getElementById('sellerStreet').value = inv.seller.street || '';
-            document.getElementById('sellerDistrict').value = inv.seller.district || '';
-            document.getElementById('sellerCity').value = inv.seller.city || '';
-            document.getElementById('sellerPostalCode').value = inv.seller.postalCode || '';
-            document.getElementById('sellerAdditionalNo').value = inv.seller.additionalNo || '';
-            document.getElementById('sellerVAT').value = inv.seller.vat || '';
-            document.getElementById('sellerCR').value = inv.seller.cr || '';
-            if (inv.seller.logo && inv.seller.logo !== window.location.href) {
-                document.getElementById('logoImage').src = inv.seller.logo;
-                document.getElementById('logoPreview').style.display = 'block';
-            }
-        }
-
-        if (inv.buyer) {
-            document.getElementById('buyerName').value = inv.buyer.name || '';
-            document.getElementById('buyerBuildingNo').value = inv.buyer.buildingNo || '';
-            document.getElementById('buyerStreet').value = inv.buyer.street || '';
-            document.getElementById('buyerDistrict').value = inv.buyer.district || '';
-            document.getElementById('buyerCity').value = inv.buyer.city || '';
-            document.getElementById('buyerPostalCode').value = inv.buyer.postalCode || '';
-            document.getElementById('buyerAdditionalNo').value = inv.buyer.additionalNo || '';
-            document.getElementById('buyerVAT').value = inv.buyer.vat || '';
-            document.getElementById('buyerCR').value = inv.buyer.cr || '';
-        }
-
-        document.getElementById('itemsBody').innerHTML = '';
-        itemRowCount = 0;
-        if (inv.items) {
-            inv.items.forEach(item => {
-                addInvoiceItem(item.desc, parseFloat(item.price) || 0, parseFloat(item.vatPct) || 15);
-                const rows = document.querySelectorAll('#itemsBody tr');
-                const lastRow = rows[rows.length - 1];
-                if (lastRow) {
-                    const inputs = lastRow.querySelectorAll('input');
-                    inputs[1].value = item.qty || 1;
-                    inputs[3].value = item.disc || 0;
-                    calculateRowTotal(itemRowCount);
-                }
-            });
-        }
-
-        document.getElementById('paymentsContainer').innerHTML = '';
-        paymentCount = 0;
-        if (inv.payments) {
-            inv.payments.forEach(payment => {
-                addPayment();
-                const paymentEl = document.getElementById(`payment-${paymentCount}`);
-                if (paymentEl) {
-                    const inputs = paymentEl.querySelectorAll('input, select');
-                    if (inputs[0]) inputs[0].value = payment.date || '';
-                    if (inputs[1]) inputs[1].value = payment.amount || 0;
-                    if (inputs[2]) inputs[2].value = payment.method || 'Cash';
-                }
-            });
-        }
-
-        updateStatusDisplay();
-        updateCurrencyDisplay();
-        calculateTotals();
-        showSection(3);
-        alert('✅ Invoice loaded!');
-    }
-
-    function deleteInvoice(index) {
-        if (!confirm('Delete this invoice?')) return;
-        let invoices = JSON.parse(localStorage.getItem('zatca_invoices') || '[]');
-        invoices.splice(index, 1);
-        localStorage.setItem('zatca_invoices', JSON.stringify(invoices));
-        loadSavedInvoices();
-    }
-
-    function newInvoice() {
-        if (!confirm('Start a new invoice? Unsaved changes will be lost.')) return;
-        
-        currentInvoiceId = null;
-        document.getElementById('itemsBody').innerHTML = '';
-        itemRowCount = 0;
-        document.getElementById('paymentsContainer').innerHTML = '';
-        paymentCount = 0;
-        document.getElementById('invoiceDiscountPercent').value = '0';
-        document.getElementById('invoiceReference').value = '';
-        document.getElementById('bankDetails').value = '';
-        document.getElementById('invoiceStatus').value = 'Unpaid';
-        document.getElementById('headerText').value = '';
-        
-        setTodayDate();
-        generateInvoiceNumber();
-        addInvoiceItem();
-        updateStatusDisplay();
-        updateCurrencyDisplay();
-        calculateTotals();
-        showSection(3);
-    }
-
-    // ==========================================
-    // QR CODE GENERATION (ZATCA)
-    // ==========================================
-    function generateQRCode() {
-        const sellerName = document.getElementById('sellerName').value.trim();
-        const sellerVAT = document.getElementById('sellerVAT').value.trim();
-        const invoiceDate = document.getElementById('invoiceDate').value;
-        const grandTotal = document.getElementById('grandTotalDisplay').textContent.replace(/[^0-9.]/g, '');
-        const vatTotal = document.getElementById('vatTotalDisplay').textContent.replace(/[^0-9.]/g, '');
-
-        if (!sellerName || !sellerVAT) {
-            alert('⚠️ Please fill seller name and VAT number first!');
-            return;
-        }
-
-        function toTLV(tag, value) {
-            const encoder = new TextEncoder();
-            const valueBytes = encoder.encode(value);
-            const result = new Uint8Array(2 + valueBytes.length);
-            result[0] = tag;
-            result[1] = valueBytes.length;
-            result.set(valueBytes, 2);
-            return result;
-        }
-
-        function concatUint8Arrays(...arrays) {
-            const totalLength = arrays.reduce((sum, arr) => sum + arr.length, 0);
-            const result = new Uint8Array(totalLength);
-            let offset = 0;
-            arrays.forEach(arr => { result.set(arr, offset); offset += arr.length; });
-            return result;
-        }
-
-        const tlv = concatUint8Arrays(
-            toTLV(1, sellerName),
-            toTLV(2, sellerVAT),
-            toTLV(3, invoiceDate + 'T00:00:00Z'),
-            toTLV(4, parseFloat(grandTotal).toFixed(2)),
-            toTLV(5, parseFloat(vatTotal).toFixed(2))
-        );
-
-        let binary = '';
-        tlv.forEach(byte => binary += String.fromCharCode(byte));
-        const qrData = btoa(binary);
-
-        localStorage.setItem('zatca_qr_current', qrData);
-        alert('✅ QR Code generated! Go to Preview to see it.');
-        showSection(5);
-    }
-
-    // ==========================================
-    // INVOICE PREVIEW GENERATION
-    // ==========================================
-    function generateInvoicePreview() {
-        const sellerData = {
-            name: document.getElementById('sellerName').value,
-            buildingNo: document.getElementById('sellerBuildingNo').value,
-            street: document.getElementById('sellerStreet').value,
-            district: document.getElementById('sellerDistrict').value,
-            city: document.getElementById('sellerCity').value,
-            country: document.getElementById('sellerCountry').value,
-            postalCode: document.getElementById('sellerPostalCode').value,
-            additionalNo: document.getElementById('sellerAdditionalNo').value,
-            vat: document.getElementById('sellerVAT').value,
-            cr: document.getElementById('sellerCR').value,
-            logo: document.getElementById('logoImage').src
-        };
-
-        const buyerData = {
-            name: document.getElementById('buyerName').value,
-            buildingNo: document.getElementById('buyerBuildingNo').value,
-            street: document.getElementById('buyerStreet').value,
-            district: document.getElementById('buyerDistrict').value,
-            city: document.getElementById('buyerCity').value,
-            country: document.getElementById('buyerCountry').value,
-            postalCode: document.getElementById('buyerPostalCode').value,
-            additionalNo: document.getElementById('buyerAdditionalNo').value,
-            vat: document.getElementById('buyerVAT').value,
-            cr: document.getElementById('buyerCR').value
-        };
-
-        const invoiceNumber = document.getElementById('invoiceNumber').value;
-        const invoiceDate = document.getElementById('invoiceDate').value;
-        const invoiceDueDate = document.getElementById('invoiceDueDate').value;
-        const invoiceReference = document.getElementById('invoiceReference').value;
-        const currency = getCurrency();
-        const bankDetails = document.getElementById('bankDetails').value;
-        const termsConditions = document.getElementById('termsConditions').value;
-        const headerText = document.getElementById('headerText').value;
-        const footerText = document.getElementById('footerText').value;
-        const invoiceStatus = document.getElementById('invoiceStatus').value;
-
-        let statusClass = 'status-unpaid';
-        let statusText = 'Unpaid | غير مدفوع';
-        if (invoiceStatus === 'Paid') { statusClass = 'status-paid'; statusText = 'Paid | مدفوع'; }
-        else if (invoiceStatus === 'Partial') { statusClass = 'status-partial'; statusText = 'Partial | دفع جزئي'; }
-
-        const subtotalBeforeDiscount = document.getElementById('subtotalBeforeDiscountDisplay').textContent;
-        const itemDiscounts = document.getElementById('itemDiscountsDisplay').textContent;
-        const subtotalAfterItemDiscount = document.getElementById('subtotalAfterItemDiscountDisplay').textContent;
-        const invoiceDiscount = document.getElementById('invoiceDiscountDisplay').textContent;
-        const subtotal = document.getElementById('subtotalDisplay').textContent;
-        const vatTotal = document.getElementById('vatTotalDisplay').textContent;
-        const grandTotal = document.getElementById('grandTotalDisplay').textContent;
-
-        const rows = document.querySelectorAll('#itemsBody tr');
-        let itemsHTML = '';
-        rows.forEach((row, index) => {
-            const inputs = row.querySelectorAll('input');
-            if (inputs.length >= 8) {
-                itemsHTML += `
-                    <tr>
-                        <td style="padding:6px;border:1px solid #E5E7EB;">${index + 1}</td>
-                        <td style="padding:6px;border:1px solid #E5E7EB;">${inputs[0].value}</td>
-                        <td style="padding:6px;border:1px solid #E5E7EB;text-align:center;">${inputs[1].value}</td>
-                        <td style="padding:6px;border:1px solid #E5E7EB;text-align:right;">${inputs[2].value}</td>
-                        <td style="padding:6px;border:1px solid #E5E7EB;text-align:center;">${inputs[3].value}%</td>
-                        <td style="padding:6px;border:1px solid #E5E7EB;text-align:right;">${inputs[4].value}</td>
-                        <td style="padding:6px;border:1px solid #E5E7EB;text-align:center;">${inputs[5].value}%</td>
-                        <td style="padding:6px;border:1px solid #E5E7EB;text-align:right;">${inputs[6].value}</td>
-                        <td style="padding:6px;border:1px solid #E5E7EB;text-align:right;font-weight:bold;">${inputs[7].value}</td>
-                    </tr>
-                `;
-            }
-        });
-
-        const qrData = localStorage.getItem('zatca_qr_current');
-        let qrCodeHTML = '';
-        if (qrData) {
-            qrCodeHTML = `<img src="https://api.qrserver.com/v1/create-qr-code/?size=100x100&data=${encodeURIComponent(qrData)}" alt="ZATCA QR" style="width:100px;height:100px;">`;
-        }
-
-        function buildAddressTable(data) {
-            if (!data.buildingNo && !data.street && !data.city) return '';
-            return `
-                <table class="address-table">
-                    <tr><th>Building No</th><th>Street</th><th>District</th></tr>
-                    <tr>
-                        <td>${data.buildingNo || '-'}</td>
-                        <td>${data.street || '-'}</td>
-                        <td>${data.district || '-'}</td>
-                    </tr>
-                    <tr><th>City</th><th>Country</th><th>Postal</th></tr>
-                    <tr>
-                        <td>${data.city || '-'}</td>
-                        <td>${(data.country || '').split('|')[0].trim()}</td>
-                        <td>${data.postalCode || '-'}</td>
-                    </tr>
-                </table>
-            `;
-        }
-
-        const sellerAddressTable = buildAddressTable(sellerData);
-        const buyerAddressTable = buildAddressTable(buyerData);
-
-        let paymentsHTML = '';
-        const paymentItems = document.querySelectorAll('.payment-item');
-        if (paymentItems.length > 0) {
-            paymentsHTML = `<div style="margin:14px 0;padding:12px;border:1px solid #E5E7EB;border-radius:6px;">
-                <h4 style="font-size:12px;margin-bottom:10px;font-weight:600;">Payment History | سجل الدفعات</h4>
-                <table style="width:100%;border-collapse:collapse;font-size:10px;">
-                    <thead><tr>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;">Date</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;">Amount</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;">Method</th>
-                    </tr></thead><tbody>`;
-            
-            const paymentsData = [];
-            paymentItems.forEach(item => {
-                const inputs = item.querySelectorAll('input, select');
-                const payment = {
-                    date: inputs[0]?.value || '',
-                    amount: parseFloat(inputs[1]?.value) || 0,
-                    method: inputs[2]?.value || ''
-                };
-                paymentsData.push(payment);
-                paymentsHTML += `<tr>
-                    <td style="padding:5px;border:1px solid #E5E7EB;">${payment.date}</td>
-                    <td style="padding:5px;border:1px solid #E5E7EB;text-align:right;">${payment.amount.toFixed(2)} ${currency}</td>
-                    <td style="padding:5px;border:1px solid #E5E7EB;">${payment.method}</td>
-                </tr>`;
-            });
-
-            const totalPaid = paymentsData.reduce((sum, p) => sum + (parseFloat(p.amount) || 0), 0);
-            const grandTotalNum = parseFloat(grandTotal.replace(/[^0-9.-]+/g, ''));
-            const remaining = grandTotalNum - totalPaid;
-            
-            paymentsHTML += `</tbody></table>
-                <div style="margin-top:10px;padding-top:10px;border-top:1px solid #E5E7EB;">
-                    <div style="display:flex;justify-content:space-between;margin-bottom:5px;">
-                        <strong>Total Paid | المدفوع:</strong>
-                        <span style="color:#16A34A;font-weight:bold;">${totalPaid.toFixed(2)} ${currency}</span>
-                    </div>
-                    <div style="display:flex;justify-content:space-between;">
-                        <strong>Remaining | المتبقي:</strong>
-                        <span style="color:#DC2626;font-weight:bold;">${remaining.toFixed(2)} ${currency}</span>
-                    </div>
-                </div>
-            </div>`;
-        }
-
-        const previewHTML = `
-            ${headerText ? `<div style="text-align:center;padding:10px;background:#EFF6FF;margin-bottom:14px;font-size:11px;border-radius:6px;border:1px solid #BFDBFE;">${headerText}</div>` : ''}
-
-            <div class="invoice-header">
-                <div class="logo-and-info">
-                    ${sellerData.logo && sellerData.logo !== window.location.href ? `<div class="logo-section"><img src="${sellerData.logo}" alt="Logo"></div>` : ''}
-                    <div class="company-info">
-                        ${sellerData.name ? `<div><strong>${sellerData.name}</strong></div>` : ''}
-                        ${sellerData.vat ? `<div>VAT: ${sellerData.vat}</div>` : ''}
-                        ${sellerData.cr ? `<div>CR: ${sellerData.cr}</div>` : ''}
-                    </div>
-                </div>
-                <div class="title-section">
-                    <h1>TAX INVOICE<br>فاتورة ضريبية</h1>
-                    <div class="status-badge ${statusClass}">${statusText}</div>
-                </div>
-                <div class="qr-section-header">${qrCodeHTML}</div>
-            </div>
-
-            <div class="invoice-details-grid">
-                <div class="info-row"><span class="info-label">Invoice # :</span><span>${invoiceNumber}</span></div>
-                <div class="info-row"><span class="info-label">Date:</span><span>${invoiceDate}</span></div>
-                ${invoiceDueDate ? `<div class="info-row"><span class="info-label">Due:</span><span style="color:#DC2626;font-weight:bold;">${invoiceDueDate}</span></div>` : ''}
-                ${invoiceReference ? `<div class="info-row"><span class="info-label">Ref:</span><span>${invoiceReference}</span></div>` : ''}
-                <div class="info-row"><span class="info-label">Currency:</span><span style="font-weight:bold;color:#2563EB;">${currency}</span></div>
-            </div>
-
-            <div class="invoice-info">
-                <div class="info-box">
-                    <h3>Seller | البائع</h3>
-                    ${sellerData.name ? `<div class="info-row"><span class="info-label">Name:</span><span>${sellerData.name}</span></div>` : ''}
-                    ${sellerAddressTable}
-                    ${sellerData.vat ? `<div class="info-row"><span class="info-label">VAT:</span><span>${sellerData.vat}</span></div>` : ''}
-                    ${sellerData.cr ? `<div class="info-row"><span class="info-label">CR:</span><span>${sellerData.cr}</span></div>` : ''}
-                </div>
-                <div class="info-box">
-                    <h3>Buyer | المشتري</h3>
-                    ${buyerData.name ? `<div class="info-row"><span class="info-label">Name:</span><span>${buyerData.name}</span></div>` : ''}
-                    ${buyerAddressTable}
-                    ${buyerData.vat ? `<div class="info-row"><span class="info-label">VAT:</span><span>${buyerData.vat}</span></div>` : ''}
-                    ${buyerData.cr ? `<div class="info-row"><span class="info-label">CR:</span><span>${buyerData.cr}</span></div>` : ''}
-                </div>
-            </div>
-
-            <h3 style="margin:12px 0 8px 0;font-size:12px;font-weight:600;">Invoice Items | بنود الفاتورة</h3>
-            <table class="items-table" style="min-width:unset;">
-                <thead>
-                    <tr>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;width:4%;">#</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;width:26%;">Description</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;width:8%;">Qty</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;width:10%;">Price</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;width:8%;">Disc%</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;width:11%;">Net</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;width:7%;">VAT%</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;width:10%;">VAT</th>
-                        <th style="padding:5px;border:1px solid #E5E7EB;background:#F9FAFB;width:12%;">Total</th>
-                    </tr>
-                </thead>
-                <tbody>${itemsHTML}</tbody>
-            </table>
-
-            <div class="totals-section" style="margin-top:12px;">
-                <div class="total-row"><span class="total-label">Subtotal (Before Disc) | قبل الخصم:</span><span class="total-value">${subtotalBeforeDiscount}</span></div>
-                ${parseFloat(itemDiscounts.replace(/[^0-9.-]+/g, '')) > 0 ? `<div class="total-row"><span class="total-label">Item Discounts:</span><span class="total-value" style="color:#16A34A;">- ${itemDiscounts}</span></div>` : ''}
-                <div class="total-row"><span class="total-label">Subtotal (After Disc):</span><span class="total-value">${subtotalAfterItemDiscount}</span></div>
-                ${parseFloat(invoiceDiscount.replace(/[^0-9.-]+/g, '')) > 0 ? `<div class="total-row"><span class="total-label">Invoice Discount (${document.getElementById('invoiceDiscountPercent').value}%):</span><span class="total-value" style="color:#16A34A;">- ${invoiceDiscount}</span></div>` : ''}
-                <div class="total-row"><span class="total-label">Subtotal (Before VAT):</span><span class="total-value">${subtotal}</span></div>
-                <div class="total-row"><span class="total-label">Total VAT | الضريبة:</span><span class="total-value">${vatTotal}</span></div>
-                <div class="total-row grand-total"><span class="total-label">Grand Total | الإجمالي:</span><span class="total-value">${grandTotal}</span></div>
-                <div class="total-row"><span class="total-label">Status:</span><span class="total-value ${statusClass}">${statusText}</span></div>
-            </div>
-
-            ${paymentsHTML}
-
-            ${bankDetails ? `<div style="margin:12px 0;padding:10px;border:1px solid #E5E7EB;border-radius:6px;background:#F9FAFB;"><h4 style="font-size:11px;margin-bottom:8px;font-weight:600;">Bank Details | التفاصيل البنكية</h4><p style="white-space:pre-line;font-size:10px;color:#4B5563;">${bankDetails}</p></div>` : ''}
-            ${termsConditions ? `<div style="margin:12px 0;padding:10px;border:1px solid #2563EB;border-radius:6px;background:#EFF6FF;"><h4 style="font-size:11px;margin-bottom:8px;color:#2563EB;font-weight:600;">Terms & Conditions</h4><p style="white-space:pre-line;font-size:10px;color:#1E40AF;">${termsConditions}</p></div>` : ''}
-
-            <div class="invoice-footer">${footerText.split('\n').map(line => `<p>${line}</p>`).join('')}</div>
-        `;
-
-        document.getElementById('invoicePreview').innerHTML = previewHTML;
-    }
-
-    // ==========================================
-    // PDF & WHATSAPP
-    // ==========================================
-    function saveAsPDF() {
-        window.print();
-    }
-
-    function shareToWhatsApp() {
-        const invoiceNumber = document.getElementById('invoiceNumber').value;
-        const grandTotal = document.getElementById('grandTotalDisplay').textContent;
-        const invoiceDate = document.getElementById('invoiceDate').value;
-        const invoiceDueDate = document.getElementById('invoiceDueDate').value;
-        const invoiceStatus = document.getElementById('invoiceStatus').value;
-        const currency = getCurrency();
-        
-        let message = `📄 *Invoice ${invoiceNumber}*\n\n` +
-                      `Date: ${invoiceDate}\n`;
-        
-        if (invoiceDueDate) {
-            message += `Due Date: ${invoiceDueDate}\n`;
-        }
-        
-        message += `Total: ${grandTotal}\n` +
-                   `Status: ${invoiceStatus}\n` +
-                   `Currency: ${currency}\n\n` +
-                   `Please find the invoice.\nيرجى الاطلاع على الفاتورة.`;
-        
-        const whatsappURL = `https://wa.me/?text=${encodeURIComponent(message)}`;
-        window.open(whatsappURL, '_blank');
-    }
 </script>
 </body>
 </html>
